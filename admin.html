@@ -1,25 +1,94 @@
 <!DOCTYPE html>
-<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin KDKMP</title>
-<style>body{font-family:system-ui;background:#eef2f0;padding:12px}.card{background:white;border-radius:16px;padding:16px;max-width:600px;margin:12px auto}input,textarea,select{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #ccc;border-radius:10px}button{width:100%;padding:12px;border:0;border-radius:10px;font-weight:700} .g{background:#0f4d2e;color:white} #panel{display:none}</style>
-</head><body>
-<div class="card" id="login"><h3>Login Pengelola</h3><select id="selUser"></select><input id="pass" type="password" placeholder="Password"><button class="g" onclick="login()">Masuk</button><p style="font-size:12px">Default: manajer / kasih2026</p></div>
-<div id="panel"><div class="card">
-<h3 id="hi"></h3>
-<label>Tanggal</label><input id="tgl"><label>Judul</label><input id="judul"><label>Isi</label><textarea id="isi" rows="4"></textarea><label>Harga</label><input id="harga" value="Rp62.500 / 5kg"><label>Stok</label><input id="stok" value="Tersedia">
-<button class="g" onclick="buat()">Buat Info Baru</button>
-<textarea id="raw" rows="8" style="margin-top:12px"></textarea>
-<button class="g" onclick="download()" style="background:#2563eb;margin-top:8px">📥 Download data.json</button>
-<p style="font-size:12px">Setelah download: Buka GitHub > file data.json > Edit (pensil) > Paste isi download > Commit. 1 menit langsung muncul di desa.html</p>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin KDKMP - Stok Angka</title>
+<style>
+body{font-family:system-ui;background:#eef2f0;padding:12px}
+.card{background:white;border-radius:16px;padding:16px;max-width:650px;margin:12px auto;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+input,select,textarea{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #ccc;border-radius:10px}
+button{width:100%;padding:12px;border:0;border-radius:10px;font-weight:700;margin-top:6px}
+.g{background:#0f4d2e;color:white} .b{background:#2563eb;color:white} .gr{background:#e5e7eb}
+label{font-size:12px;font-weight:700} .row{display:flex;gap:8px} .row>div{flex:1}
+#panel{display:none} .calc{background:#f0fdf4;border:1px dashed #16a34a;border-radius:12px;padding:12px;font-size:13px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="card" id="loginBox">
+<h3>Login Pengelola KDKMP</h3>
+<select id="selUser"></select>
+<input id="pass" type="password" placeholder="Password">
+<button class="g" onclick="doLogin()">Masuk</button>
+<p style="font-size:11px;color:gray">Default: manajer / kasih2026</p>
 </div>
-<div class="card" id="boxUser"><h4>Tambah Karyawan (Manajer only)</h4><input id="nName" placeholder="nama karyawan baru, contoh: budi"><input id="nPass" placeholder="password baru"><button onclick="addUser()" style="background:#e5e7eb">+ Tambah</button><div id="listU" style="font-size:13px;margin-top:8px"></div></div></div>
+
+<div id="panel">
+<div class="card">
+<h3 id="hi"></h3>
+
+<div class="calc" id="calcBox">Isi angka di bawah, omzet kehitung otomatis</div>
+
+<div class="row">
+<div><label>Jumlah Karung Datang</label><input id="masuk" type="number" value="100" oninput="hitung()"></div>
+<div><label>Terjual Hari Ini</label><input id="jual" type="number" value="0" oninput="hitung()"></div>
+</div>
+
+<div class="row">
+<div><label>Harga per Karung 5kg (Rp)</label><input id="hargaAngka" type="number" value="62500" oninput="hitung()"></div>
+<div><label>Harga per Kg (auto)</label><input id="hargaKg" readonly></div>
+</div>
+
+<label>Judul Info</label><input id="judul" value="Stok Beras SPHP Hari Ini">
+<label>Catatan untuk Warga</label><textarea id="isi" rows="3">Stok beras SPHP 5kg tersedia di Gerai KDKMP. HET Jawa Rp12.500/kg.</textarea>
+
+<div class="row"><div><label>Tanggal</label><input id="tgl"></div><div><label>Jam</label><input id="jam" type="time"></div></div>
+
+<button class="g" onclick="buat()">✅ Buat Laporan + Hitung Otomatis</button>
+<textarea id="raw" rows="10" style="margin-top:12px;font-size:12px"></textarea>
+<button class="b" onclick="download()">📥 Download data.json</button>
+<p style="font-size:11px">Upload file ini ke GitHub: buka data.json > Edit > Paste > Commit. Tunggu 1 menit.</p>
+</div>
+
+<div class="card" id="boxUser">
+<h4>Tambah Karyawan</h4>
+<div class="row"><div><input id="nName" placeholder="nama: budi"></div><div><input id="nPass" placeholder="pass: budi123"></div></div>
+<button class="gr" onclick="addUser()">+ Tambah Karyawan</button>
+<div id="listU" style="font-size:13px;margin-top:8px"></div>
+</div>
+</div>
+
 <script>
 let USERS=JSON.parse(localStorage.getItem('kdkmp_users')||'[{"name":"manajer","pass":"kasih2026","role":"manajer"}]');
 let DATA=[], CUR=null;
-function render(){selUser.innerHTML='';USERS.forEach(u=>{let o=document.createElement('option');o.value=u.name;o.textContent=u.name+' - '+u.role;selUser.appendChild(o)});let h='';USERS.forEach(u=>h+=`<div>${u.name} (${u.role})</div>`);listU.innerHTML=h}
-render();
-function login(){let u=USERS.find(x=>x.name===selUser.value&&x.pass===pass.value); if(!u) return alert('Salah'); CUR=u; login.style.display='none'; panel.style.display='block'; hi.textContent='Halo '+u.name; tgl.value=new Date().toLocaleDateString('id-ID'); load()}
-async function load(){try{let r=await fetch('./data.json?t='+Date.now()); DATA=await r.json(); raw.value=JSON.stringify(DATA,null,2)}catch{DATA=[]}}
-function addUser(){if(CUR.role!=='manajer') return alert('Hanya manajer'); let n=nName.value.trim().toLowerCase(), p=nPass.value.trim(); if(!n||!p) return alert('Isi nama pass'); USERS.push({name:n,pass:p,role:'karyawan'}); localStorage.setItem('kdkmp_users',JSON.stringify(USERS)); render(); nName.value=''; nPass.value='';}
-function buat(){let baru={tanggal:tgl.value,judul:judul.value,isi:isi.value,harga:harga.value,stok:stok.value,oleh:CUR.name,role:CUR.role}; DATA.push(baru); raw.value=JSON.stringify(DATA,null,2); alert('Info dibuat di bawah, tinggal Download')}
-function download(){let b=new Blob([raw.value],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='data.json'; a.click()}
-</script></body></html>
+function render(){ selUser.innerHTML=''; USERS.forEach(u=>{let o=document.createElement('option');o.value=u.name;o.textContent=u.name+' - '+u.role;selUser.appendChild(o)}); let h=''; USERS.forEach(u=>h+=`<div>${u.name} (${u.role})</div>`); listU.innerHTML=h; } render();
+function doLogin(){ let u=USERS.find(x=>x.name===selUser.value&&x.pass===pass.value); if(!u) return alert('Salah'); CUR=u; loginBox.style.display='none'; panel.style.display='block'; hi.textContent='Halo '+u.name+' ('+u.role+')'; tgl.value=new Date().toLocaleDateString('id-ID'); jam.value=new Date().toTimeString().slice(0,5); load(); hitung(); }
+async function load(){ try{ let r=await fetch('./data.json?t='+Date.now()); DATA=await r.json(); raw.value=JSON.stringify(DATA,null,2);}catch{DATA=[]} }
+function hitung(){
+ let masuk=parseInt(masukInput= document.getElementById('masuk').value)||0;
+ let jual=parseInt(document.getElementById('jual').value)||0;
+ let harga=parseInt(document.getElementById('hargaAngka').value)||0;
+ let sisa=masuk-jual; if(sisa<0) sisa=0;
+ let perKg=Math.round(harga/5);
+ let omzet=jual*harga;
+ document.getElementById('hargaKg').value='Rp '+perKg.toLocaleString('id-ID')+' /kg';
+ document.getElementById('calcBox').innerHTML=`Sisa: <b>${sisa} karung</b> dari ${masuk} | Terjual: <b>${jual} karung</b><br>Omzet Hari Ini: <b>Rp ${omzet.toLocaleString('id-ID')}</b> | Stok %: <b>${masuk?Math.round(sisa/masuk*100):0}%</b>`;
+ return {masuk,jual,sisa,harga,perKg,omzet};
+}
+function addUser(){ let n=nName.value.trim().toLowerCase(), p=nPass.value.trim(); if(!n||!p) return alert('Isi'); USERS.push({name:n,pass:p,role:'karyawan'}); localStorage.setItem('kdkmp_users',JSON.stringify(USERS)); render(); nName.value=''; nPass.value=''; }
+function buat(){
+ let h=hitung();
+ let baru={
+  tanggal:tgl.value, jam:jam.value, judul:judul.value, isi:isi.value,
+  harga:'Rp '+h.harga.toLocaleString('id-ID')+' / 5kg',
+  hargaAngka:h.harga, hargaKg:h.perKg,
+  masuk:h.masuk, terjual:h.jual, sisa:h.sisa, omzet:h.omzet,
+  stok:`${h.sisa} karung (${h.masuk?Math.round(h.sisa/h.masuk*100):0}%)`,
+  oleh:CUR.name, role:CUR.role
+ };
+ DATA.push(baru); raw.value=JSON.stringify(DATA,null,2);
+ alert(`Berhasil! Sisa ${h.sisa} karung, Omzet Rp ${h.omzet.toLocaleString('id-ID')}. Tinggal Download.`);
+}
+function download(){ let b=new Blob([raw.value],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='data.json'; a.click(); }
+</script>
+</body>
+</html>
