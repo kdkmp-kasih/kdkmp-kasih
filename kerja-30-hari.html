@@ -2,49 +2,54 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>30 Hari V5 - Data Dipisah</title>
+<title>30 Hari Kerja Pra-Operasional - KDKMP Kasih</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#f8fafc]">
 <div class="bg-[#0f5132] text-white sticky top-0 z-50">
 <div class="max-w-5xl mx-auto p-3 flex justify-between items-center">
-<div><h1 class="font-bold text-[12px]">30 HARI V5 - TANPA PARAF</h1><p class="text-[9px] opacity-80">Kasih 33.03.18.2008 | Data dipisah per orang</p></div>
-<div class="text-right"><div class="w-28 h-2 bg-white/20 rounded-full"><div id="progressBar" class="h-2 bg-yellow-300 rounded-full" style="width:0%"></div></div><p id="progressText" class="text-[10px] font-bold">0%</p><p id="sisaText" class="text-[9px]">Sisa 0</p></div>
+<div><h1 class="font-bold text-[12px]">30 HARI KERJA PRA-OPERASIONAL</h1><p class="text-[9px] opacity-80">KDKMP Desa Kasih - 33.03.18.2008 - Kertanegara</p></div>
+<div class="text-right"><div class="w-28 h-2 bg-white/20 rounded-full"><div id="bar" class="h-2 bg-yellow-300 rounded-full" style="width:0%"></div></div><p id="txt" class="text-[10px] font-bold">0%</p></div>
 </div>
 </div>
 
 <div class="max-w-5xl mx-auto p-3 space-y-3">
-<div class="bg-yellow-50 border-2 border-yellow-300 p-3 rounded-xl">
-<p class="font-bold text-[12px]">💰 HARGA + SUMBER (wajib)</p>
+<div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-[11px]">
+<b>Sistem Distribusi:</b> Pengisian gerai KDKMP melalui 1 pintu PT Agrinas Pangan Nusantara. Manajer menyiapkan data gerai, data pengurus, dan data harga pasar untuk diserahkan kepada PIC Agrinas.
+</div>
+
+<div class="bg-white border p-3 rounded-xl">
+<p class="font-bold text-[12px]">Daftar Harga dan Sumber Data</p>
+<p class="text-[10px] text-slate-500 mb-2">Wajib mencantumkan sumber: badanpangan.go.id, bulog.co.id, atau WA warung (nama dan tanggal).</p>
 <div id="hargaList" class="space-y-2 mt-2"></div>
-<button onclick="addHarga()" class="mt-2 text-[11px] bg-[#0f5132] text-white px-3 py-1 rounded">+ Tambah</button>
+<button onclick="addHarga()" class="mt-2 text-[11px] bg-[#0f5132] text-white px-3 py-1.5 rounded">+ Tambah Data Harga</button>
 </div>
 
 <div id="container" class="grid gap-3"></div>
 
 <div class="p-4 bg-white rounded-xl border text-center">
-<button onclick="exportLaporan()" class="bg-[#0f5132] text-white px-5 py-2.5 rounded-lg text-xs font-bold w-full">EXPORT LAPORAN</button>
+<button onclick="exportLaporan()" class="bg-[#0f5132] text-white px-5 py-2.5 rounded-lg text-xs font-bold w-full">EXPORT LAPORAN 30 HARI</button>
 <a href="./" class="mt-2 inline-block text-xs underline">Kembali ke Dashboard</a>
 </div>
 </div>
 
 <script>
-let hargaData = JSON.parse(localStorage.getItem('hargaV5')||`[
-{"nama":"Beras SPHP 5kg HET Jawa","harga":"Rp62.500","sumber":"HET Rp12.500/kg - Bapanas No 34/2026 - badanpangan.go.id"},
-{"nama":"Beras SPHP Gudang Jawa","harga":"Rp11.000/kg","sumber":"bulog.co.id - Zona 1"},
-{"nama":"Beras Pasar Kasih - Warung 1","harga":"","sumber":"WA Nama Warung + Tanggal"},
-{"nama":"Beras Pasar Kasih - Warung 2","harga":"","sumber":"WA Nama Warung + Tanggal"},
-{"nama":"Beras Pasar Kasih - Warung 3","harga":"","sumber":"WA Nama Warung + Tanggal"},
-{"nama":"Minyak Kita Pasar Kasih","harga":"","sumber":"WA Warung + Tanggal"},
-{"nama":"Gula Pasar Kasih","harga":"","sumber":"WA Warung + Tanggal"}
+let hargaData = JSON.parse(localStorage.getItem('hargaV6Clean')||`[
+{"nama":"Beras SPHP 5kg - HET Konsumen Jawa","harga":"Rp62.500","sumber":"HET Rp12.500/kg - Keputusan Bapanas No 34/2026 - badanpangan.go.id"},
+{"nama":"Beras SPHP 2kg - HET Konsumen Jawa","harga":"Rp25.000","sumber":"Keputusan Bapanas No 34/2026 - Kemasan 2kg resmi 2026"},
+{"nama":"Harga Gudang Bulog Jawa","harga":"Rp11.000/kg","sumber":"bulog.co.id - Zona 1 Jawa"},
+{"nama":"Harga Distributor ke KDKMP","harga":"Maks Rp11.700/kg","sumber":"Bapanas No 34/2026 - Zona 1"},
+{"nama":"Beras Pasar Desa Kasih - Warung 1","harga":"","sumber":"WA - Nama warung, tanggal"},
+{"nama":"Beras Pasar Desa Kasih - Warung 2","harga":"","sumber":"WA - Nama warung, tanggal"},
+{"nama":"Beras Pasar Desa Kasih - Warung 3","harga":"","sumber":"WA - Nama warung, tanggal"}
 ]`);
-function saveHarga(){localStorage.setItem('hargaV5',JSON.stringify(hargaData)); renderHarga();}
+function saveHarga(){localStorage.setItem('hargaV6Clean',JSON.stringify(hargaData)); renderHarga();}
 function renderHarga(){
  const w=document.getElementById('hargaList'); w.innerHTML='';
  hargaData.forEach((h,i)=>{
   const d=document.createElement('div');
-  d.className='bg-white border rounded p-2 grid grid-cols-12 gap-1';
-  d.innerHTML=`<input value="${h.nama}" oninput="hargaData[${i}].nama=this.value; saveHarga()" class="col-span-4 border p-1 rounded text-[11px]"><input value="${h.harga}" oninput="hargaData[${i}].harga=this.value; saveHarga()" class="col-span-2 border p-1 rounded text-[11px] bg-green-50"><input value="${h.sumber}" oninput="hargaData[${i}].sumber=this.value; saveHarga()" class="col-span-5 border p-1 rounded text-[11px] bg-yellow-50"><button onclick="hargaData.splice(${i},1); saveHarga()" class="col-span-1 text-red-600 text-[11px]">x</button>`;
+  d.className='bg-slate-50 border rounded p-2 grid grid-cols-12 gap-1';
+  d.innerHTML=`<input value="${h.nama}" oninput="hargaData[${i}].nama=this.value; saveHarga()" class="col-span-4 border p-1.5 rounded text-[11px] bg-white"><input value="${h.harga}" oninput="hargaData[${i}].harga=this.value; saveHarga()" class="col-span-3 border p-1.5 rounded text-[11px] bg-white"><input value="${h.sumber}" oninput="hargaData[${i}].sumber=this.value; saveHarga()" class="col-span-4 border p-1.5 rounded text-[11px] bg-white"><button onclick="hargaData.splice(${i},1); saveHarga()" class="col-span-1 text-red-600 text-[11px]">x</button>`;
   w.appendChild(d);
  });
 }
@@ -52,36 +57,36 @@ function addHarga(){hargaData.push({nama:'',harga:'',sumber:''}); saveHarga();}
 renderHarga();
 
 const days=[
-{d:1,t:"Data Kontak Desa",m:"RUMAH - WA",tasks:["☐ Simpan No WA Kepala Desa Kasih","☐ Simpan No WA Sekretaris Desa","☐ Simpan No WA Ketua Kopdes","☐ Simpan No WA Bendahara Kopdes","☐ Simpan No WA Pengawas / Kadus","☐ Bikin Folder HP: Dokumen KDKMP Kasih"]},
-{d:2,t:"Data Dokumen",m:"RUMAH",tasks:["☐ Foto/scan SK Manager (minta via WA Kades)","☐ Foto/scan AD/ART Kopdes","☐ Catat NIB Kopdes","☐ Catat Nama Lengkap Ketua Kopdes","☐ Catat Nama Sekretaris","☐ Catat Nama Bendahara"]},
-{d:3,t:"Data Harga Resmi + Pasar",m:"RUMAH - ONLINE",tasks:["☐ Screenshot HET Jawa Rp12.500 dari badanpangan.go.id - isi di tracker atas","☐ Screenshot harga gudang Rp11.000 dari bulog.co.id","☐ Tanya harga beras Warung 1 di Kasih via WA - isi tracker + sumber","☐ Tanya harga beras Warung 2 via WA - isi tracker + sumber","☐ Tanya harga beras Warung 3 via WA - isi tracker + sumber","☐ Hitung selisih HET vs Pasar"]},
-{d:4,t:"Poster Harga",m:"RUMAH - HP",tasks:["☐ Bikin poster Canva: Beras SPHP Rp62.500 + tulis sumber Bapanas","☐ Bikin poster Minyak Kita (jika ada harga)","☐ Simpan JPG poster","☐ Siapkan file siap print A4"]},
-{d:5,t:"Jadwal Kunjungan",m:"RUMAH",tasks:["☐ Tentukan hari tetap: Jumat jam 10.00","☐ Tentukan durasi: 30 menit saja","☐ Siapkan buku tamu kecil","☐ Siapkan kalimat izin sopan 10 menit"]},
-{d:6,t:"Data Supplier Online",m:"RUMAH - ONLINE",tasks:["☐ Buka bulog.co.id - baca syarat mitra Klik SPHP","☐ Screenshot syarat - simpan","☐ Cari kontak agen LPG Kertanegara via Google Maps - catat","☐ Cari kontak ID Food Jateng - catat (jangan hubungi dulu)"]},
-{d:7,t:"Laporan Minggu 1",m:"RUMAH - WA",tasks:["☐ Ketik laporan 5 baris progres data","☐ Lampirkan screenshot sumber harga","☐ Lampirkan poster harga","☐ Kirim WA ke Kades","☐ Minta izin datang Jumat 30 menit"]},
-{d:8,t:"KUNJUNGAN #1 - 30 Menit",m:"DESA",tasks:["☐ Datang pakai baju rapi","☐ Bawa buku tamu","☐ Foto gerai dari luar (2 foto)","☐ Catat kondisi listrik gerai: ada/tidak","☐ Catat kondisi rak gerai: ada/tidak","☐ Pamit sopan - jangan minta kunci"]},
-{d:9,t:"Evaluasi Gerai",m:"RUMAH",tasks:["☐ Tulis catatan kondisi gerai","☐ Tulis kekurangan gerai (list)","☐ Upload foto gerai ke HP","☐ Update website jika bisa"]},
-{d:10,t:"Belajar SOP",m:"RUMAH",tasks:["☐ Baca PDF sosialisasi KDKMP","☐ Catat 3 kewajiban manager pra-buka","☐ Catat larangan manager pra-buka","☐ Tanya grup manajer Purbalingga pengalaman"]},
-{d:11,t:"SOP Kasir",m:"RUMAH",tasks:["☐ Bikin format nota penjualan di Notes HP","☐ Bikin format stok masuk","☐ Bikin format stok keluar","☐ Bikin format laporan tutup kas harian","☐ Bikin template WA lapor ke Kades"]},
-{d:12,t:"Riset Warga",m:"RUMAH - WA",tasks:["☐ Tanya Warga 1: belanja dimana?","☐ Tanya Warga 2: belanja dimana?","☐ Tanya Warga 3: belanja dimana?","☐ Catat jam buka warung ramai","☐ Catat produk yang belum ada di Kasih"]},
-{d:13,t:"Denah Gerai",m:"RUMAH",tasks:["☐ Gambar denah di kertas A4","☐ Tentukan posisi rak beras","☐ Tentukan posisi LPG","☐ Tentukan posisi kasir","☐ Foto denah"]},
-{d:14,t:"Laporan Minggu 2",m:"RUMAH - WA",tasks:["☐ Kirim foto kunjungan #1","☐ Kirim denah gerai","☐ Kirim template kasir","☐ Kirim tracker harga terbaru","☐ WA Kades: mohon arahan"]},
-{d:15,t:"KUNJUNGAN #2 - 40 Menit",m:"DESA",tasks:["☐ Print poster harga (1 lembar)","☐ Print denah gerai (1 lembar)","☐ Datang bawa poster + denah","☐ Minta pendapat Kades (bukan minta dana)","☐ Foto bareng poster"]},
-{d:16,t:"Simulasi Modal",m:"RUMAH",tasks:["☐ Hitung: HET 12.500 - gudang 11.000 = margin 1.500/kg","☐ Hitung: 20 karung x 5kg x 1.500 = laba kotor","☐ Hitung biaya plastik","☐ Hitung biaya transport simulasi","☐ Catat tanpa pakai uang pribadi dulu"]},
-{d:17,t:"Grup WA Pelanggan",m:"RUMAH",tasks:["☐ Bikin Grup WA Info Harga KDKMP Kasih","☐ Undang Ibu PKK 1","☐ Undang Ibu PKK 2","☐ Undang Ibu PKK 3","☐ Undang 7 warga lain (total 10)","☐ Posting poster + sumber harga di grup"]},
-{d:18,t:"Konten Edukasi",m:"RUMAH - HP",tasks:["☐ Bikin video 15 detik: HET 12.500 segera hadir","☐ Sebut sumber di video: Bapanas No 34/2026","☐ Posting Status WA","☐ Posting di Grup WA"]},
-{d:19,t:"Keuangan Awal",m:"RUMAH",tasks:["☐ Hitung laba kotor simulasi","☐ Hitung biaya operasional","☐ Hitung BEP (balik modal)","☐ Catat di Notes HP"]},
-{d:20,t:"Checklist Buka",m:"RUMAH",tasks:["☐ List buku stok: sudah/belum","☐ List buku kas: sudah/belum","☐ List kalkulator: sudah/belum","☐ List plastik karung: sudah/belum","☐ List pulpen/nota: sudah/belum"]},
-{d:21,t:"Laporan Minggu 3",m:"RUMAH - WA",tasks:["☐ Kirim RAB simulasi","☐ Kirim screenshot Grup WA 10 orang","☐ Kirim konten video","☐ Kirim tracker harga lengkap + sumber","☐ Tanya Kades: bisa dibahas rapat?"]},
-{d:22,t:"Standby",m:"RUMAH",tasks:["☐ Rapikan semua catatan harga + sumber","☐ Jawab chat warga di grup","☐ Update website foto baru"]},
-{d:23,t:"KUNJUNGAN #3 Rapat",m:"DESA - 60 MENIT",tasks:["☐ Datang jika diundang rapat","☐ Bawa print laporan 3 minggu","☐ Presentasi 5 menit: data kontak + harga bersumber + denah","☐ Minta keputusan: target tanggal soft opening","☐ Catat hasil rapat"]},
-{d:24,t:"Timeline H-7",m:"RUMAH",tasks:["☐ Bikin checklist final apa yang disiapkan desa","☐ Bikin checklist apa yang kamu siapkan","☐ Bikin timeline 7 hari menuju buka","☐ Share checklist via WA ke Kades"]},
-{d:25,t:"Gladi Resik",m:"RUMAH",tasks:["☐ Simulasi timbang beras 5kg","☐ Simulasi catat nota","☐ Simulasi hitung kembalian","☐ Simulasi tutup kas harian","☐ Siapkan kemeja rapi"]},
-{d:26,t:"Promo H-3",m:"RUMAH - WA",tasks:["☐ Posting H-3 di Grup WA","☐ Chat personal 10 warga: mohon doa mau buka","☐ Chat personal 10 warga lagi","☐ Siapkan daftar antrian jika perlu"]},
-{d:27,t:"H-1 Persiapan",m:"DESA - 60 MENIT",tasks:["☐ Datang pasang poster harga + tulis sumber di pojok poster","☐ Bersihkan rak","☐ Tata rak sedikit","☐ Foto final gerai siap buka (3 foto)"]},
-{d:28,t:"SOFT OPENING",m:"DESA",tasks:["☐ Buka jam 08.00-11.00 (3 jam saja)","☐ Jual terbatas: SPHP saja","☐ Catat semua transaksi di buku","☐ Foto dokumentasi: pembeli + stok","☐ Foto nota hari pertama"]},
-{d:29,t:"Evaluasi Hari 1",m:"RUMAH",tasks:["☐ Hitung laba rugi hari 1","☐ Catat komplain warga 1","☐ Catat komplain warga 2","☐ Catat stok kurang apa","☐ Kirim laporan singkat ke Kades via WA"]},
-{d:30,t:"Laporan 30 Hari",m:"RUMAH",tasks:["☐ Klik Export Laporan di website ini","☐ Kirim TXT ke Kades","☐ Kirim TXT ke Korwil Kertanegara","☐ Kirim TXT ke Dinkop Purbalingga","☐ Tulis rencana Bulan 2: tambah LPG & Minyak Kita"]},
+{d:1,t:"Inventarisasi Kontak Desa",m:"RUMAH",tasks:["Simpan kontak Kepala Desa Kasih","Simpan kontak Sekretaris Desa","Simpan kontak Ketua Koperasi","Simpan kontak Bendahara Koperasi","Simpan kontak Pengawas Koperasi"]},
+{d:2,t:"Inventarisasi Data Pengurus",m:"RUMAH",tasks:["Catat nama lengkap Ketua Koperasi","Catat nama lengkap Sekretaris Koperasi","Catat nama lengkap Bendahara Koperasi","Catat NIB Koperasi","Arsip SK Manager"]},
+{d:3,t:"Pendataan Harga Pasar",m:"RUMAH",tasks:["Catat HET Beras SPHP Jawa Rp12.500/kg - Sumber: Bapanas","Catat harga gudang Bulog Rp11.000/kg - Sumber: Bulog","Tanya harga beras Warung 1 - Catat harga dan sumber WA","Tanya harga beras Warung 2 - Catat harga dan sumber WA","Tanya harga beras Warung 3 - Catat harga dan sumber WA","Hitung selisih HET dengan harga pasar"]},
+{d:4,t:"Dokumentasi Gerai (Koordinasi dengan Desa)",m:"RUMAH",tasks:["Minta foto gerai tampak depan via Desa","Minta foto gerai tampak dalam","Minta foto ukuran gerai","Minta informasi daya listrik gerai","Simpan foto dalam folder Gerai Kasih"]},
+{d:5,t:"Penjadwalan Kunjungan",m:"RUMAH",tasks:["Tentukan jadwal kunjungan mingguan","Tentukan durasi kunjungan","Siapkan daftar cek kondisi gerai","Siapkan format laporan kunjungan"]},
+{d:6,t:"Pendataan Spesifikasi Gerai",m:"RUMAH",tasks:["Catat alamat lengkap gerai","Catat ukuran panjang x lebar gerai","Catat kondisi daya listrik","Catat kondisi rak penyimpanan","Catat akses jalan menuju gerai"]},
+{d:7,t:"Laporan Mingguan 1",m:"RUMAH",tasks:["Susun laporan data kontak","Susun laporan data pengurus","Lampirkan foto gerai dari Desa","Lampirkan daftar harga dan sumber","Kirim laporan kepada Kepala Desa"]},
+{d:8,t:"Kunjungan Lapangan 1 - Dokumentasi",m:"DESA",tasks:["Foto gerai tampak luar 2 foto","Foto gerai tampak dalam 2 foto","Foto meteran listrik","Foto akses jalan","Kirim foto kepada Kepala Desa sebagai laporan kunjungan"]},
+{d:9,t:"Evaluasi Kondisi Gerai",m:"RUMAH",tasks:["Rapikan foto dokumentasi gerai","Tulis deskripsi kondisi gerai","Tulis daftar kekurangan gerai","Siapkan data untuk PIC Agrinas"]},
+{d:10,t:"Verifikasi Legalitas",m:"RUMAH",tasks:["Verifikasi NIB Koperasi","Catat tanggal pendirian Koperasi","Verifikasi kesesuaian alamat KTP dan alamat gerai","Arsip dokumen NIB"]},
+{d:11,t:"Penyusunan Template Administrasi",m:"RUMAH",tasks:["Buat template nota penjualan","Buat template stok masuk","Buat template stok keluar","Buat template laporan harian","Buat template laporan untuk PIC Agrinas"]},
+{d:12,t:"Riset Kebutuhan Warga",m:"RUMAH",tasks:["Tanya kebutuhan beras Warga 1","Tanya kebutuhan beras Warga 2","Tanya kebutuhan beras Warga 3","Catat jam operasional warung","Catat produk yang belum tersedia di Desa"]},
+{d:13,t:"Sketsa Tata Letak Gerai",m:"RUMAH",tasks:["Gambar denah gerai","Tentukan posisi rak beras","Tentukan posisi kasir","Foto sketsa denah"]},
+{d:14,t:"Laporan Mingguan 2",m:"RUMAH",tasks:["Kirim foto kunjungan lapangan 1","Kirim data spesifikasi gerai","Kirim sketsa denah","Kirim daftar harga terbaru","Mohon arahan Kepala Desa"]},
+{d:15,t:"Kunjungan Lapangan 2 - Presentasi Data",m:"DESA",tasks:["Cetak poster HET Rp12.500/kg","Cetak sketsa denah","Presentasikan data siap Agrinas kepada Kepala Desa","Dokumentasikan poster di gerai","Kirim dokumentasi kepada Kepala Desa"]},
+{d:16,t:"Simulasi Perhitungan Margin",m:"RUMAH",tasks:["Hitung margin: HET Rp12.500 - Gudang Rp11.000 = Rp1.500/kg","Hitung simulasi laba kotor 20 karung","Hitung estimasi biaya plastik","Hitung estimasi biaya transport","Catat sebagai simulasi (bukan realisasi)"]},
+{d:17,t:"Pembuatan Grup Informasi Harga",m:"RUMAH",tasks:["Buat Grup WA Info Harga KDKMP Kasih","Undang 10 warga Desa Kasih","Posting poster HET dan sumber resmi","Informasikan sistem distribusi 1 pintu Agrinas"]},
+{d:18,t:"Publikasi Edukasi",m:"RUMAH",tasks:["Buat video edukasi 15 detik: HET Rp12.500/kg","Cantumkan sumber: Keputusan Bapanas No 34/2026","Posting di Status WA","Posting di Grup WA"]},
+{d:19,t:"Checklist Kesiapan Data Agrinas",m:"RUMAH",tasks:["Cek foto gerai: sudah/belum","Cek ukuran gerai: sudah/belum","Cek data listrik: sudah/belum","Cek NIB: sudah/belum","Cek daftar harga dan sumber: sudah/belum"]},
+{d:20,t:"Pendataan Akses Logistik",m:"RUMAH",tasks:["Catat jarak gerai ke jalan raya","Catat jenis akses: motor/mobil/truk","Catat estimasi waktu tempuh dari kecamatan","Foto akses jalan untuk data Agrinas"]},
+{d:21,t:"Laporan Mingguan 3",m:"RUMAH",tasks:["Kirim checklist kesiapan data Agrinas","Kirim foto akses jalan","Kirim simulasi margin","Kirim tautan Grup WA","Mohon jadwal rapat Desa jika diperlukan"]},
+{d:22,t:"Pemeliharaan Data",m:"RUMAH",tasks:["Rapikan semua data dalam 1 folder","Respons chat warga di Grup","Perbarui website KDKMP Kasih"]},
+{d:23,t:"Kunjungan Lapangan 3 - Rapat Koordinasi",m:"DESA",tasks:["Hadir jika diundang rapat Desa","Presentasi data gerai, harga, dan dokumentasi","Minta penetapan target kesiapan PIC Agrinas","Catat hasil rapat"]},
+{d:24,t:"Penyusunan Timeline",m:"RUMAH",tasks:["Susun checklist final data Desa","Susun checklist data Manager","Susun timeline 7 hari persiapan","Kirim timeline kepada Kepala Desa"]},
+{d:25,t:"Gladi Resik Administrasi",m:"RUMAH",tasks:["Simulasi penulisan nota penjualan","Simulasi perhitungan kembalian","Simulasi laporan tutup kas harian","Siapkan pakaian kerja"]},
+{d:26,t:"Informasi Kesiapan",m:"RUMAH",tasks:["Posting informasi kesiapan data di Grup WA","Informasikan kepada 10 warga secara personal","Siapkan daftar antrian jika diperlukan"]},
+{d:27,t:"Finalisasi Data Gerai",m:"RUMAH",tasks:["Verifikasi ulang foto gerai","Verifikasi ulang daftar harga dan sumber","Verifikasi ulang NIB dan data pengurus","Siapkan folder siap serah kepada PIC Agrinas"]},
+{d:28,t:"Status Siaga PIC Agrinas",m:"STANDBY",tasks:["Siaga HP untuk koordinasi PIC Agrinas","Siapkan folder foto gerai di HP","Siapkan daftar harga dan sumber","Siapkan share location gerai"]},
+{d:29,t:"Evaluasi Pra-Operasional",m:"RUMAH",tasks:["Tulis kendala selama 30 hari","Tulis kebutuhan yang belum dipenuhi Desa","Tulis saran perbaikan untuk Kepala Desa"]},
+{d:30,t:"Laporan 30 Hari",m:"RUMAH",tasks:["Export laporan 30 hari","Kirim laporan kepada Kepala Desa","Kirim laporan kepada Korwil","Arsip untuk diserahkan kepada PIC Agrinas"]},
 ];
 
 const container=document.getElementById('container');
@@ -89,46 +94,31 @@ function render(){
  container.innerHTML=''; let total=0,done=0;
  days.forEach(day=>{
    let html=day.tasks.map((t,i)=>{
-     const key=`v5_${day.d}_${i}`; const chk=localStorage.getItem(key)==='1'; if(chk)done++; total++;
-     return `<label class="flex gap-2 items-start py-1.5 px-2 rounded hover:bg-slate-50 cursor-pointer border-b border-slate-50 last:border-0">
-       <input type="checkbox" data-key="${key}" ${chk?'checked':''} class="mt-0.5 w-4 h-4">
-       <span class="text-[11px] ${chk?'line-through text-slate-400':''}">${t.replace('☐','')}</span>
-     </label>`;
+     const key=`v6c_${day.d}_${i}`; const chk=localStorage.getItem(key)==='1'; if(chk)done++; total++;
+     return `<label class="flex gap-2 items-start py-1.5 px-2 rounded hover:bg-slate-50 cursor-pointer border-b last:border-0"><input type="checkbox" data-key="${key}" ${chk?'checked':''} class="mt-0.5 w-4 h-4"><span class="text-[11px] ${chk?'line-through text-slate-400':''}">${t}</span></label>`;
    }).join('');
-   const sisa=day.tasks.length - day.tasks.filter((_,i)=>localStorage.getItem(`v5_${day.d}_${i}`)==='1').length;
+   const sisa=day.tasks.length - day.tasks.filter((_,i)=>localStorage.getItem(`v6c_${day.d}_${i}`)==='1').length;
    const div=document.createElement('div');
-   div.className='bg-white p-3 rounded-xl border shadow-sm';
-   div.innerHTML=`
-    <div class="flex justify-between items-center">
-      <p class="font-bold text-[12px]">HARI ${day.d}: ${day.t}</p>
-      <span class="text-[9px] px-2 py-0.5 rounded-full ${day.m.includes('RUMAH')?'bg-blue-100 text-blue-700':'bg-orange-100 text-orange-700'}">${day.m}</span>
-    </div>
-    <div class="mt-1 flex gap-2">
-      <span class="text-[9px] px-2 py-0.5 rounded-full bg-slate-100">${day.tasks.length} data</span>
-      <span class="text-[9px] px-2 py-0.5 rounded-full ${sisa===0?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${sisa===0?'Tuntas '+day.tasks.length+'/'+day.tasks.length:'Sisa '+sisa+' dari '+day.tasks.length+' belum'}</span>
-    </div>
-    <div class="mt-2 bg-slate-50 rounded-lg border">${html}</div>
-    <textarea id="note${day.d}" placeholder="Catatan hari ${day.d}..." class="mt-2 w-full border rounded p-2 text-[11px] h-12">${localStorage.getItem('noteV5_'+day.d)||''}</textarea>
-   `;
+   div.className='bg-white p-3 rounded-xl border';
+   div.innerHTML=`<div class="flex justify-between"><p class="font-bold text-[12px]">HARI ${day.d}: ${day.t}</p><span class="text-[9px] px-2 py-0.5 rounded-full ${day.m.includes('RUMAH')?'bg-blue-100 text-blue-700':'bg-orange-100 text-orange-700'}">${day.m}</span></div><p class="text-[9px] mt-1 ${sisa===0?'bg-green-100 text-green-700':'bg-red-100 text-red-700'} inline-block px-2 py-0.5 rounded-full">${sisa===0?'Selesai':'Sisa '+sisa+' dari '+day.tasks.length}</p><div class="mt-2 bg-slate-50 rounded border">${html}</div><textarea id="note${day.d}" placeholder="Catatan hari ${day.d}..." class="mt-2 w-full border rounded p-2 text-[11px] h-12">${localStorage.getItem('noteV6c_'+day.d)||''}</textarea>`;
    container.appendChild(div);
  });
- document.getElementById('progressBar').style.width=(total?Math.round(done/total*100):0)+'%';
- document.getElementById('progressText').innerText=(total?Math.round(done/total*100):0)+'%';
- document.getElementById('sisaText').innerText='Sisa '+(total-done)+' dari '+total+' data belum';
+ document.getElementById('bar').style.width=(total?Math.round(done/total*100):0)+'%';
+ document.getElementById('txt').innerText=(total?Math.round(done/total*100):0)+'% ('+done+'/'+total+')';
  container.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',e=>{localStorage.setItem(e.target.dataset.key,e.target.checked?'1':'0'); render();}));
- container.querySelectorAll('textarea').forEach(ta=>ta.addEventListener('input',e=>{localStorage.setItem('noteV5_'+e.target.id.replace('note',''),e.target.value);}));
+ container.querySelectorAll('textarea').forEach(ta=>ta.addEventListener('input',e=>{localStorage.setItem('noteV6c_'+e.target.id.replace('note',''),e.target.value);}));
 }
 render();
 function exportLaporan(){
- let txt=`LAPORAN 30 HARI V5 - KDKMP KASIH - TANPA PARAF - DATA DIPISAH\nID 33.03.18.2008 - ${new Date().toLocaleString('id-ID')}\n\n== HARGA + SUMBER ==\n`;
+ let txt=`LAPORAN 30 HARI KERJA PRA-OPERASIONAL - KDKMP DESA KASIH\nID: 33.03.18.2008 - Kertanegara - Purbalingga\nTanggal Export: ${new Date().toLocaleString('id-ID')}\nSistem Distribusi: 1 Pintu PT Agrinas Pangan Nusantara\n\n== DAFTAR HARGA DAN SUMBER ==\n`;
  hargaData.forEach(h=>{txt+=`- ${h.nama} | ${h.harga} | Sumber: ${h.sumber}\n`;});
- txt+=`\n== RINCIAN PER HARI - DATA DIPISAH ==\n`;
+ txt+=`\n== RINCIAN HARIAN ==\n`;
  days.forEach(day=>{
    txt+=`\nHARI ${day.d} - ${day.t} (${day.m})\n`;
-   day.tasks.forEach((t,i)=>{txt+=` ${localStorage.getItem(`v5_${day.d}_${i}`)==='1'?'[✓]':'[ ]'} ${t.replace('☐','')}\n`;});
-   txt+=` Catatan: ${localStorage.getItem('noteV5_'+day.d)||'-'}\n`;
+   day.tasks.forEach((t,i)=>{txt+=` ${localStorage.getItem(`v6c_${day.d}_${i}`)==='1'?'[✓]':'[ ]'} ${t}\n`;});
+   txt+=` Catatan: ${localStorage.getItem('noteV6c_'+day.d)||'-'}\n`;
  });
- const blob=new Blob([txt],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Laporan-V5-Data-Dipisah-KDKMP-Kasih.txt'; a.click();
+ const blob=new Blob([txt],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Laporan-30Hari-KDKMP-Kasih.txt'; a.click();
 }
 </script>
 </body>
