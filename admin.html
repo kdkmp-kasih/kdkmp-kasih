@@ -1,112 +1,25 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin KDKMP - Tanpa Ngoding</title>
-<style>
-*{box-sizing:border-box} body{margin:0;font-family:system-ui;background:#eef2f0;padding:12px}
-.card{background:white;border-radius:16px;padding:16px;max-width:650px;margin:12px auto;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-input,select,textarea{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #ccc;border-radius:10px}
-button{width:100%;padding:12px;border:0;border-radius:10px;font-weight:700;cursor:pointer;margin-top:6px}
-.btn-green{background:#0f4d2e;color:white} .btn-blue{background:#2563eb;color:white} .btn-gray{background:#e5e7eb}
-label{font-size:12px;font-weight:700} .small{font-size:12px;color:gray}
-#panel{display:none} .row{display:flex;gap:8px} .row>div{flex:1}
-.user-list{font-size:13px} .user-list div{padding:6px 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between}
-</style>
-</head>
-<body>
-
-<div class="card" id="loginBox">
-<h3>Login Pengelola KDKMP</h3>
-<label>Pilih User</label>
-<select id="selUser"></select>
-<input id="pass" type="password" placeholder="Password">
-<button class="btn-green" onclick="doLogin()">Masuk</button>
-<p class="small">Default: manajer / kasih2026 . Karyawan bisa ditambah di bawah setelah login manajer.</p>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin KDKMP</title>
+<style>body{font-family:system-ui;background:#eef2f0;padding:12px}.card{background:white;border-radius:16px;padding:16px;max-width:600px;margin:12px auto}input,textarea,select{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #ccc;border-radius:10px}button{width:100%;padding:12px;border:0;border-radius:10px;font-weight:700} .g{background:#0f4d2e;color:white} #panel{display:none}</style>
+</head><body>
+<div class="card" id="login"><h3>Login Pengelola</h3><select id="selUser"></select><input id="pass" type="password" placeholder="Password"><button class="g" onclick="login()">Masuk</button><p style="font-size:12px">Default: manajer / kasih2026</p></div>
+<div id="panel"><div class="card">
+<h3 id="hi"></h3>
+<label>Tanggal</label><input id="tgl"><label>Judul</label><input id="judul"><label>Isi</label><textarea id="isi" rows="4"></textarea><label>Harga</label><input id="harga" value="Rp62.500 / 5kg"><label>Stok</label><input id="stok" value="Tersedia">
+<button class="g" onclick="buat()">Buat Info Baru</button>
+<textarea id="raw" rows="8" style="margin-top:12px"></textarea>
+<button class="g" onclick="download()" style="background:#2563eb;margin-top:8px">📥 Download data.json</button>
+<p style="font-size:12px">Setelah download: Buka GitHub > file data.json > Edit (pensil) > Paste isi download > Commit. 1 menit langsung muncul di desa.html</p>
 </div>
-
-<div id="panel">
-<div class="card">
-<h3 id="welcome"></h3>
-<label>Tanggal</label><input id="tanggal">
-<label>Judul Info</label><input id="judul" placeholder="Contoh: Beras Datang 100 Karung">
-<label>Isi Lengkap</label><textarea id="isi" rows="4" placeholder="Tulis info untuk warga..."></textarea>
-<div class="row"><div><label>Harga</label><input id="harga" value="Rp62.500 / 5kg"></div><div><label>Stok</label><input id="stok" value="Tersedia"></div></div>
-<label>GitHub Token (isi sekali saja biar auto publish)</label><input id="token" placeholder="ghp_xxx... (kosongkan kalau mau download manual)">
-<button class="btn-green" onclick="publish()">🚀 Publish ke Warga</button>
-<button class="btn-blue" onclick="downloadJSON()" style="margin-top:8px">📥 Download Manual (kalau belum ada token)</button>
-<p id="status" class="small"></p>
-</div>
-
-<div class="card" id="kelolaUser">
-<h3>Kelola Karyawan (khusus Manajer)</h3>
-<div class="row"><div><label>Nama Karyawan Baru</label><input id="newName" placeholder="budi"></div><div><label>Password</label><input id="newPass" placeholder="budi123"></div></div>
-<label>Jabatan</label><select id="newRole"><option value="karyawan">Karyawan Gerai</option><option value="manajer">Manajer</option></select>
-<button class="btn-gray" onclick="addUser()">+ Tambah User</button>
-<div class="user-list" id="listUser"></div>
-<p class="small">User disimpan di HP manajer ini. Untuk share ke HP lain, klik Export User dan import di HP lain.</p>
-<div class="row"><button class="btn-gray" onclick="exportUsers()">Export User</button><button class="btn-gray" onclick="importUsers()">Import User</button></div>
-</div>
-
-<div class="card"><label>Data Saat Ini</label><textarea id="raw" rows="6"></textarea></div>
-</div>
-
+<div class="card" id="boxUser"><h4>Tambah Karyawan (Manajer only)</h4><input id="nName" placeholder="nama karyawan baru, contoh: budi"><input id="nPass" placeholder="password baru"><button onclick="addUser()" style="background:#e5e7eb">+ Tambah</button><div id="listU" style="font-size:13px;margin-top:8px"></div></div></div>
 <script>
-const REPO='kdkmp-kasih/kdkmp-kasih', PATH='data.json', BRANCH='main';
 let USERS=JSON.parse(localStorage.getItem('kdkmp_users')||'[{"name":"manajer","pass":"kasih2026","role":"manajer"}]');
-let CURRENT=null, DATA=[];
-
-function renderUsers(){ 
- selUser.innerHTML=''; USERS.forEach(u=>{let o=document.createElement('option');o.value=u.name;o.textContent=`${u.name} - ${u.role}`;selUser.appendChild(o)});
- let html=''; USERS.forEach((u,i)=>{html+=`<div><span>${u.name} (${u.role})</span><span><a href="#" onclick="delUser(${i})">hapus</a></span></div>`}); listUser.innerHTML=html;
-}
-renderUsers();
-
-function doLogin(){
- let n=selUser.value, p=pass.value;
- let f=USERS.find(u=>u.name===n && u.pass===p);
- if(!f) return alert('Password salah');
- CURRENT=f; loginBox.style.display='none'; panel.style.display='block';
- welcome.textContent=`Halo, ${CURRENT.name} (${CURRENT.role})`;
- tanggal.value=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
- token.value=localStorage.getItem('gh_token')||'';
- if(CURRENT.role!=='manajer') kelolaUser.style.display='none';
- loadData();
-}
-async function loadData(){ try{let r=await fetch('./data.json?t='+Date.now()); DATA=await r.json(); raw.value=JSON.stringify(DATA,null,2);}catch{DATA=[]} }
-
-function addUser(){
- if(CURRENT.role!=='manajer') return alert('Hanya manajer');
- let n=newName.value.trim().toLowerCase(), p=newPass.value.trim(), r=newRole.value;
- if(!n||!p) return alert('Isi nama dan pass');
- if(USERS.find(u=>u.name===n)) return alert('Nama sudah ada');
- USERS.push({name:n,pass:p,role:r}); localStorage.setItem('kdkmp_users',JSON.stringify(USERS)); renderUsers(); newName.value=''; newPass.value='';
-}
-function delUser(i){ if(USERS.length===1) return alert('Minimal 1 user'); if(confirm('Hapus?')){USERS.splice(i,1); localStorage.setItem('kdkmp_users',JSON.stringify(USERS)); renderUsers();} }
-function exportUsers(){ raw.value=JSON.stringify(USERS); prompt('Copy data user ini:', raw.value); }
-function importUsers(){ let s=prompt('Paste data user export:'); if(!s) return; try{USERS=JSON.parse(s); localStorage.setItem('kdkmp_users',JSON.stringify(USERS)); renderUsers(); alert('Berhasil import');}catch{alert('Format salah');} }
-
-async function publish(){
- let baru={tanggal:tanggal.value,judul:judul.value,isi:isi.value,harga:harga.value,stok:stok.value,oleh:CURRENT.name,role:CURRENT.role};
- let all=[...DATA,baru]; raw.value=JSON.stringify(all,null,2);
- let tk=token.value.trim();
- if(tk){
-  localStorage.setItem('gh_token',tk);
-  status.textContent='Mengirim otomatis...';
-  let sha=''; try{let r=await fetch(`https://api.github.com/repos/${REPO}/contents/${PATH}?ref=${BRANCH}`,{headers:{Authorization:`token ${tk}`}}); let j=await r.json(); sha=j.sha;}catch{}
-  let content=btoa(unescape(encodeURIComponent(JSON.stringify(all,null,2))));
-  let body={message:`Update oleh ${CURRENT.name} - ${baru.tanggal}`,content,branch:BRANCH}; if(sha) body.sha=sha;
-  let res=await fetch(`https://api.github.com/repos/${REPO}/contents/${PATH}`,{method:'PUT',headers:{Authorization:`token ${tk}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(res.ok){ status.innerHTML='✅ Berhasil! 1 menit lagi cek <a href="./desa.html" target="_blank">desa.html</a>'; DATA=all; }
-  else { let t=await res.text(); status.textContent='Gagal auto, silakan pakai Download Manual: '+t; }
- } else {
-  status.textContent='Token kosong, pakai Download Manual lalu upload di GitHub';
- }
-}
-function downloadJSON(){
- let blob=new Blob([raw.value],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click();
- status.textContent='File terdownload. Buka GitHub > data.json > Edit > Paste > Commit.';
-}
-</script>
-</body>
-</html>
+let DATA=[], CUR=null;
+function render(){selUser.innerHTML='';USERS.forEach(u=>{let o=document.createElement('option');o.value=u.name;o.textContent=u.name+' - '+u.role;selUser.appendChild(o)});let h='';USERS.forEach(u=>h+=`<div>${u.name} (${u.role})</div>`);listU.innerHTML=h}
+render();
+function login(){let u=USERS.find(x=>x.name===selUser.value&&x.pass===pass.value); if(!u) return alert('Salah'); CUR=u; login.style.display='none'; panel.style.display='block'; hi.textContent='Halo '+u.name; tgl.value=new Date().toLocaleDateString('id-ID'); load()}
+async function load(){try{let r=await fetch('./data.json?t='+Date.now()); DATA=await r.json(); raw.value=JSON.stringify(DATA,null,2)}catch{DATA=[]}}
+function addUser(){if(CUR.role!=='manajer') return alert('Hanya manajer'); let n=nName.value.trim().toLowerCase(), p=nPass.value.trim(); if(!n||!p) return alert('Isi nama pass'); USERS.push({name:n,pass:p,role:'karyawan'}); localStorage.setItem('kdkmp_users',JSON.stringify(USERS)); render(); nName.value=''; nPass.value='';}
+function buat(){let baru={tanggal:tgl.value,judul:judul.value,isi:isi.value,harga:harga.value,stok:stok.value,oleh:CUR.name,role:CUR.role}; DATA.push(baru); raw.value=JSON.stringify(DATA,null,2); alert('Info dibuat di bawah, tinggal Download')}
+function download(){let b=new Blob([raw.value],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='data.json'; a.click()}
+</script></body></html>
