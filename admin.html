@@ -7,47 +7,51 @@
 </head>
 <body class="bg-slate-100 p-4">
 <div class="max-w-xl mx-auto bg-white p-4 rounded-xl border" id="loginBox">
-<h1 class="font-bold">Login Admin</h1>
+<h1 class="font-bold text-sm">Login Admin KDKMP Kasih</h1>
 <input id="user" placeholder="Username" class="w-full border p-2 rounded mt-3 text-sm">
 <input id="pass" type="password" placeholder="Password" class="w-full border p-2 rounded mt-2 text-sm">
 <button onclick="login()" class="w-full bg-[#0f5132] text-white p-2 rounded mt-3 text-sm font-bold">Masuk</button>
-<p class="text-[10px] mt-2">default: admin / kasih2026</p>
+<p class="text-[10px] mt-2">admin / kasih2026</p>
 </div>
 
 <div class="max-w-xl mx-auto hidden" id="mainBox">
 <div class="bg-white p-4 rounded-xl border">
-<h1 class="font-bold">Buat Pemberitahuan</h1>
+<h1 class="font-bold text-sm">Tambah Pengumuman Baru</h1>
 <input id="judul" placeholder="Judul" class="w-full border p-2 rounded mt-3 text-sm">
 <textarea id="isi" placeholder="Isi pengumuman" class="w-full border p-2 rounded mt-2 text-sm h-20"></textarea>
 <input id="harga" placeholder="Harga + sumber" class="w-full border p-2 rounded mt-2 text-sm">
 <input id="stok" placeholder="Stok" class="w-full border p-2 rounded mt-2 text-sm">
 <button onclick="tambah()" class="w-full bg-[#0f5132] text-white p-2 rounded mt-3 text-sm font-bold">+ Tambah ke Daftar</button>
 </div>
-
 <div class="bg-white p-4 rounded-xl border mt-3">
-<p class="font-bold text-sm">Daftar (tersimpan di HP, lalu export)</p>
+<p class="font-bold text-sm">Daftar Saat Ini (dari data.json)</p>
 <div id="list" class="mt-2 grid gap-2"></div>
-<button onclick="download()" class="w-full bg-yellow-500 text-black p-2 rounded mt-3 text-sm font-bold">DOWNLOAD data.json BARU</button>
-<p class="text-[10px] mt-2">Setelah download, upload file data.json ke GitHub kamu (drag drop di github.com). Warga langsung lihat baru.</p>
-<a href="info.html" class="text-xs underline mt-2 inline-block">Lihat halaman warga</a>
+<button onclick="download()" class="w-full bg-yellow-400 text-black p-2 rounded mt-3 text-sm font-bold">DOWNLOAD data.json BARU</button>
+<p class="text-[10px] mt-2">1. Klik download<br>2. Buka github.com/kdkmp-kasih/kdkmp-kasih<br>3. Upload -> Replace data.json lama<br>4. Tunggu 1 menit, buka info.html lagi</p>
+<a href="info.html" class="text-xs underline mt-2 inline-block">Lihat Halaman Warga</a>
 </div>
 </div>
 
 <script>
 const USER="admin"; const PASS="kasih2026";
-let data = JSON.parse(localStorage.getItem('kasihInfo')||'[]');
-function login(){ if(user.value==USER && pass.value==PASS){ loginBox.classList.add('hidden'); mainBox.classList.remove('hidden'); render(); } else alert('Salah'); }
+let data=[];
+function login(){
+  if(user.value==USER && pass.value==PASS){
+    loginBox.classList.add('hidden'); mainBox.classList.remove('hidden');
+    fetch('./data.json?v='+Date.now()).then(r=>r.json()).then(d=>{ data=d; render(); }).catch(()=>{ data=[]; render(); });
+  } else alert('Salah');
+}
 function tambah(){
   if(!judul.value) return alert('Judul wajib');
   data.push({tanggal:new Date().toLocaleDateString('id-ID'), judul:judul.value, isi:isi.value, harga:harga.value, stok:stok.value});
-  localStorage.setItem('kasihInfo', JSON.stringify(data));
   judul.value=''; isi.value=''; harga.value=''; stok.value=''; render();
 }
-function hapus(i){ data.splice(i,1); localStorage.setItem('kasihInfo', JSON.stringify(data)); render(); }
+function hapus(i){ data.splice(i,1); render(); }
 function render(){
   const el=document.getElementById('list'); el.innerHTML='';
-  data.forEach((d,i)=>{
-    el.innerHTML+=`<div class="border p-2 rounded text-xs"><b>${d.judul}</b> - ${d.tanggal}<br>${d.isi}<br><button onclick="hapus(${i})" class="text-red-600 text-[10px] underline">Hapus</button></div>`;
+  data.slice().reverse().forEach((d,i)=>{
+    const realIndex = data.length-1-i;
+    el.innerHTML+=`<div class="border p-2 rounded text-xs"><b>${d.judul}</b> - ${d.tanggal}<br>${d.isi}<br><button onclick="hapus(${realIndex})" class="text-red-600 text-[10px] underline mt-1">Hapus</button></div>`;
   });
 }
 function download(){
