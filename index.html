@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KDKMP Desa Kasih - Kertanegara</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:'Plus Jakarta Sans',sans-serif}.tab-active{background:#15803d;color:white}</style>
+</head>
+<body class="bg-[#f6f7f4]">
+<header class="bg-green-700 text-white p-3 sticky top-0 z-50">
+<div class="max-w-6xl mx-auto flex justify-between items-center">
+<div><h1 class="font-bold text-[13px]">KDKMP DESA KASIH</h1><p class="text-[9px] opacity-80">Kec.Kertanegara - Kab.Purbalingga | 3.500 Jiwa | 33.03.18.2008</p></div>
+<div class="flex gap-1">
+<button onclick="switchTab('dash')" id="btn-dash" class="tab-active px-3 py-1 rounded-full text-[10px] font-bold">Dashboard</button>
+<button onclick="switchTab('stake')" id="btn-stake" class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold">Kontak</button>
+</div>
+</div>
+</header>
+
+<div id="tab-dash" class="max-w-6xl mx-auto p-3 grid grid-cols-1 lg:grid-cols-3 gap-3">
+<div class="lg:col-span-2 space-y-3">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+<div class="bg-white p-2 rounded-xl border"><p class="text-[9px]">DESIL 1-3</p><input id="desil123" class="font-bold text-lg w-full outline-none" value="380"><p class="text-[9px] text-red-600">Target Subsidi Beras</p></div>
+<div class="bg-white p-2 rounded-xl border"><p class="text-[9px]">BERAS SPHP</p><input id="stokBeras" class="font-bold text-lg w-full outline-none" value="500">kg</div>
+<div class="bg-white p-2 rounded-xl border"><p class="text-[9px]">OMZET HARI INI</p><input id="omzet" class="font-bold text-lg w-full outline-none" placeholder="Rp0"></div>
+<div class="bg-white p-2 rounded-xl border"><p class="text-[9px]">UMKM KASIH</p><input id="umkmCount" class="font-bold text-lg w-full outline-none" value="3"><p class="text-[9px]">Aktif</p></div>
+</div>
+<div class="bg-white p-3 rounded-xl border">
+<h2 class="font-bold text-xs">Analisis Desil DTSE - Sumber: Bidan Desa / Agen Perlinsos</h2>
+<div class="grid grid-cols-5 md:grid-cols-10 gap-2 mt-2" id="desilInputs"></div>
+<canvas id="chartDesil" height="100" class="mt-2"></canvas>
+<p class="text-[9px] text-gray-400 mt-1">Desil 1-3 = Penerima Beras SPHP Rp12.500 | Desil 4-5 = Minyakita Rp15.700</p>
+</div>
+<div class="bg-white p-3 rounded-xl border">
+<h2 class="font-bold text-xs">Potensi Desa Kasih (Padi & Kelapa)</h2>
+<div class="grid md:grid-cols-3 gap-2 mt-2 text-[11px]">
+<div class="border rounded-lg p-2">🌾 Padi Sawah<input id="komoditasPadi" class="w-full border rounded p-1 mt-1 text-[11px]" placeholder="Luas:...Ha"></div>
+<div class="border rounded-lg p-2">🥥 Gula Kelapa<input id="komoditasKelapa" class="w-full border rounded p-1 mt-1 text-[11px]" placeholder="Penderes:...orang"></div>
+<div class="border rounded-lg p-2">🍌 UMKM<input id="komoditasPisang" class="w-full border rounded p-1 mt-1 text-[11px]" placeholder="Keripik Ibu..."></div>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="bg-white p-3 rounded-xl border"><h2 class="font-bold text-xs">Stok Subsidi Harian</h2>
+<div class="space-y-2 mt-2 text-[11px]">
+<div class="flex justify-between items-center">Beras SPHP<input id="sBeras" class="border rounded w-20 p-1 text-right" placeholder="kg"></div>
+<div class="flex justify-between items-center">Minyakita<input id="sMinyak" class="border rounded w-20 p-1 text-right" placeholder="L"></div>
+<div class="flex justify-between items-center">LPG 3kg<input id="sLpg" class="border rounded w-20 p-1 text-right" placeholder="tab"></div>
+<div class="flex justify-between items-center">Pupuk<input id="sPupuk" class="border rounded w-20 p-1 text-right" placeholder="sak"></div>
+</div>
+<button onclick="saveData()" class="w-full bg-green-700 text-white rounded-lg py-2 mt-3 text-[11px] font-bold">SIMPAN & DOWNLOAD LAPORAN</button>
+</div>
+<div class="bg-green-50 p-3 rounded-xl border border-green-200"><h2 class="font-bold text-[11px]">Link Kerja Online</h2><p class="text-[10px] mt-1">Setelah upload ke GitHub Pages, share link ini ke:<br>• Kades Kasih<br>• Korwil Agrinas<br>• Dinkop Purbalingga</p></div>
+</div>
+</div>
+
+<div id="tab-stake" class="max-w-6xl mx-auto p-3 hidden">
+<div class="bg-white p-3 rounded-xl border">
+<div class="flex justify-between items-center"><h2 class="font-bold text-xs">Pemetaan Kontak Penting Desa Kasih</h2><button onclick="addStake()" class="bg-green-700 text-white px-3 py-1 rounded-full text-[10px]">+ Tambah Kontak</button></div>
+<div class="overflow-auto mt-3"><table class="w-full text-[10px] border-collapse"><thead><tr class="bg-gray-100"><th class="border p-1 text-left">Kategori</th><th class="border p-1">Nama / Jabatan</th><th class="border p-1">No HP (08...)</th><th class="border p-1">Peran KDKMP</th><th class="border p-1">Aksi</th></tr></thead><tbody id="stakeBody"></tbody></table></div>
+</div>
+</div>
+
+<script>
+const defaultStake=[
+{K:'Pemerintah Desa',N:'Kepala Desa Kasih',HP:'',P:'SK Pengurus & Aset Desa'},
+{K:'Pemerintah Desa',N:'Sekdes / Operator SIKS-NG',HP:'',P:'Data DTSE 3.500 jiwa'},
+{K:'Tokoh',N:'Bidan Desa / Agen Perlinsos Posyandu',HP:'',P:'Data Desil 1-10 + Calon Karyawan'},
+{K:'Tokoh',N:'Ketua Gapoktan Kasih',HP:'',P:'Supplier Padi Lokal'},
+{K:'Keamanan',N:'Babinsa Kertanegara',HP:'',P:'Pengamanan Stok'},
+{K:'Pasok',N:'Bulog Banyumas',HP:'',P:'Beras SPHP Rp12.500'},
+{K:'Pasok',N:'Agen LPG 3kg Kertanegara',HP:'',P:'LPG HET'},
+{K:'Pasok',N:'ID FOOD - Minyakita',HP:'',P:'Minyakita Rp15.700'},
+{K:'Pusat',N:'Dinas Koperasi Purbalingga',HP:'',P:'Perizinan & Pengawasan'},
+{K:'Pusat',N:'Korwil Agrinas Purbalingga',HP:'',P:'Laporan Simkopdes'},
+];
+let chart;
+function switchTab(t){document.getElementById('tab-dash').classList.toggle('hidden',t!=='dash');document.getElementById('tab-stake').classList.toggle('hidden',t!=='stake');document.getElementById('btn-dash').className=t==='dash'?'tab-active px-3 py-1 rounded-full text-[10px] font-bold':'bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold';document.getElementById('btn-stake').className=t==='stake'?'tab-active px-3 py-1 rounded-full text-[10px] font-bold':'bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold';}
+function renderStake(){const tbody=document.getElementById('stakeBody');const data=JSON.parse(localStorage.getItem('stake-kasih-v3')||JSON.stringify(defaultStake));tbody.innerHTML='';data.forEach((s,i)=>{tbody.innerHTML+=`<tr><td class="border p-1"><input value="${s.K}" onchange="editStake(${i},'K',this.value)" class="w-full outline-none text-[10px]"></td><td class="border p-1"><input value="${s.N}" onchange="editStake(${i},'N',this.value)" class="w-full outline-none font-bold text-[10px]"></td><td class="border p-1"><input value="${s.HP}" placeholder="08..." onchange="editStake(${i},'HP',this.value)" class="w-full outline-none text-[10px]"></td><td class="border p-1"><input value="${s.P}" onchange="editStake(${i},'P',this.value)" class="w-full outline-none text-[10px]"></td><td class="border p-1 text-center"><a href="https://wa.me/62${s.HP.replace(/^0/,'')}" target="_blank" class="bg-green-100 text-green-700 px-2 py-1 rounded-full">WA</a> <button onclick="delStake(${i})" class="text-red-400 ml-1">x</button></td></tr>`});}
+function editStake(i,k,v){let d=JSON.parse(localStorage.getItem('stake-kasih-v3')||JSON.stringify(defaultStake));d[i][k]=v;localStorage.setItem('stake-kasih-v3',JSON.stringify(d));}
+function addStake(){let d=JSON.parse(localStorage.getItem('stake-kasih-v3')||JSON.stringify(defaultStake));d.push({K:'Baru',N:'Nama Baru',HP:'',P:'Peran'});localStorage.setItem('stake-kasih-v3',JSON.stringify(d));renderStake();}
+function delStake(i){let d=JSON.parse(localStorage.getItem('stake-kasih-v3')||JSON.stringify(defaultStake));d.splice(i,1);localStorage.setItem('stake-kasih-v3',JSON.stringify(d));renderStake();}
+function initDesilInputs(){const c=document.getElementById('desilInputs');for(let i=1;i<=10;i++){c.innerHTML+=`<div><label class="text-[9px]">D${i}</label><input id="d${i}" type="number" value="${i<=3?120:i<=5?150:80}" class="w-full border rounded p-1 text-center text-[11px]" oninput="updateChart()"></div>`}}
+function initChart(){const ctx=document.getElementById('chartDesil').getContext('2d');chart=new Chart(ctx,{type:'bar',data:{labels:['D1','D2','D3','D4','D5','D6','D7','D8','D9','D10'],datasets:[{label:'KK',data:[120,120,120,150,150,80,80,80,80,80],backgroundColor:['#dc2626','#dc2626','#dc2626','#facc15','#facc15','#22c55e','#22c55e','#22c55e','#22c55e','#22c55e']}]},options:{responsive:true,plugins:{legend:{display:false}}}})}
+function updateChart(){let data=[];for(let i=1;i<=10;i++)data.push(parseInt(document.getElementById('d'+i).value)||0);chart.data.datasets[0].data=data;chart.update();document.getElementById('desil123').value=data[0]+data[1]+data[2];localStorage.setItem('desil-kasih-v3',JSON.stringify(data));}
+function saveData(){const p={beras:document.getElementById('sBeras').value,minyak:document.getElementById('sMinyak').value,lpg:document.getElementById('sLpg').value,pupuk:document.getElementById('sPupuk').value,omzet:document.getElementById('omzet').value,date:new Date().toLocaleDateString('id-ID')};localStorage.setItem('stok-kasih-v3',JSON.stringify(p));let txt=`LAPORAN KDKMP KASIH - ${p.date}\nDESIL 1-3: ${document.getElementById('desil123').value} KK\nSTOK: Beras ${p.beras}kg, Minyak ${p.minyak}L, LPG ${p.lpg} tab, Pupuk ${p.pupuk} sak\nOMZET: Rp${p.omzet}\nLINK: github pages kdkmp-kasih`;const blob=new Blob([txt],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Laporan-Kasih-${Date.now()}.txt`;a.click();alert('Laporan tersimpan!');}
+window.onload=()=>{initDesilInputs();initChart();renderStake();}
+</script>
+</body>
+</html>
