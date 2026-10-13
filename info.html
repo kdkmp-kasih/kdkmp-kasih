@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Info KDKMP Kasih</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#f8fafc] p-4">
+<div class="max-w-xl mx-auto">
+<h1 class="font-bold">Info Resmi KDKMP Desa Kasih</h1>
+<p class="text-[10px] text-slate-500">ID 33.03.18.2008 | Scan QR di gerai</p>
+<div id="list" class="mt-4 grid gap-3"></div>
+<div class="mt-8 text-center">
+<div id="qrcode" class="bg-white p-3 inline-block border rounded-xl"></div>
+<p class="text-[10px] mt-2">kdkmp-kasih.github.io/info.html</p>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+fetch('./data.json?v='+Date.now()).then(r=>r.json()).then(data=>{
+  const el=document.getElementById('list'); el.innerHTML='';
+  data.reverse().forEach(i=>{
+    el.innerHTML+=`<div class="bg-white p-3 rounded-xl border"><p class="text-[10px] text-slate-500">${i.tanggal}</p><p class="font-bold text-[13px]">${i.judul}</p><p class="text-[12px] mt-1">${i.isi}</p><div class="mt-2 flex gap-2 flex-wrap"><span class="text-[10px] bg-green-100 px-2 py-1 rounded">${i.harga}</span><span class="text-[10px] bg-blue-100 px-2 py-1 rounded">Stok: ${i.stok}</span></div></div>`;
+  });
+});
+new QRCode(document.getElementById("qrcode"), {text:"https://kdkmp-kasih.github.io/info.html", width:140, height:140});
+</script>
+</body>
+</html>
