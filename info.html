@@ -1,36 +1,63 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Info KDKMP Kasih</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Info KDKMP Desa Kasih</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+body{font-family:system-ui,sans-serif;background:#f6f7f6;margin:0;padding:16px}
+.header{background:#0f4d2e;color:white;padding:16px;border-radius:16px;margin-bottom:16px}
+.header h1{margin:0;font-size:20px}
+.header p{margin:4px 0 0 0;opacity:.8;font-size:13px}
+.card{background:white;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;margin-right:6px}
+.harga{background:#d1fae5} .stok{background:#dbeafe}
+.qr-box{background:white;border-radius:16px;padding:20px;text-align:center;margin-top:24px}
+#qrcode{display:flex;justify-content:center;margin:12px 0}
+</style>
 </head>
-<body class="bg-[#f8fafc] p-4">
-<div class="max-w-xl mx-auto">
-<div class="bg-[#0f5132] text-white p-3 rounded-xl">
-<h1 class="font-bold text-sm">KDKMP DESA KASIH</h1>
-<p class="text-[10px] opacity-80">ID 33.03.18.2008 - Kertanegara - Purbalingga</p>
+<body>
+
+<div class="header">
+<h1>KDKMP DESA KASIH</h1>
+<p>ID 33.03.18.2008 - Kertanegara - Purbalingga</p>
 </div>
-<div id="list" class="mt-4 grid gap-3"><p class="text-xs">Memuat...</p></div>
-<div class="mt-8 text-center border-t pt-4">
-<div id="qrcode" class="bg-white p-3 inline-block border rounded-xl"></div>
-<p class="text-[10px] mt-2">Scan untuk buka info terbaru</p>
-<p class="text-[10px]">kdkmp-kasih.github.io/kdkmp-kasih/info.html</p>
+
+<div id="list">Loading...</div>
+
+<div class="qr-box">
+<div id="qrcode"></div>
+<p style="font-size:13px;line-height:1.4">Scan untuk buka info terbaru<br><b>kdkmp-kasih.github.io/kdkmp-kasih/info.html</b></p>
 </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
 <script>
-fetch('./data.json?v='+Date.now()).then(r=>{
-  if(!r.ok) throw new Error('data.json belum ada');
-  return r.json();
-}).then(data=>{
-  const el=document.getElementById('list'); el.innerHTML='';
-  data.slice().reverse().forEach(i=>{
-    el.innerHTML+=`<div class="bg-white p-3 rounded-xl border shadow-sm"><p class="text-[10px] text-slate-500">${i.tanggal}</p><p class="font-bold text-[13px]">${i.judul}</p><p class="text-[12px] mt-1 leading-snug">${i.isi}</p><div class="mt-2 flex gap-2 flex-wrap"><span class="text-[10px] bg-green-100 px-2 py-1 rounded-full">${i.harga}</span><span class="text-[10px] bg-blue-100 px-2 py-1 rounded-full">Stok: ${i.stok}</span></div></div>`;
+fetch('./data.json?t='+Date.now())
+.then(r=>r.json())
+.then(data=>{
+  const list=document.getElementById('list');
+  list.innerHTML='';
+  data.reverse().forEach(item=>{
+    list.innerHTML+=`
+    <div class="card">
+      <div style="font-size:12px;color:#6b7280">${item.tanggal}</div>
+      <div style="font-weight:700;margin:4px 0">${item.judul}</div>
+      <div style="font-size:14px;color:#374151;line-height:1.5">${item.isi}</div>
+      <div style="margin-top:10px">
+        <span class="badge harga">${item.harga}</span>
+        <span class="badge stok">Stok: ${item.stok}</span>
+      </div>
+    </div>`;
   });
-}).catch(e=>{
-  document.getElementById('list').innerHTML='<p class=text-xs text-red-600>File data.json belum di-upload ke GitHub. Upload dulu data.json.</p>';
+})
+.catch(()=>{document.getElementById('list').innerHTML='File data.json belum di-upload';});
+
+new QRCode(document.getElementById("qrcode"), {
+  text:"https://kdkmp-kasih.github.io/kdkmp-kasih/info.html",
+  width:160,
+  height:160
 });
-new QRCode(document.getElementById("qrcode"), {text:"https://kdkmp-kasih.github.io/kdkmp-kasih/info.html", width:140, height:140});</script>
+</script>
+
 </body>
 </html>
