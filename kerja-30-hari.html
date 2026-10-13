@@ -2,169 +2,133 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>30 Hari V3 - Harga + Sumber + Paraf Pengurus</title>
+<title>30 Hari V5 - Data Dipisah</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#f8fafc] font-sans">
+<body class="bg-[#f8fafc]">
 <div class="bg-[#0f5132] text-white sticky top-0 z-50">
 <div class="max-w-5xl mx-auto p-3 flex justify-between items-center">
-<div><h1 class="font-bold text-[12px]">30 HARI V3 - VALIDASI & HARGA BERSUMBER</h1><p class="text-[9px] opacity-80">Kasih 33.03.18.2008 | Harga harus pakai sumber</p></div>
-<div class="text-right"><div class="w-28 h-2 bg-white/20 rounded-full"><div id="progressBar" class="h-2 bg-yellow-300 rounded-full" style="width:0%"></div></div><p id="progressText" class="text-[10px] font-bold">0%</p></div>
+<div><h1 class="font-bold text-[12px]">30 HARI V5 - TANPA PARAF</h1><p class="text-[9px] opacity-80">Kasih 33.03.18.2008 | Data dipisah per orang</p></div>
+<div class="text-right"><div class="w-28 h-2 bg-white/20 rounded-full"><div id="progressBar" class="h-2 bg-yellow-300 rounded-full" style="width:0%"></div></div><p id="progressText" class="text-[10px] font-bold">0%</p><p id="sisaText" class="text-[9px]">Sisa 0</p></div>
 </div>
 </div>
 
 <div class="max-w-5xl mx-auto p-3 space-y-3">
-
-<!-- PENGURUS -->
-<div class="bg-white border p-3 rounded-xl">
-<p class="font-bold text-[11px] mb-2">👥 NAMA PENGURUS (isi sekali)</p>
-<div class="grid grid-cols-2 gap-2">
-<input id="p_kades" placeholder="Kepala Desa Kasih" class="border p-2 rounded text-[11px]">
-<input id="p_ketua" placeholder="Ketua Kopdes" class="border p-2 rounded text-[11px]">
-<input id="p_sek" placeholder="Sekretaris" class="border p-2 rounded text-[11px]">
-<input id="p_ben" placeholder="Bendahara" class="border p-2 rounded text-[11px]">
-<input id="p_pengawas" placeholder="Pengawas" class="border p-2 rounded text-[11px]">
-<input id="p_manager" placeholder="Manager (Kamu)" class="border p-2 rounded text-[11px]">
-</div>
-</div>
-
-<!-- TRACKER HARGA + SUMBER - BARU -->
 <div class="bg-yellow-50 border-2 border-yellow-300 p-3 rounded-xl">
-<p class="font-bold text-[12px]">💰 TRACKER HARGA RESMI + SUMBER (Wajib diisi - untuk laporan Agrinas)</p>
-<p class="text-[10px] text-slate-600 mb-2">Contoh sumber valid: bulog.co.id, badanpangan.go.id, Klik SPHP, screenshot WA warung, foto nota. Jangan kosongkan.</p>
-<div id="hargaList" class="space-y-2"></div>
-<button onclick="addHarga()" class="mt-2 text-[11px] bg-[#0f5132] text-white px-3 py-1.5 rounded">+ Tambah Harga</button>
-<div class="mt-2 text-[10px] bg-white p-2 rounded border">
-<b>Contoh pengisian benar:</b><br>
-Beras SPHP 5kg = Rp62.500 | Sumber: HET Jawa Rp12.500/kg - Keputusan Bapanas No 34/2026 - badanpangan.go.id + bulog.co.id (13 Okt 2026)<br>
-Beras pasaran Kasih = Rp14.000/kg | Sumber: WA Bu Siti Warung Kasih - 13 Okt 2026 09:12
-</div>
+<p class="font-bold text-[12px]">💰 HARGA + SUMBER (wajib)</p>
+<div id="hargaList" class="space-y-2 mt-2"></div>
+<button onclick="addHarga()" class="mt-2 text-[11px] bg-[#0f5132] text-white px-3 py-1 rounded">+ Tambah</button>
 </div>
 
-<div id="container" class="grid gap-4"></div>
+<div id="container" class="grid gap-3"></div>
 
 <div class="p-4 bg-white rounded-xl border text-center">
-<button onclick="exportLaporan()" class="bg-[#0f5132] text-white px-5 py-2.5 rounded-lg text-xs font-bold w-full">EXPORT LAPORAN LENGKAP + HARGA + PARAF</button>
+<button onclick="exportLaporan()" class="bg-[#0f5132] text-white px-5 py-2.5 rounded-lg text-xs font-bold w-full">EXPORT LAPORAN</button>
 <a href="./" class="mt-2 inline-block text-xs underline">Kembali ke Dashboard</a>
 </div>
 </div>
 
 <script>
-const pengurusDef=[
- {id:'kades', label:'Kepala Desa', color:'bg-red-100 text-red-700 border-red-200'},
- {id:'ketua', label:'Ketua Kopdes', color:'bg-blue-100 text-blue-700 border-blue-200'},
- {id:'sek', label:'Sekretaris', color:'bg-green-100 text-green-700 border-green-200'},
- {id:'ben', label:'Bendahara', color:'bg-yellow-100 text-yellow-700 border-yellow-200'},
- {id:'pengawas', label:'Pengawas', color:'bg-purple-100 text-purple-700 border-purple-200'},
- {id:'manager', label:'Manager', color:'bg-slate-800 text-white'},
-];
-pengurusDef.forEach(p=>{
- const el=document.getElementById('p_'+p.id);
- el.value=localStorage.getItem('pengurus_'+p.id)||'';
- el.addEventListener('input',e=>{localStorage.setItem('pengurus_'+p.id,e.target.value); renderDays();});
-});
-
-// HARGA TRACKER
-let hargaData = JSON.parse(localStorage.getItem('hargaData')||'[{"nama":"Beras SPHP 5kg","harga":"Rp62.500","sumber":"HET Jawa Rp12.500/kg - Bapanas No 34/2026 - badanpangan.go.id & bulog.co.id"},{"nama":"Beras Pasar Kasih","harga":"","sumber":""},{"nama":"Minyak Kita","harga":"","sumber":""}]');
-function saveHarga(){localStorage.setItem('hargaData',JSON.stringify(hargaData)); renderHarga();}
+let hargaData = JSON.parse(localStorage.getItem('hargaV5')||`[
+{"nama":"Beras SPHP 5kg HET Jawa","harga":"Rp62.500","sumber":"HET Rp12.500/kg - Bapanas No 34/2026 - badanpangan.go.id"},
+{"nama":"Beras SPHP Gudang Jawa","harga":"Rp11.000/kg","sumber":"bulog.co.id - Zona 1"},
+{"nama":"Beras Pasar Kasih - Warung 1","harga":"","sumber":"WA Nama Warung + Tanggal"},
+{"nama":"Beras Pasar Kasih - Warung 2","harga":"","sumber":"WA Nama Warung + Tanggal"},
+{"nama":"Beras Pasar Kasih - Warung 3","harga":"","sumber":"WA Nama Warung + Tanggal"},
+{"nama":"Minyak Kita Pasar Kasih","harga":"","sumber":"WA Warung + Tanggal"},
+{"nama":"Gula Pasar Kasih","harga":"","sumber":"WA Warung + Tanggal"}
+]`);
+function saveHarga(){localStorage.setItem('hargaV5',JSON.stringify(hargaData)); renderHarga();}
 function renderHarga(){
- const wrap=document.getElementById('hargaList'); wrap.innerHTML='';
+ const w=document.getElementById('hargaList'); w.innerHTML='';
  hargaData.forEach((h,i)=>{
-   const d=document.createElement('div');
-   d.className='bg-white border rounded-lg p-2 grid grid-cols-12 gap-1 items-center';
-   d.innerHTML=`
-    <input value="${h.nama}" oninput="hargaData[${i}].nama=this.value; saveHarga()" placeholder="Nama produk" class="col-span-3 border p-1.5 rounded text-[11px]">
-    <input value="${h.harga}" oninput="hargaData[${i}].harga=this.value; saveHarga()" placeholder="Harga (Rp)" class="col-span-3 border p-1.5 rounded text-[11px] bg-green-50">
-    <input value="${h.sumber}" oninput="hargaData[${i}].sumber=this.value; saveHarga()" placeholder="Sumber wajib: link / WA / nota + tanggal" class="col-span-5 border p-1.5 rounded text-[11px] bg-yellow-50">
-    <button onclick="hargaData.splice(${i},1); saveHarga()" class="col-span-1 text-[10px] text-red-600">x</button>
-   `;
-   wrap.appendChild(d);
+  const d=document.createElement('div');
+  d.className='bg-white border rounded p-2 grid grid-cols-12 gap-1';
+  d.innerHTML=`<input value="${h.nama}" oninput="hargaData[${i}].nama=this.value; saveHarga()" class="col-span-4 border p-1 rounded text-[11px]"><input value="${h.harga}" oninput="hargaData[${i}].harga=this.value; saveHarga()" class="col-span-2 border p-1 rounded text-[11px] bg-green-50"><input value="${h.sumber}" oninput="hargaData[${i}].sumber=this.value; saveHarga()" class="col-span-5 border p-1 rounded text-[11px] bg-yellow-50"><button onclick="hargaData.splice(${i},1); saveHarga()" class="col-span-1 text-red-600 text-[11px]">x</button>`;
+  w.appendChild(d);
  });
 }
 function addHarga(){hargaData.push({nama:'',harga:'',sumber:''}); saveHarga();}
 renderHarga();
 
 const days=[
-{d:1,t:"Perkenalan Resmi",m:"RUMAH - WA",tasks:["WA Kades + foto SK + link web","Save kontak pengurus","Bikin folder dokumen"]},
-{d:2,t:"Inventaris Dokumen",m:"RUMAH",tasks:["Scan SK & AD/ART via WA","Catat NIB & pengurus","Rapikan Drive"]},
-{d:3,t:"Riset Harga Resmi + Sumber",m:"RUMAH - ONLINE",tasks:["Buka badanpangan.go.id & bulog.co.id, catat HET Jawa Rp12.500","Isi Tracker Harga di atas + tempel link sumber","Chat 3 warung Kasih via WA, catat harga + nama warung sebagai sumber"]},
-{d:4,t:"Poster Harga Bersumber",m:"RUMAH - HP",tasks:["Bikin poster Canva: cantumkan HET + sumber (Bapanas No 34/2026)","Simpan JPG","Tulis di poster kecil: Sumber: bulog.co.id"]},
-{d:5,t:"Jadwal Kunjungan",m:"RUMAH",tasks:["Tentukan Jumat 10.00-10.30","Siapkan buku tamu","Siapkan kalimat izin"]},
-{d:6,t:"Syarat Supplier Online",m:"RUMAH - ONLINE",tasks:["Baca syarat mitra di bulog.co.id / Klik SPHP","Screenshot syarat, simpan sebagai sumber","Cari agen LPG, catat sumber Google Maps"]},
-{d:7,t:"Laporan Minggu 1",m:"RUMAH - WA",tasks:["Ketik laporan + lampirkan screenshot sumber harga","Kirim ke Kades","Minta izin datang Jumat"]},
-{d:8,t:"KUNJUNGAN #1",m:"DESA - 30 MENIT",tasks:["Datang rapi bawa buku tamu","Foto gerai","Minta paraf"]},
-{d:9,t:"Evaluasi",m:"RUMAH",tasks:["Tulis kondisi gerai","Update website","Istirahat"]},
-{d:10,t:"SOP Agrinas",m:"RUMAH",tasks:["Baca PDF sosialisasi","Catat kewajiban","Tanya grup manajer"]},
-{d:11,t:"SOP Kasir",m:"RUMAH",tasks:["Template nota","Template WA harian","Simpan"]},
-{d:12,t:"Riset Warga",m:"RUMAH - WA",tasks:["Tanya 5 warga via WA","Catat jam ramai","Cari celah produk + sumber info warga"]},
-{d:13,t:"Denah Gerai",m:"RUMAH",tasks:["Gambar denah","Foto","List rak"]},
-{d:14,t:"Laporan Minggu 2",m:"RUMAH - WA",tasks:["Kirim foto + denah + template + daftar harga bersumber","Minta arahan","Jadwal kunjungan"]},
-{d:15,t:"KUNJUNGAN #2",m:"DESA - 40 MENIT",tasks:["Bawa poster harga + sumber tertulis","Minta pendapat","Foto"]},
-{d:16,t:"Simulasi Modal",m:"RUMAH",tasks:["Hitung margin: HET 12.500 - gudang 11.000","Isi di tracker harga: margin + sumber HET","Simulasi tanpa uang pribadi"]},
-{d:17,t:"Grup WA",m:"RUMAH",tasks:["Bikin grup info harga","Undang 10 warga","Posting poster + sumber harga"]},
-{d:18,t:"Konten Edukasi",m:"RUMAH - HP",tasks:["Video 15 detik HET 12.500 + sebut sumber Bapanas","Posting","Tulis Segera Hadir"]},
-{d:19,t:"Keuangan",m:"RUMAH",tasks:["Hitung laba","Transport","BEP"]},
-{d:20,t:"Checklist Buka",m:"RUMAH",tasks:["Siapkan alat","List gerai","Surat listrik"]},
-{d:21,t:"Laporan Minggu 3",m:"RUMAH - WA",tasks:["Kirim RAB + grup + konten + tracker harga lengkap","Minta rapat","Tunggu undangan"]},
-{d:22,t:"Standby",m:"RUMAH",tasks:["Rapikan laporan harga bersumber","Jawab WA warga","Update web"]},
-{d:23,t:"KUNJUNGAN #3 Rapat",m:"DESA - 60 MENIT",tasks:["Datang jika diundang","Presentasi 5 menit + tunjukkan sumber harga resmi","Minta target buka"]},
-{d:24,t:"Timeline H-7",m:"RUMAH",tasks:["Checklist final","Timeline","Share ke Kades"]},
-{d:25,t:"Gladi Resik",m:"RUMAH",tasks:["Simulasi jualan","Tutup kas","Kemeja rapi"]},
-{d:26,t:"Promo H-3",m:"RUMAH - WA",tasks:["Posting H-3","Chat 20 warga","Antrian"]},
-{d:27,t:"H-1",m:"DESA - 60 MENIT",tasks:["Pasang poster harga + sumber","Bersih rak","Foto final"]},
-{d:28,t:"SOFT OPENING",m:"DESA",tasks:["Buka 3 jam","Jual terbatas","Foto"]},
-{d:29,t:"Evaluasi",m:"RUMAH",tasks:["Laba rugi","Komplain","Laporan ke Kades"]},
-{d:30,t:"Laporan 30 Hari",m:"RUMAH",tasks:["Export laporan + tracker harga + paraf","Kirim ke Kades Korwil Dinkop","Rencana bulan 2"]},
+{d:1,t:"Data Kontak Desa",m:"RUMAH - WA",tasks:["☐ Simpan No WA Kepala Desa Kasih","☐ Simpan No WA Sekretaris Desa","☐ Simpan No WA Ketua Kopdes","☐ Simpan No WA Bendahara Kopdes","☐ Simpan No WA Pengawas / Kadus","☐ Bikin Folder HP: Dokumen KDKMP Kasih"]},
+{d:2,t:"Data Dokumen",m:"RUMAH",tasks:["☐ Foto/scan SK Manager (minta via WA Kades)","☐ Foto/scan AD/ART Kopdes","☐ Catat NIB Kopdes","☐ Catat Nama Lengkap Ketua Kopdes","☐ Catat Nama Sekretaris","☐ Catat Nama Bendahara"]},
+{d:3,t:"Data Harga Resmi + Pasar",m:"RUMAH - ONLINE",tasks:["☐ Screenshot HET Jawa Rp12.500 dari badanpangan.go.id - isi di tracker atas","☐ Screenshot harga gudang Rp11.000 dari bulog.co.id","☐ Tanya harga beras Warung 1 di Kasih via WA - isi tracker + sumber","☐ Tanya harga beras Warung 2 via WA - isi tracker + sumber","☐ Tanya harga beras Warung 3 via WA - isi tracker + sumber","☐ Hitung selisih HET vs Pasar"]},
+{d:4,t:"Poster Harga",m:"RUMAH - HP",tasks:["☐ Bikin poster Canva: Beras SPHP Rp62.500 + tulis sumber Bapanas","☐ Bikin poster Minyak Kita (jika ada harga)","☐ Simpan JPG poster","☐ Siapkan file siap print A4"]},
+{d:5,t:"Jadwal Kunjungan",m:"RUMAH",tasks:["☐ Tentukan hari tetap: Jumat jam 10.00","☐ Tentukan durasi: 30 menit saja","☐ Siapkan buku tamu kecil","☐ Siapkan kalimat izin sopan 10 menit"]},
+{d:6,t:"Data Supplier Online",m:"RUMAH - ONLINE",tasks:["☐ Buka bulog.co.id - baca syarat mitra Klik SPHP","☐ Screenshot syarat - simpan","☐ Cari kontak agen LPG Kertanegara via Google Maps - catat","☐ Cari kontak ID Food Jateng - catat (jangan hubungi dulu)"]},
+{d:7,t:"Laporan Minggu 1",m:"RUMAH - WA",tasks:["☐ Ketik laporan 5 baris progres data","☐ Lampirkan screenshot sumber harga","☐ Lampirkan poster harga","☐ Kirim WA ke Kades","☐ Minta izin datang Jumat 30 menit"]},
+{d:8,t:"KUNJUNGAN #1 - 30 Menit",m:"DESA",tasks:["☐ Datang pakai baju rapi","☐ Bawa buku tamu","☐ Foto gerai dari luar (2 foto)","☐ Catat kondisi listrik gerai: ada/tidak","☐ Catat kondisi rak gerai: ada/tidak","☐ Pamit sopan - jangan minta kunci"]},
+{d:9,t:"Evaluasi Gerai",m:"RUMAH",tasks:["☐ Tulis catatan kondisi gerai","☐ Tulis kekurangan gerai (list)","☐ Upload foto gerai ke HP","☐ Update website jika bisa"]},
+{d:10,t:"Belajar SOP",m:"RUMAH",tasks:["☐ Baca PDF sosialisasi KDKMP","☐ Catat 3 kewajiban manager pra-buka","☐ Catat larangan manager pra-buka","☐ Tanya grup manajer Purbalingga pengalaman"]},
+{d:11,t:"SOP Kasir",m:"RUMAH",tasks:["☐ Bikin format nota penjualan di Notes HP","☐ Bikin format stok masuk","☐ Bikin format stok keluar","☐ Bikin format laporan tutup kas harian","☐ Bikin template WA lapor ke Kades"]},
+{d:12,t:"Riset Warga",m:"RUMAH - WA",tasks:["☐ Tanya Warga 1: belanja dimana?","☐ Tanya Warga 2: belanja dimana?","☐ Tanya Warga 3: belanja dimana?","☐ Catat jam buka warung ramai","☐ Catat produk yang belum ada di Kasih"]},
+{d:13,t:"Denah Gerai",m:"RUMAH",tasks:["☐ Gambar denah di kertas A4","☐ Tentukan posisi rak beras","☐ Tentukan posisi LPG","☐ Tentukan posisi kasir","☐ Foto denah"]},
+{d:14,t:"Laporan Minggu 2",m:"RUMAH - WA",tasks:["☐ Kirim foto kunjungan #1","☐ Kirim denah gerai","☐ Kirim template kasir","☐ Kirim tracker harga terbaru","☐ WA Kades: mohon arahan"]},
+{d:15,t:"KUNJUNGAN #2 - 40 Menit",m:"DESA",tasks:["☐ Print poster harga (1 lembar)","☐ Print denah gerai (1 lembar)","☐ Datang bawa poster + denah","☐ Minta pendapat Kades (bukan minta dana)","☐ Foto bareng poster"]},
+{d:16,t:"Simulasi Modal",m:"RUMAH",tasks:["☐ Hitung: HET 12.500 - gudang 11.000 = margin 1.500/kg","☐ Hitung: 20 karung x 5kg x 1.500 = laba kotor","☐ Hitung biaya plastik","☐ Hitung biaya transport simulasi","☐ Catat tanpa pakai uang pribadi dulu"]},
+{d:17,t:"Grup WA Pelanggan",m:"RUMAH",tasks:["☐ Bikin Grup WA Info Harga KDKMP Kasih","☐ Undang Ibu PKK 1","☐ Undang Ibu PKK 2","☐ Undang Ibu PKK 3","☐ Undang 7 warga lain (total 10)","☐ Posting poster + sumber harga di grup"]},
+{d:18,t:"Konten Edukasi",m:"RUMAH - HP",tasks:["☐ Bikin video 15 detik: HET 12.500 segera hadir","☐ Sebut sumber di video: Bapanas No 34/2026","☐ Posting Status WA","☐ Posting di Grup WA"]},
+{d:19,t:"Keuangan Awal",m:"RUMAH",tasks:["☐ Hitung laba kotor simulasi","☐ Hitung biaya operasional","☐ Hitung BEP (balik modal)","☐ Catat di Notes HP"]},
+{d:20,t:"Checklist Buka",m:"RUMAH",tasks:["☐ List buku stok: sudah/belum","☐ List buku kas: sudah/belum","☐ List kalkulator: sudah/belum","☐ List plastik karung: sudah/belum","☐ List pulpen/nota: sudah/belum"]},
+{d:21,t:"Laporan Minggu 3",m:"RUMAH - WA",tasks:["☐ Kirim RAB simulasi","☐ Kirim screenshot Grup WA 10 orang","☐ Kirim konten video","☐ Kirim tracker harga lengkap + sumber","☐ Tanya Kades: bisa dibahas rapat?"]},
+{d:22,t:"Standby",m:"RUMAH",tasks:["☐ Rapikan semua catatan harga + sumber","☐ Jawab chat warga di grup","☐ Update website foto baru"]},
+{d:23,t:"KUNJUNGAN #3 Rapat",m:"DESA - 60 MENIT",tasks:["☐ Datang jika diundang rapat","☐ Bawa print laporan 3 minggu","☐ Presentasi 5 menit: data kontak + harga bersumber + denah","☐ Minta keputusan: target tanggal soft opening","☐ Catat hasil rapat"]},
+{d:24,t:"Timeline H-7",m:"RUMAH",tasks:["☐ Bikin checklist final apa yang disiapkan desa","☐ Bikin checklist apa yang kamu siapkan","☐ Bikin timeline 7 hari menuju buka","☐ Share checklist via WA ke Kades"]},
+{d:25,t:"Gladi Resik",m:"RUMAH",tasks:["☐ Simulasi timbang beras 5kg","☐ Simulasi catat nota","☐ Simulasi hitung kembalian","☐ Simulasi tutup kas harian","☐ Siapkan kemeja rapi"]},
+{d:26,t:"Promo H-3",m:"RUMAH - WA",tasks:["☐ Posting H-3 di Grup WA","☐ Chat personal 10 warga: mohon doa mau buka","☐ Chat personal 10 warga lagi","☐ Siapkan daftar antrian jika perlu"]},
+{d:27,t:"H-1 Persiapan",m:"DESA - 60 MENIT",tasks:["☐ Datang pasang poster harga + tulis sumber di pojok poster","☐ Bersihkan rak","☐ Tata rak sedikit","☐ Foto final gerai siap buka (3 foto)"]},
+{d:28,t:"SOFT OPENING",m:"DESA",tasks:["☐ Buka jam 08.00-11.00 (3 jam saja)","☐ Jual terbatas: SPHP saja","☐ Catat semua transaksi di buku","☐ Foto dokumentasi: pembeli + stok","☐ Foto nota hari pertama"]},
+{d:29,t:"Evaluasi Hari 1",m:"RUMAH",tasks:["☐ Hitung laba rugi hari 1","☐ Catat komplain warga 1","☐ Catat komplain warga 2","☐ Catat stok kurang apa","☐ Kirim laporan singkat ke Kades via WA"]},
+{d:30,t:"Laporan 30 Hari",m:"RUMAH",tasks:["☐ Klik Export Laporan di website ini","☐ Kirim TXT ke Kades","☐ Kirim TXT ke Korwil Kertanegara","☐ Kirim TXT ke Dinkop Purbalingga","☐ Tulis rencana Bulan 2: tambah LPG & Minyak Kita"]},
 ];
 
 const container=document.getElementById('container');
-function renderDays(){
+function render(){
  container.innerHTML=''; let total=0,done=0;
  days.forEach(day=>{
-   let tasksHtml=day.tasks.map((t,i)=>{
-     const key=`task_${day.d}_${i}`; const chk=localStorage.getItem(key)==='1'; if(chk)done++; total++;
-     return `<label class="flex gap-2 items-start py-1 px-2 rounded hover:bg-slate-50 cursor-pointer"><input type="checkbox" data-key="${key}" ${chk?'checked':''} class="mt-1 w-4 h-4"><span class="text-[11px] ${chk?'line-through text-slate-400':''}">${t} ${t.toLowerCase().includes('harga')||t.toLowerCase().includes('sumber')? '<b class="text-orange-600">(wajib isi sumber)</b>':''}</span></label>`;
+   let html=day.tasks.map((t,i)=>{
+     const key=`v5_${day.d}_${i}`; const chk=localStorage.getItem(key)==='1'; if(chk)done++; total++;
+     return `<label class="flex gap-2 items-start py-1.5 px-2 rounded hover:bg-slate-50 cursor-pointer border-b border-slate-50 last:border-0">
+       <input type="checkbox" data-key="${key}" ${chk?'checked':''} class="mt-0.5 w-4 h-4">
+       <span class="text-[11px] ${chk?'line-through text-slate-400':''}">${t.replace('☐','')}</span>
+     </label>`;
    }).join('');
-   let validHtml=pengurusDef.map(p=>{
-     const nama=localStorage.getItem('pengurus_'+p.id)||''; const full=nama?`${p.label} - ${nama}`:p.label;
-     const key=`valid_${day.d}_${p.id}`; const chk=localStorage.getItem(key)==='1'; if(chk)done++; total++;
-     return `<label class="flex gap-1 items-center border rounded-full px-2.5 py-1 cursor-pointer text-[10px] ${p.color} ${chk?'ring-2 ring-green-400':''}"><input type="checkbox" data-key="${key}" ${chk?'checked':''} class="w-3 h-3"><span>${full} ${chk?'✓':''}</span></label>`;
-   }).join('');
-   const belumTasks=day.tasks.length - day.tasks.filter((_,i)=>localStorage.getItem(`task_${day.d}_${i}`)==='1').length;
-   const belumValid=pengurusDef.length - pengurusDef.filter(p=>localStorage.getItem(`valid_${day.d}_${p.id}`)==='1').length;
-   const sisa=belumTasks+belumValid;
+   const sisa=day.tasks.length - day.tasks.filter((_,i)=>localStorage.getItem(`v5_${day.d}_${i}`)==='1').length;
    const div=document.createElement('div');
-   div.className='bg-white p-3 rounded-xl border';
+   div.className='bg-white p-3 rounded-xl border shadow-sm';
    div.innerHTML=`
-    <div class="flex justify-between"><p class="font-bold text-[12px]">HARI ${day.d}: ${day.t}</p><span class="text-[9px] px-2 py-0.5 rounded-full ${day.m.includes('RUMAH')?'bg-blue-100 text-blue-700':'bg-orange-100 text-orange-700'}">${day.m}</span></div>
-    <p class="text-[9px] mt-1 ${sisa===0?'bg-green-100 text-green-700':'bg-red-100 text-red-700'} inline-block px-2 py-0.5 rounded-full">${sisa===0?'TUNTAS':'Sisa '+sisa+' belum'}</p>
-    <div class="mt-2 bg-slate-50 rounded p-2"><p class="text-[10px] font-bold">📋 TUGAS</p>${tasksHtml}</div>
-    <div class="mt-2 bg-yellow-50 border border-yellow-100 rounded p-2"><p class="text-[10px] font-bold">✍️ PARAF PENGURUS (per nama)</p><div class="flex flex-wrap gap-1.5 mt-1">${validHtml}</div></div>
-    <textarea id="note${day.d}" placeholder="Catatan + sebut sumber harga jika ada di hari ini..." class="mt-2 w-full border rounded p-2 text-[11px] h-14">${localStorage.getItem('note_'+day.d)||''}</textarea>
+    <div class="flex justify-between items-center">
+      <p class="font-bold text-[12px]">HARI ${day.d}: ${day.t}</p>
+      <span class="text-[9px] px-2 py-0.5 rounded-full ${day.m.includes('RUMAH')?'bg-blue-100 text-blue-700':'bg-orange-100 text-orange-700'}">${day.m}</span>
+    </div>
+    <div class="mt-1 flex gap-2">
+      <span class="text-[9px] px-2 py-0.5 rounded-full bg-slate-100">${day.tasks.length} data</span>
+      <span class="text-[9px] px-2 py-0.5 rounded-full ${sisa===0?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${sisa===0?'Tuntas '+day.tasks.length+'/'+day.tasks.length:'Sisa '+sisa+' dari '+day.tasks.length+' belum'}</span>
+    </div>
+    <div class="mt-2 bg-slate-50 rounded-lg border">${html}</div>
+    <textarea id="note${day.d}" placeholder="Catatan hari ${day.d}..." class="mt-2 w-full border rounded p-2 text-[11px] h-12">${localStorage.getItem('noteV5_'+day.d)||''}</textarea>
    `;
    container.appendChild(div);
  });
  document.getElementById('progressBar').style.width=(total?Math.round(done/total*100):0)+'%';
- document.getElementById('progressText').innerText=(total?Math.round(done/total*100):0)+'% ('+done+'/'+total+')';
- container.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',e=>{localStorage.setItem(e.target.dataset.key,e.target.checked?'1':'0'); renderDays();}));
- container.querySelectorAll('textarea').forEach(ta=>ta.addEventListener('input',e=>{localStorage.setItem('note_'+e.target.id.replace('note',''),e.target.value);}));
+ document.getElementById('progressText').innerText=(total?Math.round(done/total*100):0)+'%';
+ document.getElementById('sisaText').innerText='Sisa '+(total-done)+' dari '+total+' data belum';
+ container.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',e=>{localStorage.setItem(e.target.dataset.key,e.target.checked?'1':'0'); render();}));
+ container.querySelectorAll('textarea').forEach(ta=>ta.addEventListener('input',e=>{localStorage.setItem('noteV5_'+e.target.id.replace('note',''),e.target.value);}));
 }
-renderDays();
-
+render();
 function exportLaporan(){
- let txt=`LAPORAN 30 HARI V3 - KDKMP KASIH\nID 33.03.18.2008\nTanggal ${new Date().toLocaleString('id-ID')}\n\n== DAFTAR HARGA + SUMBER ==\n`;
- hargaData.forEach(h=>{txt+=`- ${h.nama} | ${h.harga} | Sumber: ${h.sumber||'BELUM DIISI'}\n`;});
- txt+=`\n== PENGURUS ==\n`;
- pengurusDef.forEach(p=>{txt+=`- ${p.label}: ${localStorage.getItem('pengurus_'+p.id)||'-'}\n`;});
- txt+=`\n== RINCIAN HARIAN ==\n`;
+ let txt=`LAPORAN 30 HARI V5 - KDKMP KASIH - TANPA PARAF - DATA DIPISAH\nID 33.03.18.2008 - ${new Date().toLocaleString('id-ID')}\n\n== HARGA + SUMBER ==\n`;
+ hargaData.forEach(h=>{txt+=`- ${h.nama} | ${h.harga} | Sumber: ${h.sumber}\n`;});
+ txt+=`\n== RINCIAN PER HARI - DATA DIPISAH ==\n`;
  days.forEach(day=>{
-   txt+=`\nHARI ${day.d} - ${day.t}\n`;
-   day.tasks.forEach((t,i)=>{txt+=` ${localStorage.getItem(`task_${day.d}_${i}`)==='1'?'[✓]':'[ ]'} ${t}\n`;});
-   txt+=` Paraf:\n`;
-   pengurusDef.forEach(p=>{txt+=` ${localStorage.getItem(`valid_${day.d}_${p.id}`)==='1'?'[✓]':'[ ]'} ${p.label} ${localStorage.getItem('pengurus_'+p.id)||''}\n`;});
-   txt+=` Catatan: ${localStorage.getItem('note_'+day.d)||'-'}\n`;
+   txt+=`\nHARI ${day.d} - ${day.t} (${day.m})\n`;
+   day.tasks.forEach((t,i)=>{txt+=` ${localStorage.getItem(`v5_${day.d}_${i}`)==='1'?'[✓]':'[ ]'} ${t.replace('☐','')}\n`;});
+   txt+=` Catatan: ${localStorage.getItem('noteV5_'+day.d)||'-'}\n`;
  });
- const blob=new Blob([txt],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Laporan-V3-Harga-Sumber-Paraf.txt'; a.click();
+ const blob=new Blob([txt],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Laporan-V5-Data-Dipisah-KDKMP-Kasih.txt'; a.click();
 }
 </script>
 </body>
