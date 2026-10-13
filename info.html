@@ -31,7 +31,6 @@ fetch('./data.json?v='+Date.now()).then(r=>{
 }).catch(e=>{
   document.getElementById('list').innerHTML='<p class=text-xs text-red-600>File data.json belum di-upload ke GitHub. Upload dulu data.json.</p>';
 });
-new QRCode(document.getElementById("qrcode"), {text:"https://kdkmp-kasih.github.io/info.html", width:140, height:140});
-</script>
+new QRCode(document.getElementById("qrcode"), {text:"https://kdkmp-kasih.github.io/kdkmp-kasih/info.html", width:140, height:140});</script>
 </body>
 </html>
