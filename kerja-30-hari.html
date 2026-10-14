@@ -2,43 +2,111 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>V9 TTD & Cap + PDF Bertanggal - KDKMP Kasih</title>
+<title>V10 Final - TTD + 60 Hari - KDKMP Kasih</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-[#f8fafc]">
 <div class="bg-[#0f5132] text-white sticky top-0 z-50">
 <div class="max-w-5xl mx-auto p-3 flex justify-between items-center gap-2">
-<div class="flex-1"><h1 class="font-bold text-[11px]">V9 - TTD & CAP + PDF BERTANGGAL</h1>
-<div class="flex items-center gap-2 mt-1 flex-wrap">
-<label class="text-[9px]">Start Hari-1:</label><input type="date" id="startInput" class="text-[10px] text-black rounded px-1 py-0.5" onchange="setStartDate(this.value)">
-</div><p id="tgl" class="text-[9px] font-bold text-yellow-200 mt-1"></p></div>
+<div class="flex-1"><h1 class="font-bold text-[11px]">V10 FINAL - TTD & 60 HARI</h1>
+<div class="flex items-center gap-2 mt-1"><label class="text-[9px]">Start Hari-1:</label><input type="date" id="startInput" class="text-[10px] text-black rounded px-1 py-0.5" onchange="setStartDate(this.value)"></div><p id="tgl" class="text-[9px] font-bold text-yellow-200 mt-1"></p></div>
 <div class="text-right"><div class="w-24 h-2 bg-white/20 rounded-full"><div id="bar" class="h-2 bg-yellow-300 rounded-full" style="width:0%"></div></div><p id="txt" class="text-[9px] font-bold">0%</p></div>
 </div>
 </div>
 
 <div class="max-w-5xl mx-auto p-3 space-y-3">
 
-<!-- UPLOAD TTD & CAP UNTUK GITHUB -->
-<div class="bg-white border-2 border-dashed border-[#0f5132] p-3 rounded-xl">
-<p class="font-bold text-[12px]">🖼️ Upload TTD & Cap (Disimpan untuk GitHub)</p>
-<p class="text-[9px] text-slate-500">Gambar akan tersimpan di browser dan otomatis masuk ke PDF. File gambar asli simpan di folder /assets/ di GitHub kamu.</p>
-<div class="grid grid-cols-3 gap-3 mt-3">
-<div class="border p-2 rounded-lg text-center"><p class="text-[10px] font-bold">TTD Manajer</p><input type="file" id="ttdManajer" accept="image/*" class="text-[9px] mt-1" onchange="saveImg(this,'ttdManajer')"><img id="prevManajer" class="w-full h-20 object-contain mt-2 border rounded bg-slate-50"><button onclick="hapusImg('ttdManajer')" class="text-[8px] text-red-600 mt-1">Hapus</button></div>
-<div class="border p-2 rounded-lg text-center"><p class="text-[10px] font-bold">TTD Kades</p><input type="file" id="ttdKades" accept="image/*" class="text-[9px] mt-1" onchange="saveImg(this,'ttdKades')"><img id="prevKades" class="w-full h-20 object-contain mt-2 border rounded bg-slate-50"><button onclick="hapusImg('ttdKades')" class="text-[8px] text-red-600 mt-1">Hapus</button></div>
-<div class="border p-2 rounded-lg text-center"><p class="text-[10px] font-bold">Cap KDKMP</p><input type="file" id="capKoperasi" accept="image/*" class="text-[9px] mt-1" onchange="saveImg(this,'capKoperasi')"><img id="prevCap" class="w-full h-20 object-contain mt-2 border rounded bg-slate-50"><button onclick="hapusImg('capKoperasi')" class="text-[8px] text-red-600 mt-1">Hapus</button></div>
+<!-- KONTROL TTD SIAPA AJA -->
+<div class="bg-white border-2 border-[#0f5132] p-3 rounded-xl">
+<div class="flex justify-between items-center">
+<p class="font-bold text-[12px]">🖋️ Kontrol TTD & Cap</p>
+<span class="text-[9px] bg-green-100 text-green-700 px-2 py-1 rounded">Auto Tersimpan - Tidak perlu upload ulang</span>
 </div>
-<p class="text-[8px] text-slate-400 mt-2">Tips GitHub: Upload juga file asli ke repo kamu di folder /assets/ttd-manajer.png, /assets/ttd-kades.png, /assets/cap.png biar bisa diakses public.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+
+<!-- MANAJER -->
+<div class="border-2 p-3 rounded-xl bg-slate-50">
+<div class="flex justify-between items-center">
+<p class="text-[11px] font-bold">1. TTD Manajer KDKMP</p>
+<label class="flex items-center gap-1 text-[9px]"><input type="checkbox" id="needManajer" checked onchange="saveNeed()"> Wajib</label>
+</div>
+<input type="file" id="inManajer" accept="image/*" class="text-[9px] mt-2 w-full" onchange="saveImg(this,'ttdManajer')">
+<img id="prevManajer" class="w-full h-24 object-contain mt-2 border bg-white rounded hidden">
+<div class="flex gap-2 mt-2">
+<button onclick="hapusImg('ttdManajer')" class="text-[9px] bg-red-50 text-red-600 px-3 py-1 rounded border">🗑️ Hapus</button>
+<span id="statusManajer" class="text-[9px] text-slate-500"></span>
+</div>
+</div>
+
+<!-- KADES -->
+<div class="border-2 p-3 rounded-xl bg-slate-50">
+<div class="flex justify-between items-center">
+<p class="text-[11px] font-bold">2. TTD Kepala Desa</p>
+<label class="flex items-center gap-1 text-[9px]"><input type="checkbox" id="needKades" checked onchange="saveNeed()"> Wajib</label>
+</div>
+<input type="file" id="inKades" accept="image/*" class="text-[9px] mt-2 w-full" onchange="saveImg(this,'ttdKades')">
+<img id="prevKades" class="w-full h-24 object-contain mt-2 border bg-white rounded hidden">
+<div class="flex gap-2 mt-2">
+<button onclick="hapusImg('ttdKades')" class="text-[9px] bg-red-50 text-red-600 px-3 py-1 rounded border">🗑️ Hapus</button>
+<span id="statusKades" class="text-[9px] text-slate-500"></span>
+</div>
+</div>
+
+<!-- CAP -->
+<div class="border-2 p-3 rounded-xl bg-slate-50">
+<div class="flex justify-between items-center">
+<p class="text-[11px] font-bold">3. Cap KDKMP Kasih</p>
+<label class="flex items-center gap-1 text-[9px]"><input type="checkbox" id="needCap" checked onchange="saveNeed()"> Wajib</label>
+</div>
+<input type="file" id="inCap" accept="image/*" class="text-[9px] mt-2 w-full" onchange="saveImg(this,'capKoperasi')">
+<img id="prevCap" class="w-full h-24 object-contain mt-2 border bg-white rounded hidden">
+<div class="flex gap-2 mt-2">
+<button onclick="hapusImg('capKoperasi')" class="text-[9px] bg-red-50 text-red-600 px-3 py-1 rounded border">🗑️ Hapus</button>
+<span id="statusCap" class="text-[9px] text-slate-500"></span>
+</div>
+</div>
+
+</div>
+
+<!-- TAMBAHAN: TTD KETUA KOPERASI / PENGAWAS -->
+<div class="mt-3 border-t pt-3">
+<p class="text-[11px] font-bold">Tambahan TTD (Opsional)</p>
+<div class="grid grid-cols-2 gap-3 mt-2">
+<div class="border p-2 rounded"><div class="flex justify-between"><p class="text-[10px] font-bold">4. TTD Ketua Koperasi</p><label class="text-[9px]"><input type="checkbox" id="needKetua" onchange="saveNeed()"> Aktifkan</label></div><input type="file" accept="image/*" class="text-[8px] mt-1 w-full" onchange="saveImg(this,'ttdKetua')"><img id="prevKetua" class="w-full h-16 object-contain mt-1 border bg-white rounded hidden"><button onclick="hapusImg('ttdKetua')" class="text-[8px] text-red-600">Hapus</button></div>
+<div class="border p-2 rounded"><div class="flex justify-between"><p class="text-[10px] font-bold">5. TTD Pengawas</p><label class="text-[9px]"><input type="checkbox" id="needPengawas" onchange="saveNeed()"> Aktifkan</label></div><input type="file" accept="image/*" class="text-[8px] mt-1 w-full" onchange="saveImg(this,'ttdPengawas')"><img id="prevPengawas" class="w-full h-16 object-contain mt-1 border bg-white rounded hidden"><button onclick="hapusImg('ttdPengawas')" class="text-[8px] text-red-600">Hapus</button></div>
+</div>
+</div>
+
+</div>
+
+<!-- TAMBAH KEGIATAN 30 HARI BERIKUTNYA -->
+<div class="bg-white border-2 border-blue-200 p-3 rounded-xl">
+<p class="font-bold text-[12px]">📅 Tambah Kegiatan 30 Hari Berikutnya (Hari 31-60)</p>
+<p class="text-[9px] text-slate-500">Untuk rencana bulan kedua. Data tersimpan otomatis.</p>
+<div class="grid grid-cols-4 gap-2 mt-2">
+<input id="newDay" type="number" min="31" max="60" placeholder="Hari 31-60" class="border rounded p-2 text-[11px]">
+<input id="newTitle" placeholder="Judul kegiatan" class="border rounded p-2 text-[11px] col-span-2">
+<select id="newMode" class="border rounded p-2 text-[11px]"><option>RUMAH</option><option>DESA</option><option>GERAI</option></select>
+</div>
+<div class="flex gap-2 mt-2">
+<textarea id="newTasks" placeholder="Tulis kegiatan, 1 baris = 1 kotak ceklis. Contoh:
+Rapat dengan Dinas Koperasi
+Survey harga pupuk
+Input laporan SHU" class="border rounded p-2 text-[11px] h-20 flex-1"></textarea>
+<button onclick="addNewDay()" class="bg-blue-600 text-white px-4 py-2 rounded text-[11px] font-bold h-20">+ Tambah</button>
+</div>
+<div id="listCustom" class="mt-2 text-[10px]"></div>
 </div>
 
 <div id="rekap" class="bg-white border p-3 rounded-xl"></div>
-<div id="alertLembur" class="hidden bg-amber-50 border border-amber-300 p-3 rounded-xl"><p class="text-[11px] font-bold">⚠️ Lembur:</p><div id="listLembur" class="text-[10px]"></div></div>
+<div id="alertLembur" class="hidden bg-amber-50 border p-3 rounded-xl"><p class="text-[11px] font-bold">⚠️ Lembur:</p><div id="listLembur" class="text-[10px]"></div></div>
 <div id="container" class="grid gap-3"></div>
 
 <div class="bg-white p-4 rounded-xl border space-y-2">
-<button onclick="exportPDF()" class="bg-[#0f5132] text-white px-5 py-3 rounded-lg text-xs font-bold w-full">📄 EXPORT PDF BERTANGGAL + TTD & CAP</button>
-<button onclick="exportTXT()" class="bg-slate-800 text-white px-5 py-2 rounded-lg text-xs w-full">Export TXT (backup)</button>
-<p class="text-[9px] text-center text-slate-500">Nama file PDF otomatis: Laporan-HariX-KDKMP-Kasih-YYYY-MM-DD.pdf</p>
+<button onclick="exportPDF()" class="bg-[#0f5132] text-white px-5 py-3 rounded-lg text-xs font-bold w-full">📄 EXPORT PDF BERTANGGAL (TANPA JAM) + TTD & CAP</button>
+<p class="text-[9px] text-center text-slate-500">Nama file: Laporan-HariX-KDKMP-Kasih-YYYY-MM-DD.pdf | TTD tanpa jam, cuma tanggal</p>
 </div>
 </div>
 
@@ -48,21 +116,51 @@ function getStoredStart(){return localStorage.getItem('kdkmp_startDate');}
 function setStartDate(v){localStorage.setItem('kdkmp_startDate',v); render();}
 function getStartDateObj(){const s=getStoredStart(); if(s){const d=new Date(s); d.setHours(0,0,0,0); return d;} const n=new Date(); n.setHours(0,0,0,0); return n;}
 function getHariIni(){const start=getStartDateObj(); const now=new Date(); now.setHours(0,0,0,0); return Math.max(1, Math.floor((now-start)/86400000)+1);}
+function saveNeed(){localStorage.setItem('needManajer',document.getElementById('needManajer').checked); localStorage.setItem('needKades',document.getElementById('needKades').checked); localStorage.setItem('needCap',document.getElementById('needCap').checked); localStorage.setItem('needKetua',document.getElementById('needKetua').checked); localStorage.setItem('needPengawas',document.getElementById('needPengawas').checked);}
+function loadNeed(){document.getElementById('needManajer').checked=localStorage.getItem('needManajer')!=='false'; document.getElementById('needKades').checked=localStorage.getItem('needKades')!=='false'; document.getElementById('needCap').checked=localStorage.getItem('needCap')!=='false'; document.getElementById('needKetua').checked=localStorage.getItem('needKetua')==='true'; document.getElementById('needPengawas').checked=localStorage.getItem('needPengawas')==='true';}
 
 function saveImg(input,key){
  const file=input.files[0]; if(!file) return;
  const reader=new FileReader();
- reader.onload=e=>{localStorage.setItem(key,e.target.result); loadImgs();};
+ reader.onload=e=>{localStorage.setItem(key,e.target.result); loadImgs(); render();};
  reader.readAsDataURL(file);
 }
-function hapusImg(key){localStorage.removeItem(key); loadImgs();}
+function hapusImg(key){ if(confirm('Hapus gambar '+key+'?')){localStorage.removeItem(key); loadImgs(); render();} }
 function loadImgs(){
- const m=localStorage.getItem('ttdManajer'); const k=localStorage.getItem('ttdKades'); const c=localStorage.getItem('capKoperasi');
- document.getElementById('prevManajer').src=m||''; document.getElementById('prevKades').src=k||''; document.getElementById('prevCap').src=c||'';
+ const keys=['ttdManajer','ttdKades','capKoperasi','ttdKetua','ttdPengawas'];
+ keys.forEach(k=>{
+   const data=localStorage.getItem(k);
+   const imgEl=document.getElementById('prev'+k.charAt(0).toUpperCase()+k.slice(1).replace('Koperasi','Cap').replace('Manajer','Manajer').replace('Kades','Kades'));
+   // mapping manual
+   const map={'ttdManajer':'prevManajer','ttdKades':'prevKades','capKoperasi':'prevCap','ttdKetua':'prevKetua','ttdPengawas':'prevPengawas'};
+   const el=document.getElementById(map[k]);
+   const statusEl=document.getElementById('status'+k.charAt(0).toUpperCase()+k.slice(1).replace('Koperasi','Cap'));
+   if(data && el){ el.src=data; el.classList.remove('hidden'); if(statusEl) statusEl.innerText='✅ Tersimpan'; }
+   else if(el){ el.classList.add('hidden'); if(statusEl) statusEl.innerText='Belum ada'; }
+ });
+ // status khusus
+ ['Manajer','Kades','Cap'].forEach(n=>{
+   const key=n==='Manajer'?'ttdManajer':n==='Kades'?'ttdKades':'capKoperasi';
+   const st=document.getElementById('status'+n); if(st){ st.innerText=localStorage.getItem(key)?'✅ Tersimpan otomatis':'❌ Belum ada'; }
+ });
 }
-loadImgs();
+loadNeed(); loadImgs();
 
-const days=[
+function getCustomDays(){return JSON.parse(localStorage.getItem('customDays')||'[]');}
+function saveCustomDays(arr){localStorage.setItem('customDays',JSON.stringify(arr));}
+function addNewDay(){
+ const day=parseInt(document.getElementById('newDay').value); const title=document.getElementById('newTitle').value.trim(); const mode=document.getElementById('newMode').value; const tasksRaw=document.getElementById('newTasks').value.trim();
+ if(!day || day<31 || day>60){alert('Isi Hari 31-60'); return;} if(!title){alert('Isi judul'); return;} if(!tasksRaw){alert('Isi kegiatan, 1 baris 1 ceklis'); return;}
+ const tasks=tasksRaw.split('\n').map(s=>s.trim()).filter(Boolean);
+ const custom=getCustomDays(); custom.push({d:day,t:title,m:mode,tasks}); custom.sort((a,b)=>a.d-b.d); saveCustomDays(custom);
+ document.getElementById('newDay').value=''; document.getElementById('newTitle').value=''; document.getElementById('newTasks').value='';
+ renderCustom(); render();
+}
+function deleteCustom(idx){const c=getCustomDays(); c.splice(idx,1); saveCustomDays(c); renderCustom(); render();}
+function renderCustom(){const c=getCustomDays(); document.getElementById('listCustom').innerHTML=c.length?c.map((x,i)=>`<div class="flex justify-between border-b py-1"><span>Hari ${x.d}: ${x.t} [${x.m}] - ${x.tasks.length} tugas</span><button onclick="deleteCustom(${i})" class="text-red-600">Hapus</button></div>`).join(''):'Belum ada kegiatan Hari 31-60';}
+renderCustom();
+
+const baseDays=[
 {d:1,t:"Laporan Diri Tingkat Desa",m:"DESA",tasks:["Melaporkan keberadaan kepada Kepala Desa","Melaporkan kepada Lurah","Serah terima penugasan kepada Pengurus","Perkenalkan diri sebagai Manajer","Catat kontak Kades"]},
 {d:2,t:"Silaturahmi",m:"DESA",tasks:["Silaturahmi Ketua BPD","Silaturahmi Anggota BPD","Silaturahmi Tokoh Masyarakat","Silaturahmi Ketua RT","Silaturahmi Ketua RW","Sampaikan visi inklusif","Sampaikan visi kolaboratif","Sampaikan visi transparan","Catat aspirasi"]},
 {d:3,t:"Inventarisasi Aset",m:"GERAI",tasks:["Periksa kantor koperasi","Catat ukuran kantor","Periksa mesin/peralatan","Catat kondisi mesin","Periksa persediaan barang","Catat stok barang","Foto aset untuk BAST"]},
@@ -99,80 +197,89 @@ const container=document.getElementById('container');
 function render(){
  const stored=getStoredStart(); if(stored) document.getElementById('startInput').value=stored;
  const startObj=getStartDateObj(); const hariIni=getHariIni();
- document.getElementById('tgl').innerText=`Start: ${startObj.toLocaleDateString('id-ID')} | Hari ke-${hariIni} | ${new Date().toLocaleDateString('id-ID')}`;
- container.innerHTML=''; let total=0,done=0; let lembur=[]; let sudah=[]; let belum=[];
- days.forEach(day=>{
-   const color = day.m==='RUMAH'?'bg-blue-100 text-blue-700':day.m==='DESA'?'bg-orange-100 text-orange-700':'bg-green-100 text-green-700';
+ document.getElementById('tgl').innerText=`Start: ${startObj.toLocaleDateString('id-ID')} | Hari ke-${hariIni} | ${new Date().toLocaleDateString('id-ID',{weekday:'long'})}`;
+ const allDays=[...baseDays,...getCustomDays()].sort((a,b)=>a.d-b.d);
+ container.innerHTML=''; let total=0,done=0; let lembur=[];
+ allDays.forEach(day=>{
    let html=day.tasks.map((t,i)=>{
-     const key=`v9_${day.d}_${i}`; const chk=localStorage.getItem(key)==='1';
-     if(chk){done++; if(day.d===hariIni) sudah.push(t); if(day.d>hariIni) lembur.push(`Hari ${day.d}: ${t}`);}
-     else if(day.d<=hariIni) belum.push(`Hari ${day.d}: ${t}`);
+     const key=`v10_${day.d}_${i}`; const chk=localStorage.getItem(key)==='1';
+     if(chk){done++; if(day.d>hariIni) lembur.push(`Hari ${day.d}: ${t}`);}
      total++;
      return `<label class="flex gap-2 items-start py-2 px-2 border-b hover:bg-slate-50 cursor-pointer ${day.d>hariIni && chk?'bg-amber-50':''}"><input type="checkbox" data-key="${key}" data-day="${day.d}" ${chk?'checked':''} class="mt-0.5 w-5 h-5"><span class="text-[12px] ${chk?'line-through text-slate-400':''}">${t} ${day.d>hariIni && chk?'<b class=text-amber-600> ⚠️ LEMBUR</b>':''}</span></label>`;
    }).join('');
-   const sisa=day.tasks.length - day.tasks.filter((_,i)=>localStorage.getItem(`v9_${day.d}_${i}`)==='1').length;
+   const sisa=day.tasks.length - day.tasks.filter((_,i)=>localStorage.getItem(`v10_${day.d}_${i}`)==='1').length;
    const isToday=day.d===hariIni;
+   const color = day.m==='RUMAH'?'bg-blue-100 text-blue-700':day.m==='DESA'?'bg-orange-100 text-orange-700':'bg-green-100 text-green-700';
    const div=document.createElement('div');
    div.className=`bg-white p-3 rounded-xl border ${isToday?'ring-2 ring-[#0f5132]':''}`;
-   div.innerHTML=`<div class="flex justify-between items-center"><div class="flex items-center gap-2"><p class="font-bold text-[12px]">${isToday?'👉 ':''}HARI ${day.d}: ${day.t}</p><span class="text-[9px] px-2 py-0.5 rounded-full font-bold ${color}">${day.m}</span></div><span class="text-[9px] px-2 py-0.5 rounded-full ${sisa===0?'bg-green-100 text-green-700':'bg-slate-100'}">${sisa===0?'Selesai':'Sisa '+sisa+'/'+day.tasks.length}</span></div><div class="mt-2 border rounded">${html}</div><textarea id="note${day.d}" placeholder="Catatan hari ${day.d}..." class="mt-2 w-full border rounded p-2 text-[11px] h-12">${localStorage.getItem('noteV9_'+day.d)||''}</textarea>`;
+   div.innerHTML=`<div class="flex justify-between items-center"><div class="flex items-center gap-2"><p class="font-bold text-[12px]">${isToday?'👉 ':''}HARI ${day.d}: ${day.t}</p><span class="text-[9px] px-2 py-0.5 rounded-full font-bold ${color}">${day.m}</span></div><span class="text-[9px] px-2 py-0.5 rounded-full ${sisa===0?'bg-green-100 text-green-700':'bg-slate-100'}">${sisa===0?'Selesai':'Sisa '+sisa}</span></div><div class="mt-2 border rounded bg-white">${html}</div><textarea id="note${day.d}" placeholder="Catatan hari ${day.d}..." class="mt-2 w-full border rounded p-2 text-[11px] h-12">${localStorage.getItem('noteV10_'+day.d)||''}</textarea>`;
    container.appendChild(div);
  });
  const persen=total?Math.round(done/total*100):0;
  document.getElementById('bar').style.width=persen+'%'; document.getElementById('txt').innerText=persen+'% ('+done+'/'+total+')';
- document.getElementById('rekap').innerHTML=`<p class="font-bold text-[11px]">📊 Hari ke-${hariIni} | Sudah: ${sudah.length} | Belum: ${belum.length}</p>`;
  if(lembur.length>0){document.getElementById('alertLembur').classList.remove('hidden'); document.getElementById('listLembur').innerHTML=lembur.map(l=>`• ${l}`).join('<br>');} else document.getElementById('alertLembur').classList.add('hidden');
  container.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',e=>{localStorage.setItem(e.target.dataset.key,e.target.checked?'1':'0'); render();}));
- container.querySelectorAll('textarea').forEach(ta=>ta.addEventListener('input',e=>{localStorage.setItem('noteV9_'+e.target.id.replace('note',''),e.target.value);}));
+ container.querySelectorAll('textarea').forEach(ta=>ta.addEventListener('input',e=>{localStorage.setItem('noteV10_'+e.target.id.replace('note',''),e.target.value);}));
 }
 render();
 
-function exportTXT(){
- let txt=`LAPORAN KDKMP KASIH - Hari ke-${getHariIni()} - ${new Date().toLocaleString('id-ID')}\n`; days.forEach(day=>{txt+=`\nHARI ${day.d} ${day.t} [${day.m}]\n`; day.tasks.forEach((t,i)=>{txt+=` ${localStorage.getItem(`v9_${day.d}_${i}`)==='1'?'[✓]':'[ ]'} ${t}\n`;});});
- const blob=new Blob([txt],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`Laporan-Hari${getHariIni()}-KDKMP-Kasih-${new Date().toISOString().slice(0,10)}.txt`; a.click();
-}
-
 function exportPDF(){
  const doc=new jsPDF();
- const hariIni=getHariIni(); const tglDownload=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+ const hariIni=getHariIni();
+ // TANGGAL TANPA JAM sesuai request
+ const tglTanpaJam=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
  const tglFile=new Date().toISOString().slice(0,10);
- // header
- doc.setFillColor(15,81,50); doc.rect(0,0,210,30,'F');
- doc.setTextColor(255,255,255); doc.setFontSize(14); doc.text("KDKMP DESA KASIH - 33.03.18.2008",10,12);
- doc.setFontSize(10); doc.text(`Rencana Kerja 30 Hari - Laporan Harian - Hari ke-${hariIni}`,10,18);
- doc.setFontSize(8); doc.text(`Download: ${tglDownload} | Start Hari-1: ${getStartDateObj().toLocaleDateString('id-ID')}`,10,24);
- let y=35; doc.setTextColor(0,0,0); doc.setFontSize(9);
- days.forEach(day=>{
+ doc.setFillColor(15,81,50); doc.rect(0,0,210,28,'F');
+ doc.setTextColor(255,255,255); doc.setFontSize(13); doc.text("KDKMP DESA KASIH - 33.03.18.2008",10,11);
+ doc.setFontSize(9); doc.text(`Laporan Progres Hari ke-${hariIni} - Tanggal: ${tglTanpaJam}`,10,18);
+ doc.setFontSize(7); doc.text(`Start Hari-1: ${getStartDateObj().toLocaleDateString('id-ID')}`,10,23);
+ let y=34; doc.setTextColor(0,0,0);
+ const allDays=[...baseDays,...getCustomDays()].sort((a,b)=>a.d-b.d);
+ allDays.forEach(day=>{
    if(y>270){doc.addPage(); y=15;}
-   doc.setFont(undefined,'bold'); doc.text(`HARI ${day.d}: ${day.t} [${day.m}] ${day.d===hariIni?'(HARI INI)':''}`,10,y); y+=5;
+   doc.setFont(undefined,'bold'); doc.setFontSize(9); doc.text(`HARI ${day.d}: ${day.t} [${day.m}]`,10,y); y+=5;
    doc.setFont(undefined,'normal'); doc.setFontSize(8);
    day.tasks.forEach((t,i)=>{
-     if(y>280){doc.addPage(); y=15;}
-     const chk=localStorage.getItem(`v9_${day.d}_${i}`)==='1';
-     const isLembur=day.d>hariIni && chk;
-     doc.text(`${chk?'[v]':'[ ]'} ${t}${isLembur?' - LEMBUR':''}`,12,y); y+=4;
-   });
-   const note=localStorage.getItem('noteV9_'+day.d); if(note){doc.setFontSize(7); doc.text(`Catatan: ${note}`,12,y); y+=4; doc.setFontSize(8);}
-   y+=3;
+     if(y>278){doc.addPage(); y=15;}
+     const chk=localStorage.getItem(`v10_${day.d}_${i}`)==='1';
+     doc.text(`${chk?'[v]':'[ ]'} ${t}${day.d>hariIni && chk?' - LEMBUR':''}`,12,y); y+=4;
+   }); y+=2;
  });
- // TTD & Cap di halaman terakhir
+ // Halaman TTD TANPA JAM
  doc.addPage();
- doc.setFontSize(11); doc.setFont(undefined,'bold'); doc.text("PENGESAHAN",10,15);
- doc.setFontSize(9); doc.setFont(undefined,'normal');
- doc.text(`Tanggal Download: ${tglDownload}`,10,22);
- doc.text(`Hari Laporan: Hari ke-${hariIni}`,10,27);
- y=35;
- doc.text("Mengetahui, Kepala Desa Kasih",10,y); doc.text(`Purbalingga, ${tglDownload}`,130,y); y+=5;
- doc.text("Manajer KDKMP Kasih",130,y); y+=10;
- // gambar TTD & Cap jika ada
- const ttdM=localStorage.getItem('ttdManajer'); const ttdK=localStorage.getItem('ttdKades'); const cap=localStorage.getItem('capKoperasi');
+ doc.setFont(undefined,'bold'); doc.setFontSize(12); doc.text("PENGESAHAN LAPORAN",10,15);
+ doc.setFont(undefined,'normal'); doc.setFontSize(10);
+ doc.text(`Tanggal: ${tglTanpaJam}`,10,24); // TANPA JAM
+ doc.text(`Hari Laporan: Hari ke-${hariIni}`,10,30);
+ y=40;
+ // Cek kebutuhan TTD
+ const needManajer=localStorage.getItem('needManajer')!=='false';
+ const needKades=localStorage.getItem('needKades')!=='false';
+ const needCap=localStorage.getItem('needCap')!=='false';
+ const needKetua=localStorage.getItem('needKetua')==='true';
+ const needPengawas=localStorage.getItem('needPengawas')==='true';
+
+ doc.setFontSize(9);
+ if(needKades) doc.text("Kepala Desa Kasih",10,y);
+ if(needManajer) doc.text("Manajer KDKMP Kasih",110,y);
+ y+=8;
+ // gambar
  try{
-   if(ttdK) doc.addImage(ttdK,'PNG',10,y,40,20);
-   if(cap) doc.addImage(cap,'PNG',50,y,25,25);
-   if(ttdM) doc.addImage(ttdM,'PNG',130,y,40,20);
- } catch(e){ console.log(e); }
- y+=30;
- doc.text("______________________",10,y); doc.text("______________________",130,y);
- doc.text("(TTD & Cap)",10,y+5); doc.text("(TTD Manajer)",130,y+5);
+   const ttdKades=localStorage.getItem('ttdKades');
+   const ttdManajer=localStorage.getItem('ttdManajer');
+   const cap=localStorage.getItem('capKoperasi');
+   const ttdKetua=localStorage.getItem('ttdKetua');
+   const ttdPengawas=localStorage.getItem('ttdPengawas');
+   if(needKades && ttdKades) doc.addImage(ttdKades,'PNG',10,y,35,18);
+   if(needCap && cap) doc.addImage(cap,'PNG',50,y,20,20);
+   if(needManajer && ttdManajer) doc.addImage(ttdManajer,'PNG',110,y,35,18);
+   y+=22;
+   if(needKetua && ttdKetua){doc.text("Ketua Koperasi",10,y); doc.addImage(ttdKetua,'PNG',10,y+4,35,18); y+=25;}
+   if(needPengawas && ttdPengawas){doc.text("Pengawas",10,y); doc.addImage(ttdPengawas,'PNG',10,y+4,35,18);}
+ } catch(e){}
+ y+=10;
+ doc.text("______________________",10,y); doc.text("______________________",110,y);
+ doc.text("Cap KDKMP",10,y+20);
 
  doc.save(`Laporan-Hari${hariIni}-KDKMP-Kasih-${tglFile}.pdf`);
 }
