@@ -2,106 +2,146 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>30 Hari Kerja Manajer KDKMP Kasih - V7 Agrinas</title>
+<title>V8.1 - Set Tanggal Start - KDKMP Kasih</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#f8fafc]">
 <div class="bg-[#0f5132] text-white sticky top-0 z-50 shadow">
-<div class="max-w-5xl mx-auto p-3 flex justify-between items-center">
-<div><h1 class="font-bold text-[12px] tracking-wide">RENCANA KERJA 30 HARI PERTAMA - MANAJER KDKMP</h1><p class="text-[9px] opacity-80">KDKMP Desa Kasih - 33.03.18.2008 - Kertanegara, Purbalingga</p></div>
-<div class="text-right"><div class="w-28 h-2 bg-white/20 rounded-full"><div id="bar" class="h-2 bg-yellow-300 rounded-full transition-all" style="width:0%"></div></div><p id="txt" class="text-[10px] font-bold">0%</p></div>
+<div class="max-w-5xl mx-auto p-3 flex justify-between items-center gap-2">
+<div class="flex-1"><h1 class="font-bold text-[12px]">RENCANA KERJA 30 HARI + PROGRES</h1><p class="text-[9px] opacity-80">KDKMP Desa Kasih - V8.1 Progresif</p>
+<div class="flex items-center gap-2 mt-1">
+<label class="text-[9px]">Set Hari-1:</label>
+<input type="date" id="startInput" class="text-[10px] text-black rounded px-1.5 py-0.5" onchange="setStartDate(this.value)">
+<button onclick="resetStart()" class="text-[9px] bg-white/20 px-2 py-0.5 rounded">Reset Hari Ini</button>
+</div>
+<p id="tgl" class="text-[10px] font-bold text-yellow-200 mt-1"></p></div>
+<div class="text-right"><div class="w-32 h-2 bg-white/20 rounded-full"><div id="bar" class="h-2 bg-yellow-300 rounded-full transition-all" style="width:0%"></div></div><p id="txt" class="text-[10px] font-bold">0%</p><p id="statusHari" class="text-[9px] mt-1"></p></div>
 </div>
 </div>
 
 <div class="max-w-5xl mx-auto p-3 space-y-3">
-
-<div class="bg-white border p-4 rounded-xl">
-<div class="flex items-start gap-3">
-<div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-xs font-bold">1</div>
-<div><p class="font-bold text-[12px]">MINGGU 1: Orientasi, Pemetaan & Silaturahmi Pemangku Kepentingan (Day 1-7)</p><p class="text-[10px] text-slate-500">Fokus Utama: Membangun presence, memahami kondisi eksisting, dan menjalin hubungan baik dengan stakeholder kunci desa.</p></div>
+<div id="rekap" class="bg-white border-2 border-[#0f5132] p-3 rounded-xl"></div>
+<div id="alertLembur" class="hidden bg-amber-50 border border-amber-300 p-3 rounded-xl">
+<p class="text-[11px] font-bold text-amber-800">⚠️ Lembur - Dikerjakan lebih awal:</p>
+<div id="listLembur" class="text-[10px] text-amber-700 mt-1"></div>
 </div>
-</div>
-
 <div id="container" class="grid gap-3"></div>
-
-<div class="grid grid-cols-3 gap-2">
-<div class="bg-[#0f172a] text-white p-3 rounded-xl"><p class="font-bold text-[10px]">MENDENGAR LEBIH BANYAK</p><p class="text-[9px] opacity-80 mt-1">Di 10 hari pertama, fokus mendengarkan aspirasi warga dan pengurus sebelum perubahan radikal.</p></div>
-<div class="bg-[#0f5132] text-white p-3 rounded-xl"><p class="font-bold text-[10px]">AKUNTABILITAS SEJAK HARI PERTAMA</p><p class="text-[9px] opacity-80 mt-1">Setiap rupiah transaksi kas wajib langsung dicatat dan diunggah ke sistem agar transparan.</p></div>
-<div class="bg-blue-700 text-white p-3 rounded-xl"><p class="font-bold text-[10px]">KOMUNIKASI AKTIF</p><p class="text-[9px] opacity-80 mt-1">Berikan laporan progres singkat secara rutin kepada Kepala Desa dan Dinas Koperasi.</p></div>
-</div>
-
 <div class="p-4 bg-white rounded-xl border text-center">
-<button onclick="exportLaporan()" class="bg-[#0f5132] text-white px-5 py-2.5 rounded-lg text-xs font-bold w-full">EXPORT LAPORAN 30 HARI - KDKMP KASIH</button>
-<a href="./" class="mt-2 inline-block text-xs underline text-slate-500">Kembali ke Dashboard</a>
+<button onclick="exportLaporan()" class="bg-[#0f5132] text-white px-5 py-2.5 rounded-lg text-xs font-bold w-full">EXPORT LAPORAN + PROGRES HARIAN</button>
 </div>
 </div>
 
 <script>
+function getStoredStart(){return localStorage.getItem('kdkmp_startDate');}
+function setStartDate(val){if(!val) return; localStorage.setItem('kdkmp_startDate',val); render();}
+function resetStart(){localStorage.removeItem('kdkmp_startDate'); document.getElementById('startInput').value=''; render();}
+function getStartDateObj(){
+  const stored=getStoredStart();
+  if(stored){const d=new Date(stored); d.setHours(0,0,0,0); return d;}
+  const now=new Date(); now.setHours(0,0,0,0); return now;
+}
+function getHariIni(){
+  const start=getStartDateObj();
+  const now=new Date(); now.setHours(0,0,0,0);
+  const diff=Math.floor((now-start)/86400000)+1;
+  return diff<1?1:diff;
+}
+
 const days=[
-{d:1,t:"Laporan Diri & Silaturahmi Tingkat Desa",m:"DESA",tasks:["Melaporkan keberadaan dan serah terima penugasan kepada Kepala Desa/Lurah dan Pengurus KDKMP","Bersilaturahmi dengan pimpinan BPD (Badan Permusyawaratan Desa)","Mendata kontak tokoh masyarakat dan ketua RT/RW"]},
-{d:2,t:"Penyampaian Visi Kepemimpinan",m:"DESA",tasks:["Bersilaturahmi dengan tokoh masyarakat, RT/RW","Menyampaikan visi kepemimpinan yang inklusif, kolaboratif, dan transparan","Mencatat aspirasi awal warga dan pengurus"]},
-{d:3,t:"Inventarisasi Aset Fisik",m:"GERAI",tasks:["Memeriksa dan mencatat seluruh aset fisik koperasi (kantor, mesin/peralatan)","Mencatat persediaan barang/stok usaha yang ada","Foto dokumentasi aset untuk BAST"]},
-{d:4,t:"Audit Administrasi Awal",m:"GERAI",tasks:["Memeriksa dokumen legalitas koperasi","Memeriksa buku rekening bank koperasi dan arsip keuangan","Menguji coba dan memastikan akses login dashboard SIMKOPDES berjalan lancar"]},
-{d:5,t:"Pemetaan Kondisi Anggota",m:"RUMAH",tasks:["Mengumpulkan data jumlah anggota aktif, pasif, dan calon anggota potensial","Membuat rekap data keanggotaan untuk input SIMKOPDES"]},
-{d:6,t:"Pemetaan Ekonomi Desa & Data Desil",m:"RUMAH",tasks:["Meninjau data Desil wilayah untuk identifikasi kelompok sasaran prioritas","Memetakan potensi ekonomi desa dan kelompok tani/nelayan"]},
-{d:7,t:"Deliverable Minggu 1 - BAST",m:"RUMAH",tasks:["Menyusun Laporan Berita Acara Serah Terima (BAST) Aset & Dokumen","Menyusun Dokumen Pemetaan Awal KDKMP","Kirim laporan Minggu 1 kepada Kepala Desa"]},
-
-{d:8,t:"Implementasi SIMKOPDES - Keanggotaan",m:"RUMAH",tasks:["Memulai input/update data keanggotaan dan profil KDKMP ke SIMKOPDES","Verifikasi NIK anggota dan kesesuaian data"]},
-{d:9,t:"Implementasi SIMKOPDES - Keuangan",m:"RUMAH",tasks:["Menata alur pembukuan dan keuangan agar selaras dengan standar SIMKOPDES","Input saldo awal kas dan rekening bank"]},
-{d:10,t:"Integrasi Sertifikat Elektronik",m:"RUMAH",tasks:["Memastikan alur penandatanganan dokumen resmi/kontrak terintegrasi dengan Sertifikat Elektronik (Privy)","Uji coba tanda tangan elektronik"]},
-{d:11,t:"Penyusunan SOP Kas & Keuangan",m:"RUMAH",tasks:["Menyusun SOP Kas & Keuangan (pengeluaran kas kecil, penerimaan pembayaran)","Menyusun SOP pelaporan harian dan penutupan kas"]},
-{d:12,t:"Penyusunan SOP Pelayanan & Stok",m:"RUMAH",tasks:["Menyusun SOP Pelayanan Anggota (pendaftaran, simpanan, pengajuan)","Menyusun SOP Pengelolaan Stok/Barang (jika ada unit perdagangan/waserda)"]},
-{d:13,t:"Rapat Konsolidasi Pengurus - Persiapan",m:"RUMAH",tasks:["Menyiapkan materi presentasi hasil pemetaan awal dan draf SOP","Membuat undangan rapat Pengurus & Pengawas"]},
-{d:14,t:"Rapat Konsolidasi Pengurus - Pelaksanaan",m:"DESA",tasks:["Mempresentasikan hasil pemetaan awal dan draf SOP kepada Pengurus & Pengawas","Menyepakati target bersama untuk 3 bulan ke depan (Q1 Targets)","Deliverable Minggu 2: Sistem Administrasi Digital & Buku SOP"]},
-
-{d:15,t:"Peluncuran Program Quick Win - Persiapan",m:"GERAI",tasks:["Menentukan pilihan Quick Win sesuai potensi desa: Sembako / Pupuk-Pakan-Bibit / Layanan PPOB","Menyiapkan stok awal dan daftar harga bersaing","Koordinasi dengan PT Agrinas Pangan Nusantara untuk suplai (sistem 1 pintu)"]},
-{d:16,t:"Pelaksanaan Quick Win - Operasional",m:"GERAI",tasks:["Pelaksanaan layanan prioritas Quick Win","Penyediaan kebutuhan pokok / pupuk / pakan / bibit untuk kelompok tani/nelayan"]},
-{d:17,t:"Pencatatan Real-time SIMKOPDES",m:"GERAI",tasks:["Memastikan sistem pencatatan transaksi Quick Win tercatat secara real-time di SIMKOPDES","Cek stok dan cash harian"]},
-{d:18,t:"Kampanye Sosialisasi - Forum Desa",m:"DESA",tasks:["Mengadakan sosialisasi keanggotaan koperasi dalam forum desa (rembuk warga, pengajian, RWT/RTL)","Menjelaskan hak, kewajiban, dan keuntungan menjadi anggota (SHU, akses usaha)"]},
-{d:19,t:"Posko Pendaftaran Anggota",m:"DESA",tasks:["Membuka posko pendaftaran anggota baru di lokasi strategis desa","Membagikan brosur literasi keuangan desa"]},
-{d:20,t:"Literasi Keuangan & Edukasi",m:"DESA",tasks:["Edukasi transparansi SHU dan kemudahan akses usaha KDKMP","Mengumpulkan calon anggota baru minimal 10 orang"]},
-{d:21,t:"Deliverable Minggu 3 - Quick Win Jalan",m:"GERAI",tasks:["Evaluasi berjalannya layanan prioritas Quick Win","Rekap penambahan anggota baru terdaftar","Laporan Minggu 3 ke Kepala Desa"]},
-
-{d:22,t:"Penutupan Buku Bulanan - Reconcile",m:"RUMAH",tasks:["Melakukan reconcile (pencocokan) kas, rekening bank, dan catatan SIMKOPDES","Verifikasi semua transaksi Minggu 1-3"]},
-{d:23,t:"Laporan Keuangan Bulanan",m:"RUMAH",tasks:["Menyusun Laporan Keuangan Bulanan (Laba/Rugi, Neraca Kas)","Menyusun Laporan Perkembangan Anggota"]},
-{d:24,t:"Analisis Kinerja Quick Win",m:"RUMAH",tasks:["Analisis omzet dan margin Quick Win","Analisis animo warga terhadap layanan koperasi"]},
-{d:25,t:"Persiapan Pelaporan Eksternal",m:"RUMAH",tasks:["Menyiapkan Laporan Kinerja Bulanan Manajer KDKMP untuk Dinas Koperasi/Kementerian"]},
-{d:26,t:"Pelaporan Eksternal",m:"RUMAH",tasks:["Mengirimkan Laporan Kinerja Bulanan ke instansi pembina","Mengadakan diskusi evaluasi bersama Pendamping Lapangan / Pembina"]},
-{d:27,t:"Koordinasi Dinas & Pendamping",m:"DESA",tasks:["Koordinasi dengan Pendamping Lapangan wilayah","Minta arahan untuk pengembangan bulan ke-2"]},
-{d:28,t:"Persiapan Rapat Evaluasi Bulanan",m:"RUMAH",tasks:["Menyusun materi evaluasi capaian 30 hari pertama","Membuat draf Rencana Kerja Bulan Ke-2"]},
-{d:29,t:"Rapat Evaluasi Bulanan",m:"DESA",tasks:["Mengadakan rapat evaluasi bersama Pengurus KDKMP mengenai capaian 30 hari","Mencatat masukan dan kendala"]},
-{d:30,t:"Deliverable Minggu 4 - Master Plan Bulan 2",m:"RUMAH",tasks:["Menyusun Rencana Kerja Bulan Ke-2 (pengembangan unit usaha baru, kemitraan, permodalan)","Finalisasi Laporan Kinerja Bulanan Resmi KDKMP & Master Plan","Export dan kirim laporan kepada Kepala Desa, Korwil, dan Dinas"]},
+{d:1,t:"Laporan Diri & Silaturahmi",tasks:["Lapor keberadaan & serah terima ke Kades/Lurah & Pengurus KDKMP","Silaturahmi pimpinan BPD","Mendata kontak tokoh masyarakat RT/RW"]},
+{d:2,t:"Visi Kepemimpinan",tasks:["Silaturahmi tokoh masyarakat RT/RW","Sampaikan visi inklusif, kolaboratif, transparan","Catat aspirasi awal"]},
+{d:3,t:"Inventarisasi Aset Fisik",tasks:["Catat aset fisik (kantor, mesin, peralatan)","Catat stok usaha","Foto aset untuk BAST"]},
+{d:4,t:"Audit Administrasi & SIMKOPDES",tasks:["Periksa dokumen legalitas","Periksa rekening bank & arsip keuangan","Test login SIMKOPDES"]},
+{d:5,t:"Pemetaan Anggota",tasks:["Kumpulkan data anggota aktif/pasif/calon","Rekap untuk input SIMKOPDES"]},
+{d:6,t:"Pemetaan Ekonomi & Desil",tasks:["Tinjau data Desil wilayah","Petakan potensi ekonomi desa"]},
+{d:7,t:"BAST Minggu 1",tasks:["Susun BAST Aset & Dokumen","Susun Pemetaan Awal","Kirim laporan Minggu 1 ke Kades"]},
+{d:8,t:"SIMKOPDES Keanggotaan",tasks:["Input/update anggota & profil KDKMP ke SIMKOPDES","Verifikasi NIK"]},
+{d:9,t:"SIMKOPDES Keuangan",tasks:["Tata alur pembukuan selaras SIMKOPDES","Input saldo awal kas & bank"]},
+{d:10,t:"Integrasi Privy",tasks:["Pastikan alur ttd dokumen terintegrasi Privy","Uji coba ttd elektronik"]},
+{d:11,t:"SOP Kas & Keuangan",tasks:["Susun SOP Kas & Keuangan","Susun SOP pelaporan harian"]},
+{d:12,t:"SOP Pelayanan & Stok",tasks:["Susun SOP Pelayanan Anggota","Susun SOP Pengelolaan Stok/Barang"]},
+{d:13,t:"Persiapan Rapat Konsolidasi",tasks:["Siapkan materi pemetaan & draf SOP","Buat undangan Pengurus & Pengawas"]},
+{d:14,t:"Rapat Konsolidasi",tasks:["Presentasi pemetaan & SOP ke Pengurus & Pengawas","Sepakati Q1 Targets","Deliverable: SIMKOPDES & Buku SOP"]},
+{d:15,t:"Quick Win Persiapan",tasks:["Tentukan Quick Win: Sembako/Pupuk/PPOB","Siapkan stok awal & harga","Koordinasi Agrinas 1 pintu"]},
+{d:16,t:"Quick Win Operasional",tasks:["Layanan prioritas Quick Win","Penyediaan kebutuhan pokok/pupuk"]},
+{d:17,t:"Pencatatan Real-time",tasks:["Pencatatan transaksi Quick Win real-time di SIMKOPDES","Cek stok & cash"]},
+{d:18,t:"Sosialisasi Forum Desa",tasks:["Sosialisasi di rembug warga/pengajian/RWT","Jelaskan hak/kewajiban & SHU"]},
+{d:19,t:"Posko Pendaftaran",tasks:["Buka posko pendaftaran anggota baru","Bagi brosur literasi keuangan"]},
+{d:20,t:"Literasi & Rekrutmen",tasks:["Edukasi transparansi SHU","Kumpulkan 10 calon anggota baru"]},
+{d:21,t:"Deliverable Minggu 3",tasks:["Evaluasi layanan Quick Win","Rekap anggota baru","Laporan Minggu 3"]},
+{d:22,t:"Reconcile",tasks:["Reconcile kas/bank/SIMKOPDES","Verifikasi transaksi Minggu 1-3"]},
+{d:23,t:"Laporan Keuangan",tasks:["Susun Laba/Rugi, Neraca Kas","Susun Laporan Perkembangan Anggota"]},
+{d:24,t:"Analisis Quick Win",tasks:["Analisis omzet & margin","Analisis animo warga"]},
+{d:25,t:"Persiapan Laporan Eksternal",tasks:["Siapkan Laporan Kinerja Bulanan untuk Dinkop/Kementerian"]},
+{d:26,t:"Pelaporan Eksternal",tasks:["Kirim Laporan ke pembina","Diskusi dengan Pendamping Lapangan"]},
+{d:27,t:"Koordinasi Pendamping",tasks:["Koordinasi Pendamping wilayah","Minta arahan Bulan 2"]},
+{d:28,t:"Persiapan Evaluasi",tasks:["Susun materi evaluasi 30 hari","Draf Rencana Bulan 2"]},
+{d:29,t:"Rapat Evaluasi",tasks:["Rapat evaluasi bersama Pengurus","Catat masukan & kendala"]},
+{d:30,t:"Master Plan Bulan 2",tasks:["Susun Rencana Bulan 2","Finalisasi Laporan Resmi & Master Plan","Export & kirim ke Kades/Korwil/Dinas"]},
 ];
 
 const container=document.getElementById('container');
 function render(){
- container.innerHTML=''; let total=0,done=0;
+ const stored=getStoredStart();
+ if(stored) document.getElementById('startInput').value=stored;
+ const startObj=getStartDateObj();
+ const hariIni=getHariIni();
+ const tglStr=startObj.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+ document.getElementById('tgl').innerText=`Start Hari-1: ${tglStr} | Hari ini: Hari ke-${hariIni} - ${new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'})}`;
+
+ container.innerHTML=''; let total=0,done=0; let lembur=[]; let sudahHariIni=[]; let belumHariIni=[];
  days.forEach(day=>{
    let html=day.tasks.map((t,i)=>{
-     const key=`v7agr_${day.d}_${i}`; const chk=localStorage.getItem(key)==='1'; if(chk)done++; total++;
-     return `<label class="flex gap-2 items-start py-1.5 px-2 rounded hover:bg-slate-50 cursor-pointer border-b last:border-0"><input type="checkbox" data-key="${key}" ${chk?'checked':''} class="mt-0.5 w-4 h-4 accent-[#0f5132]"><span class="text-[11px] leading-snug ${chk?'line-through text-slate-400':''}">${t}</span></label>`;
+     const key=`v81_${day.d}_${i}`; const chk=localStorage.getItem(key)==='1';
+     if(chk){done++; if(day.d===hariIni) sudahHariIni.push(t); if(day.d>hariIni) lembur.push(`Hari ${day.d}: ${t}`);}
+     else { if(day.d<=hariIni) belumHariIni.push(`Hari ${day.d}: ${t}`);}
+     total++;
+     return `<label class="flex gap-2 items-start py-1.5 px-2 rounded hover:bg-slate-50 cursor-pointer border-b last:border-0 ${day.d>hariIni && chk?'bg-amber-50':''}"><input type="checkbox" data-key="${key}" data-day="${day.d}" ${chk?'checked':''} class="mt-0.5 w-4 h-4 accent-[#0f5132]"><span class="text-[11px] leading-snug ${chk?'line-through text-slate-400':''}">${t} ${day.d>hariIni && chk?'<b class=text-amber-600> ⚠️ LEMBUR</b>':''}</span></label>`;
    }).join('');
-   const sisa=day.tasks.length - day.tasks.filter((_,i)=>localStorage.getItem(`v7agr_${day.d}_${i}`)==='1').length;
+   const sisa=day.tasks.length - day.tasks.filter((_,i)=>localStorage.getItem(`v81_${day.d}_${i}`)==='1').length;
+   const isToday=day.d===hariIni;
+   const isPast=day.d<hariIni;
+   const isFuture=day.d>hariIni;
    const div=document.createElement('div');
-   div.className='bg-white p-3 rounded-xl border shadow-sm';
-   div.innerHTML=`<div class="flex justify-between items-center"><p class="font-bold text-[12px]">HARI ${day.d}: ${day.t}</p><span class="text-[9px] px-2 py-0.5 rounded-full font-bold ${day.m.includes('RUMAH')?'bg-blue-100 text-blue-700':day.m.includes('DESA')?'bg-orange-100 text-orange-700':'bg-green-100 text-green-700'}">${day.m}</span></div><p class="text-[9px] mt-1 ${sisa===0?'bg-green-100 text-green-700':'bg-red-100 text-red-700'} inline-block px-2 py-0.5 rounded-full font-bold">${sisa===0?'Selesai - Deliverable Tercapai':'Sisa '+sisa+' dari '+day.tasks.length}</p><div class="mt-2 bg-slate-50 rounded border">${html}</div><textarea id="note${day.d}" placeholder="Catatan hari ${day.d}..." class="mt-2 w-full border rounded p-2 text-[11px] h-12 bg-white">${localStorage.getItem('noteV7agr_'+day.d)||''}</textarea>`;
+   div.className=`bg-white p-3 rounded-xl border shadow-sm ${isToday?'ring-2 ring-[#0f5132]':''} ${isPast && sisa>0?'border-red-200':''}`;
+   div.innerHTML=`<div class="flex justify-between items-center"><p class="font-bold text-[12px] ${isToday?'text-[#0f5132]':''}">${isToday?'👉 ':isPast?'':isFuture?'🔜 ':''}HARI ${day.d}: ${day.t} ${isToday?'(HARI INI)':isPast && sisa>0?'(TERTUNDA)':isFuture?'(MENDATANG)':''}</p><span class="text-[9px] px-2 py-0.5 rounded-full font-bold ${sisa===0?'bg-green-100 text-green-700':isPast?'bg-red-100 text-red-700':'bg-slate-100 text-slate-600'}">${sisa===0?'Selesai':'Sisa '+sisa}</span></div><div class="mt-2 bg-slate-50 rounded border">${html}</div><textarea id="note${day.d}" placeholder="Progres hari ${day.d} - udah ngapain aja..." class="mt-2 w-full border rounded p-2 text-[11px] h-12 bg-white">${localStorage.getItem('noteV81_'+day.d)||''}</textarea>`;
    container.appendChild(div);
  });
- document.getElementById('bar').style.width=(total?Math.round(done/total*100):0)+'%';
- document.getElementById('txt').innerText=(total?Math.round(done/total*100):0)+'% ('+done+'/'+total+')';
- container.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',e=>{localStorage.setItem(e.target.dataset.key,e.target.checked?'1':'0'); render();}));
- container.querySelectorAll('textarea').forEach(ta=>ta.addEventListener('input',e=>{localStorage.setItem('noteV7agr_'+e.target.id.replace('note',''),e.target.value);}));
+ const persen=total?Math.round(done/total*100):0;
+ document.getElementById('bar').style.width=persen+'%';
+ document.getElementById('txt').innerText=persen+'% ('+done+'/'+total+')';
+ document.getElementById('statusHari').innerText=hariIni<=30?`Hari ke-${hariIni} dari 30`:'Selesai 30 hari';
+
+ document.getElementById('rekap').innerHTML=`
+ <div class="flex justify-between"><p class="font-bold text-[12px]">📊 PROGRES HARIAN - Hari ke-${hariIni}</p><p class="text-[9px] bg-slate-100 px-2 py-1 rounded">Start: ${tglStr}</p></div>
+ <div class="grid grid-cols-2 gap-3 mt-2">
+ <div class="bg-green-50 border border-green-200 p-2 rounded-lg"><p class="text-[10px] font-bold text-green-800">✅ SUDAH DIKERJAKAN HARI INI (Hari ${hariIni}):</p><p class="text-[10px] text-green-700 mt-1">${sudahHariIni.length?sudahHariIni.map(s=>`• ${s}`).join('<br>'):'Belum ada - centang di bawah'}</p></div>
+ <div class="bg-red-50 border border-red-200 p-2 rounded-lg"><p class="text-[10px] font-bold text-red-800">⏳ BELUM / TERTUNDA (s.d. Hari ${hariIni}):</p><p class="text-[10px] text-red-700 mt-1">${belumHariIni.slice(0,6).map(s=>`• ${s}`).join('<br>')}${belumHariIni.length>6?`<br>+${belumHariIni.length-6} lagi`:''}${belumHariIni.length===0?'Semua beres hari ini!':''}</p></div>
+ </div>
+ `;
+
+ if(lembur.length>0){
+   document.getElementById('alertLembur').classList.remove('hidden');
+   document.getElementById('listLembur').innerHTML=lembur.map(l=>`• ${l} <span class=text-amber-600> (dikerjakan lebih awal)</span>`).join('<br>');
+ } else {
+   document.getElementById('alertLembur').classList.add('hidden');
+ }
+
+ container.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',e=>{
+   localStorage.setItem(e.target.dataset.key,e.target.checked?'1':'0');
+   render();
+ }));
+ container.querySelectorAll('textarea').forEach(ta=>ta.addEventListener('input',e=>{localStorage.setItem('noteV81_'+e.target.id.replace('note',''),e.target.value);}));
 }
 render();
 function exportLaporan(){
- let txt=`LAPORAN 30 HARI KERJA PERTAMA - MANAJER KDKMP DESA KASIH\nID Desa: 33.03.18.2008 - Kertanegara - Purbalingga\nKoordinat: -7.3088933, 109.4273522\nTanggal Export: ${new Date().toLocaleString('id-ID')}\nSistem Distribusi: 1 Pintu PT Agrinas Pangan Nusantara\n\n`;
+ let txt=`LAPORAN 30 HARI + PROGRES - KDKMP KASIH\nStart Hari-1: ${getStartDateObj().toLocaleDateString('id-ID')}\nExport Hari ke-${getHariIni()} - ${new Date().toLocaleString('id-ID')}\n\n`;
  days.forEach(day=>{
-   txt+=`\nHARI ${day.d} - ${day.t} (${day.m})\n`;
-   day.tasks.forEach((t,i)=>{txt+=` ${localStorage.getItem(`v7agr_${day.d}_${i}`)==='1'?'[✓]':'[ ]'} ${t}\n`;});
-   txt+=` Catatan: ${localStorage.getItem('noteV7agr_'+day.d)||'-'}\n`;
+   txt+=`\nHARI ${day.d} - ${day.t} ${day.d===getHariIni()?'(HARI INI)':''}\n`;
+   day.tasks.forEach((t,i)=>{const isLembur=parseInt(day.d)>getHariIni() && localStorage.getItem(`v81_${day.d}_${i}`)==='1'; txt+=` ${localStorage.getItem(`v81_${day.d}_${i}`)==='1'?'[✓]':'[ ]'} ${t}${isLembur?' (LEMBUR - DIKERJAKAN LEBIH AWAL)':''}\n`;});
+   txt+=` Progres: ${localStorage.getItem('noteV81_'+day.d)||'-'}\n`;
  });
- txt+=`\n\nTIPS SUKSES:\n1. Mendengar Lebih Banyak (10 hari pertama)\n2. Akuntabilitas Sejak Hari Pertama\n3. Komunikasi Aktif ke Kades & Dinkop\n`;
- const blob=new Blob([txt],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Laporan-30Hari-KDKMP-Kasih-V7-Agrinas.txt'; a.click();
+ const blob=new Blob([txt],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`Laporan-Hari${getHariIni()}-KDKMP-Kasih.txt`; a.click();
 }
 </script>
 </body>
