@@ -1,256 +1,170 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stakeholder & Analisis Desa Kasih</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stakeholder & Analisis Desa - KDMP Kasih V3</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,sans-serif}</style>
 </head>
-<body class="bg-[#f8fafc] min-h-screen">
-<div class="bg-[#0f5132] text-white p-4 sticky top-0 z-50">
-<div class="max-w-5xl mx-auto flex justify-between items-center">
-<div>
-<h1 class="font-bold text-[13px]">KDKMP KASIH - STAKEHOLDER & ANALISIS</h1>
-<p class="text-[10px] text-yellow-200">Desa Kasih - Kertanegara - Purbalingga | Data untuk Manajer</p>
+<body class="bg-[#f6f7f9] min-h-screen">
+<div class="max-w-6xl mx-auto p-3 md:p-6">
+<div class="bg-white rounded-2xl shadow p-4 flex justify-between items-center">
+<h1 class="font-bold text-lg">Koperasi Desa Merah Putih Kasih - V3 Lengkap</h1>
+<div class="flex gap-2"><a href="index.html" class="text-sm bg-gray-100 px-3 py-1.5 rounded-lg">Home</a><button id="btnLogin" class="bg-black text-white px-3 py-1.5 rounded-lg text-sm">Login Manajer</button></div>
 </div>
-<div class="text-right">
-<p id="loginInfo" class="text-[10px] font-bold">Belum Login</p>
-<button onclick="logout()" id="btnLogout" class="hidden text-[9px] bg-white/20 px-2 py-1 rounded mt-1">Logout</button>
-</div>
-</div>
-<div class="max-w-5xl mx-auto flex gap-2 mt-3">
-<button id="tab1Btn" onclick="switchTab(1)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white text-[#0f5132]">TAB 1: DATA PUBLIK</button>
-<button id="tab2Btn" onclick="switchTab(2)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20">TAB 2: KONTAK (LOGIN)</button>
-<button id="tab3Btn" onclick="switchTab(3)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20">TAB 3: ANALISIS DESA (LOGIN)</button>
-</div>
+<div class="mt-4 bg-white rounded-2xl shadow p-2 flex gap-2 flex-wrap">
+<button data-tab="1" class="tabBtn flex-1 py-2 rounded-xl bg-black text-white font-semibold min-w-[120px]">Tab 1: Info Umum</button>
+<button data-tab="2" class="tabBtn flex-1 py-2 rounded-xl bg-gray-100 min-w-[120px]">Tab 2: Stakeholder</button>
+<button data-tab="3" class="tabBtn flex-1 py-2 rounded-xl bg-gray-100 min-w-[120px]">Tab 3: Desil & Potensi</button>
+<button data-tab="4" class="tabBtn flex-1 py-2 rounded-xl bg-gray-100 min-w-[120px]">Tab 4: Data Kopdes</button>
 </div>
 
-<div class="max-w-5xl mx-auto p-3">
+<!-- TAB1 -->
+<div id="tab1" class="tabPanel mt-4"><div class="bg-white rounded-2xl shadow p-4"><h2 class="font-bold">Info Umum Desa (hanya UMUM)</h2><div id="publicList" class="mt-4 grid gap-3"></div></div></div>
 
-<!-- LOGIN BOX -->
-<div id="loginBox" class="bg-white border-2 border-amber-300 p-4 rounded-xl mb-3">
-<p class="font-bold text-[12px]">🔒 Buat Akun Manajer / Login</p>
-<p class="text-[10px] text-slate-500">Akun disimpan di HP ini (localStorage). Untuk buka Tab 2 & 3 harus login dulu.</p>
-<div class="grid grid-cols-3 gap-2 mt-3">
-<input id="loginUser" placeholder="Username manajer" class="border rounded p-2 text-[11px]">
-<input id="loginPass" type="password" placeholder="Password" class="border rounded p-2 text-[11px]">
-<div class="flex gap-1">
-<button onclick="buatAkun()" class="bg-blue-600 text-white px-3 py-2 rounded text-[10px] font-bold">Buat Akun</button>
-<button onclick="doLogin()" class="bg-[#0f5132] text-white px-3 py-2 rounded text-[10px] font-bold">Login</button>
-</div>
-</div>
-<p id="loginMsg" class="text-[10px] mt-2 text-red-600"></p>
+<!-- TAB2 -->
+<div id="tab2" class="tabPanel mt-4 hidden"><div class="bg-white rounded-2xl shadow p-4"><div class="flex justify-between"><h2 class="font-bold">Stakeholder - WA Link + Edit Hapus</h2><button id="addStakeholderBtn" class="hidden bg-black text-white text-sm px-3 py-1.5 rounded-lg">+ Tambah</button></div><div id="stakeholderList" class="mt-4 grid gap-3"></div></div></div>
+
+<!-- TAB3 -->
+<div id="tab3" class="tabPanel mt-4 hidden"><div class="bg-white rounded-2xl shadow p-4">
+<div class="flex justify-between flex-wrap gap-2"><h2 class="font-bold">Tab 3: Desil, Pekerjaan, Konsumen, Potensi Desa</h2><div class="flex gap-2"><button id="btnTampilAnalisis" class="bg-green-600 text-white text-sm px-3 py-1.5 rounded-lg">Tampilkan Analisis</button><button id="addDesilBtn" class="hidden bg-black text-white text-sm px-3 py-1.5 rounded-lg">+ Tambah Data</button></div></div>
+
+<div class="mt-4 grid md:grid-cols-3 gap-3">
+<div class="bg-gray-50 p-3 rounded-xl"><h3 class="font-semibold text-sm">Filter Dusun</h3><select id="filterDusun" class="mt-2 w-full border rounded-lg p-2 text-sm"></select><select id="filterRTRW" class="mt-2 w-full border rounded-lg p-2 text-sm"><option>Semua RT/RW</option></select></div>
+<div class="bg-gray-50 p-3 rounded-xl md:col-span-2"><h3 class="font-semibold text-sm">Pekerjaan (custom edit hapus)</h3><div id="pekerjaanChips" class="mt-2 flex flex-wrap gap-2"></div><div class="mt-2 flex gap-2"><input id="customPekerjaan" class="flex-1 border rounded-lg p-2 text-sm" placeholder="Tambah pekerjaan"><button id="btnAddPekerjaan" class="bg-black text-white px-3 rounded-lg text-sm">Tambah</button></div></div>
 </div>
 
-<!-- TAB 1: PUBLIK -->
-<div id="content1" class="space-y-3">
-<div class="bg-white p-4 rounded-xl border">
-<h2 class="font-bold text-[13px]">📢 Data Umum Desa Kasih - Bisa Dicek Orang Lain</h2>
-<p class="text-[10px] text-slate-500">Hanya yang kamu set UMUM di Tab 2 & 3 yang muncul di sini. Privacy tidak muncul.</p>
-</div>
-<div class="grid md:grid-cols-2 gap-3">
-<div class="bg-white p-3 rounded-xl border"><p class="font-bold text-[11px]">👥 Kontak Umum</p><div id="publikKontak" class="mt-2 space-y-2 text-[11px]"></div></div>
-<div class="bg-white p-3 rounded-xl border"><p class="font-bold text-[11px]">📊 Ringkasan Desa Umum</p><div id="publikDesa" class="mt-2 text-[11px]"></div></div>
-</div>
-<div class="bg-white p-3 rounded-xl border"><p class="font-bold text-[11px]">💡 Saran Analisis (Publik)</p><div id="publikSaran" class="mt-2 text-[11px]"></div></div>
+<h3 class="font-bold mt-6">Data Desil per Dusun RT RW</h3><div id="desilList" class="mt-3 grid gap-3"></div>
+<h3 class="font-bold mt-6">Jumlah Orang per Pekerjaan</h3><div id="pekerjaanList" class="mt-3 grid gap-3"></div>
+<h3 class="font-bold mt-6">Kekuatan Konsumen & Daya Serap</h3><div id="konsumenList" class="mt-3 grid gap-3"></div>
+
+<h3 class="font-bold mt-8">Potensi Desa - Komoditi Padi, Jagung, Ayam (bisa tambah)</h3>
+<div class="mt-2 flex gap-2"><button id="addPotensiBtn" class="hidden bg-black text-white text-sm px-3 py-1.5 rounded-lg">+ Tambah Komoditi</button></div>
+<div id="potensiList" class="mt-3 grid gap-3"></div>
+
+<div id="analisisBox" class="hidden mt-6 bg-[#0f172a] text-white rounded-2xl p-5"><h3 class="font-bold">📊 Analisis Otomatis (Gabung Tab 3 + Tab 4)</h3><div id="analisisContent" class="mt-3 text-sm leading-7"></div></div>
+</div></div>
+
+<!-- TAB4 -->
+<div id="tab4" class="tabPanel mt-4 hidden"><div class="bg-white rounded-2xl shadow p-4">
+<div id="tab4Locked"><h2 class="font-bold">Tab 4 Private - Login Manajer Dibutuhkan</h2><p class="text-sm text-gray-500 mt-2">Data Kopdes, NIK, NIB, SK hanya bisa diakses setelah login. Klik Login Manajer (password: kasih123)</p></div>
+<div id="tab4Content" class="hidden">
+<h2 class="font-bold text-lg">Data Koperasi Desa (Private)</h2>
+<div class="mt-4 grid md:grid-cols-2 gap-4">
+<div class="bg-gray-50 p-4 rounded-xl"><h3 class="font-semibold">Identitas Kopdes</h3>
+<div class="mt-3 grid gap-2 text-sm">
+<label class="font-semibold text-xs">NIK Koperasi / No Induk</label><input id="kop_nik" class="border rounded-lg p-2">
+<label class="font-semibold text-xs">NIB</label><input id="kop_nib" class="border rounded-lg p-2">
+<label class="font-semibold text-xs">SK Pembentukan No</label><input id="kop_sk" class="border rounded-lg p-2">
+<label class="font-semibold text-xs">Tanggal SK</label><input id="kop_tgl" type="date" class="border rounded-lg p-2">
+<label class="font-semibold text-xs">Total Penduduk</label><input id="kop_total" type="number" class="border rounded-lg p-2">
+<label class="font-semibold text-xs">Jumlah Laki-laki</label><input id="kop_laki" type="number" class="border rounded-lg p-2">
+<label class="font-semibold text-xs">Jumlah Perempuan</label><input id="kop_perempuan" type="number" class="border rounded-lg p-2">
+<button id="saveKopdes" class="mt-2 bg-black text-white px-3 py-2 rounded-lg text-sm">Simpan Data Kopdes</button>
+</div></div>
+<div class="bg-gray-50 p-4 rounded-xl"><h3 class="font-semibold">Ringkasan untuk Analisis</h3><div id="kopRingkasan" class="mt-3 text-sm"></div></div>
 </div>
 
-<!-- TAB 2: KONTAK -->
-<div id="content2" class="hidden space-y-3">
-<div class="bg-white border-2 border-blue-200 p-4 rounded-xl">
-<p class="font-bold text-[12px]">Tambah Kontak Stakeholder</p>
-<div class="grid grid-cols-1 md:grid-cols-5 gap-2 mt-2">
-<input id="cNama" placeholder="Nama" class="border rounded p-2 text-[11px]">
-<input id="cJabatan" placeholder="Jabatan / Kategori (Kades, Bulog, RT)" class="border rounded p-2 text-[11px]">
-<input id="cHP" placeholder="No HP" class="border rounded p-2 text-[11px]">
-<select id="cPriv" class="border rounded p-2 text-[11px]"><option value="umum">UMUM - Tampil di Tab 1</option><option value="privacy">PRIVACY - Hanya Manajer</option></select>
-<input id="cCatatan" placeholder="Catatan" class="border rounded p-2 text-[11px]">
-</div>
-<button onclick="addKontak()" class="mt-2 bg-[#0f5132] text-white px-4 py-2 rounded text-[11px] font-bold w-full">+ Tambah Kontak</button>
-</div>
-<div id="listKontak" class="grid gap-2"></div>
-</div>
+<h3 class="font-bold mt-8">List Pengurus (Nama, Jabatan, Alamat, HP WA)</h3>
+<button id="addPengurusBtn" class="mt-2 bg-black text-white text-sm px-3 py-1.5 rounded-lg">+ Tambah Pengurus</button>
+<div id="pengurusList" class="mt-3 grid gap-3"></div>
 
-<!-- TAB 3: ANALISIS -->
-<div id="content3" class="hidden space-y-3">
-<div class="bg-white border-2 border-orange-200 p-4 rounded-xl">
-<p class="font-bold text-[12px]">Data Awal Desa Kasih</p>
-<div class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-3">
-<div class="col-span-2 md:col-span-5 font-bold text-[11px] bg-slate-100 p-2 rounded">Desil (Jumlah KK)</div>
-<div>Desil 1 <input id="desil1" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Desil 2 <input id="desil2" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Desil 3 <input id="desil3" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Desil 4 <input id="desil4" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Desil 5 <input id="desil5" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Desil 6 <input id="desil6" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Desil 7 <input id="desil7" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Desil 8 <input id="desil8" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Desil 9 <input id="desil9" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Desil 10 <input id="desil10" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-
-<div class="col-span-2 md:col-span-5 font-bold text-[11px] bg-slate-100 p-2 rounded mt-3">Jumlah Orang per Pekerjaan (Jiwa)</div>
-<div>Petani <input id="jobPetani" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Buruh Tani <input id="jobBuruhTani" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Pedagang <input id="jobPedagang" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>PNS/Perangkat <input id="jobPNS" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Buruh Pabrik <input id="jobPabrik" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Peternak <input id="jobTernak" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>UMKM <input id="jobUMKM" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Lainnya <input id="jobLain" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-
-<div class="col-span-2 md:col-span-5 font-bold text-[11px] bg-slate-100 p-2 rounded mt-3">Kekuatan Konsumen & Daya Serap</div>
-<div>Kekuatan Beli (1-10) <input id="dayaBeli" type="number" min="1" max="10" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Daya Serap Pedagang Lokal (Kg/Hari) <input id="dayaSerap" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Jumlah Warung <input id="jmlWarung" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
-<div>Privacy Data <select id="analisisPriv" class="w-full border rounded p-1 text-[11px]" onchange="saveAnalisis()"><option value="umum">UMUM</option><option value="privacy">PRIVACY</option></select></div>
+<h3 class="font-bold mt-8">List Pengawas</h3>
+<button id="addPengawasBtn" class="mt-2 bg-black text-white text-sm px-3 py-1.5 rounded-lg">+ Tambah Pengawas</button>
+<div id="pengawasList" class="mt-3 grid gap-3"></div>
 </div>
-
-<div class="mt-4 bg-amber-50 p-3 rounded border">
-<p class="font-bold text-[11px]">📈 Saran Otomatis Analisis</p>
-<div id="autoSaran" class="text-[11px] mt-2 space-y-1"></div>
-</div>
-</div>
-</div>
+</div></div>
 
 </div>
-
+<div id="modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-3 z-50"><div class="bg-white rounded-2xl max-w-lg w-full p-4"><h3 id="modalTitle" class="font-bold"></h3><div id="modalBody" class="mt-3 grid gap-2"></div><div class="mt-4 flex justify-end gap-2"><button id="modalCancel" class="px-3 py-1.5 bg-gray-100 rounded-lg text-sm">Batal</button><button id="modalSave" class="px-3 py-1.5 bg-black text-white rounded-lg text-sm">Simpan</button></div></div></div>
 <script>
-let currentTab=1;
-function switchTab(n){
-  if(n!==1 &&!isLoggedIn()){ alert('Harus login dulu untuk Tab 2 & 3'); return; }
-  currentTab=n;
-  document.getElementById('content1').classList.toggle('hidden',n!==1);
-  document.getElementById('content2').classList.toggle('hidden',n!==2);
-  document.getElementById('content3').classList.toggle('hidden',n!==3);
-  ['tab1Btn','tab2Btn','tab3Btn'].forEach((id,i)=>{
-    document.getElementById(id).className = (i+1===n)? 'px-4 py-2 rounded-lg text-[11px] font-bold bg-white text-[#0f5132]' : 'px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20';
-  });
-  renderAll();
-}
-function isLoggedIn(){ return localStorage.getItem('kdkmp_login')==='1'; }
-function getAkun(){ return JSON.parse(localStorage.getItem('kdkmp_akun')||'null'); }
-function buatAkun(){
-  const u=document.getElementById('loginUser').value.trim();
-  const p=document.getElementById('loginPass').value.trim();
-  if(!u||!p){ document.getElementById('loginMsg').innerText='Isi username & password'; return; }
-  localStorage.setItem('kdkmp_akun',JSON.stringify({u,p}));
-  document.getElementById('loginMsg').innerText='Akun dibuat, sekarang klik Login';
-}
-function doLogin(){
-  const u=document.getElementById('loginUser').value.trim();
-  const p=document.getElementById('loginPass').value.trim();
-  const akun=getAkun();
-  if(!akun){ document.getElementById('loginMsg').innerText='Belum ada akun, buat dulu'; return; }
-  if(akun.u===u && akun.p===p){
-    localStorage.setItem('kdkmp_login','1');
-    localStorage.setItem('kdkmp_user',u);
-    document.getElementById('loginMsg').innerText='Login berhasil';
-    checkLogin();
-    renderAll();
-  }else{ document.getElementById('loginMsg').innerText='Username/password salah'; }
-}
-function logout(){ localStorage.removeItem('kdkmp_login'); checkLogin(); switchTab(1); }
-function checkLogin(){
-  if(isLoggedIn()){
-    document.getElementById('loginInfo').innerText='Login: '+localStorage.getItem('kdkmp_user');
-    document.getElementById('btnLogout').classList.remove('hidden');
-    document.getElementById('loginBox').classList.add('hidden');
-  }else{
-    document.getElementById('loginInfo').innerText='Belum Login';
-    document.getElementById('btnLogout').classList.add('hidden');
-    document.getElementById('loginBox').classList.remove('hidden');
-  }
-}
-checkLogin();
-
-// KONTAK
-function getKontak(){ return JSON.parse(localStorage.getItem('kasih_kontak')||'[]'); }
-function saveKontak(arr){ localStorage.setItem('kasih_kontak',JSON.stringify(arr)); }
-function addKontak(){
-  const nama=document.getElementById('cNama').value.trim();
-  const jab=document.getElementById('cJabatan').value.trim();
-  const hp=document.getElementById('cHP').value.trim();
-  const priv=document.getElementById('cPriv').value;
-  const cat=document.getElementById('cCatatan').value.trim();
-  if(!nama||!hp){ alert('Nama & HP wajib'); return; }
-  const arr=getKontak(); arr.push({id:Date.now(),nama,jab,hp,priv,cat}); saveKontak(arr);
-  document.getElementById('cNama').value=''; document.getElementById('cHP').value=''; document.getElementById('cCatatan').value='';
-  renderAll();
-}
-function hapusKontak(id){ if(!confirm('Hapus kontak?')) return; saveKontak(getKontak().filter(x=>x.id!==id)); renderAll(); }
-
-// ANALISIS
-function saveAnalisis(){
-  const data={};
-  for(let i=1;i<=10;i++) data['desil'+i]=document.getElementById('desil'+i).value;
-  ['Petani','BuruhTani','Pedagang','PNS','Pabrik','Ternak','UMKM','Lain'].forEach(k=>{ data['job'+k]=document.getElementById('job'+k).value; });
-  data.dayaBeli=document.getElementById('dayaBeli').value;
-  data.dayaSerap=document.getElementById('dayaSerap').value;
-  data.jmlWarung=document.getElementById('jmlWarung').value;
-  data.priv=document.getElementById('analisisPriv').value;
-  localStorage.setItem('kasih_analisis',JSON.stringify(data));
-  renderAll();
-}
-function loadAnalisis(){
-  const d=JSON.parse(localStorage.getItem('kasih_analisis')||'{}');
-  for(let i=1;i<=10;i++){ const el=document.getElementById('desil'+i); if(el && d['desil'+i]) el.value=d['desil'+i]; }
-  ['Petani','BuruhTani','Pedagang','PNS','Pabrik','Ternak','UMKM','Lain'].forEach(k=>{ const el=document.getElementById('job'+k); if(el && d['job'+k]) el.value=d['job'+k]; });
-  if(d.dayaBeli) document.getElementById('dayaBeli').value=d.dayaBeli;
-  if(d.dayaSerap) document.getElementById('dayaSerap').value=d.dayaSerap;
-  if(d.jmlWarung) document.getElementById('jmlWarung').value=d.jmlWarung;
-  if(d.priv) document.getElementById('analisisPriv').value=d.priv;
-  return d;
-}
-function generateSaran(d){
-  let s=[];
-  const desil123=(parseInt(d.desil1||0)+parseInt(d.desil2||0)+parseInt(d.desil3||0));
-  const totalDesil=Array.from({length:10},(_,i)=>parseInt(d['desil'+(i+1)]||0)).reduce((a,b)=>a+b,0);
-  if(desil123>0){
-    if(desil123/totalDesil>0.4) s.push(`🔴 Desil 1-3 dominan (${desil123} KK / ${Math.round(desil123/totalDesil*100)}%) - Fokus utama beras SPHP Rp12.500, LPG 3kg, Minyakita. Potensi subsidi besar.`);
-    else s.push(`🟡 Desil 1-3 ada ${desil123} KK - Cukup untuk program sembako, tapi perlu edukasi anggota koperasi.`);
-  }
-  const petani=parseInt(d.jobPetani||0)+parseInt(d.jobBuruhTani||0);
-  if(petani>100) s.push(`🌾 Petani+Buruh Tani ${petani} jiwa dominan - Saran: Pupuk subsidi, benih, gabah, kemitraan penggilingan. KDKMP bisa jadi off-taker gabah.`);
-  const pedagang=parseInt(d.jobPedagang||0)+parseInt(d.jobUMKM||0);
-  if(pedagang>50) s.push(`🛒 Pedagang+UMKM ${pedagang} jiwa - Daya serap tinggi, saran modal usaha kecil, kulakan bareng, warung kemitraan.`);
-  const dayaBeli=parseInt(d.dayaBeli||0);
-  if(dayaBeli<=4) s.push(`💸 Daya beli rendah (${dayaBeli}/10) - Jangan stok barang mahal dulu, fokus kebutuhan pokok HET.`);
-  else if(dayaBeli>=7) s.push(`💰 Daya beli kuat (${dayaBeli}/10) - Bisa tambah produk sekunder: telur, gula, sabun.`);
-  const dayaSerap=parseInt(d.dayaSerap||0);
-  const warung=parseInt(d.jmlWarung||0);
-  if(dayaSerap>0 && warung>0) s.push(`📦 Daya serap ${dayaSerap} Kg/hari dari ${warung} warung - Potensi omzet harian Rp ${(dayaSerap*12500).toLocaleString('id-ID')} jika beras SPHP.`);
-  if(s.length===0) s.push('Isi data desil & pekerjaan dulu untuk dapat saran otomatis.');
-  return s;
-}
-
-function renderAll(){
-  const kontak=getKontak();
-  const analisis=loadAnalisis();
-  // TAB 2 list
-  const list=document.getElementById('listKontak'); list.innerHTML='';
-  kontak.forEach(k=>{
-    const div=document.createElement('div');
-    div.className='bg-white p-3 rounded-xl border flex justify-between items-center';
-    div.innerHTML=`<div class="text-[11px]"><p class="font-bold">${k.nama} - ${k.jab} <span class="text-[9px] px-2 py-0.5 rounded-full ${k.priv==='umum'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${k.priv.toUpperCase()}</span></p><p>📞 ${k.hp} - ${k.cat}</p></div><button onclick="hapusKontak(${k.id})" class="text-[10px] bg-red-50 px-2 py-1 rounded">🗑️ Hapus</button>`;
-    list.appendChild(div);
-  });
-  // TAB 1 publik
-  const pubK=document.getElementById('publikKontak'); pubK.innerHTML='';
-  kontak.filter(k=>k.priv==='umum').forEach(k=>{ pubK.innerHTML+=`<div class="border-b py-1"><b>${k.nama}</b> (${k.jab}) - ${k.hp}<br><span class="text-[10px] text-slate-500">${k.cat}</span></div>`; });
-  if(pubK.innerHTML==='') pubK.innerHTML='<p class="text-slate-400">Belum ada kontak umum</p>';
-
-  const pubD=document.getElementById('publikDesa');
-  if(analisis.priv==='umum'){
-    let html=`Desil: `;
-    for(let i=1;i<=10;i++) html+=`D${i}:${analisis['desil'+i]||0} `;
-    html+=`<br>Pekerjaan: Petani ${analisis.jobPetani||0}, Pedagang ${analisis.jobPedagang||0}, UMKM ${analisis.jobUMKM||0}<br>Daya Beli: ${analisis.dayaBeli||'-'}/10, Daya Serap: ${analisis.dayaSerap||'-'} Kg/hari, Warung: ${analisis.jmlWarung||'-'}`;
-    pubD.innerHTML=html;
-  }else{ pubD.innerHTML='<span class="text-slate-400">Data analisis di-set Privacy</span>'; }
-
-  const saran=generateSaran(analisis);
-  document.getElementById('autoSaran').innerHTML=saran.map(x=>`<div>• ${x}</div>`).join('');
-  document.getElementById('publikSaran').innerHTML=(analisis.priv==='umum')?saran.map(x=>`<div class="py-1 border-b">• ${x}</div>`).join(''):'<span class="text-slate-400">Saran privacy</span>';
-}
-renderAll();
+const LS_KEY='kdmp_v3_final';
+const defaultData={
+dusuns:['Kasih','Krajan','Sokawera','Karangkemiri'],rtrw:['RT 01/RW 01','RT 02/RW 01','RT 03/RW 02','RT 04/RW 02','RT 05/RW 03'],
+pekerjaans:['Petani','Buruh Tani','Pedagang','PNS','Perangkat Desa','Wiraswasta','Ibu Rumah Tangga'],
+stakeholders:[
+{nama:'Kepala Desa Kasih',jabatan:'Kepala Desa',hp:'6281234567890',alamat:'Balai Desa',dusun:'Kasih',rtrw:'RT 01/RW 01',status:'UMUM'},
+{nama:'Ketua BPD',jabatan:'BPD',hp:'6281234567891',alamat:'Krajan',dusun:'Krajan',rtrw:'RT 02/RW 01',status:'UMUM'},
+],
+desil:[{desil:'Desil 1 - Sangat Miskin',jml:45,dusun:'Kasih',rtrw:'RT 01/RW 01',alamat:'Kasih Lor',status:'UMUM',catatan:''},{desil:'Desil 2 - Miskin',jml:78,dusun:'Krajan',rtrw:'RT 02/RW 01',alamat:'',status:'UMUM',catatan:''}],
+pekerjaanData:[{pekerjaan:'Petani',jml:210,dusun:'Kasih',rtrw:'RT 01/RW 01',alamat:'Sawah',status:'UMUM'}],
+konsumenData:[{jenis:'Beras',jml:500,dusun:'Kasih',rtrw:'RT 01/RW 01',alamat:'',status:'UMUM',daya:'Tinggi'}],
+potensiData:[
+{komoditi:'Padi',luas:50,volume:200,satuan:'Ton',sdm:120,dusun:'Kasih',rtrw:'RT 01/RW 01',alamat:'Sawah Lor',analisisManual:'Potensi tinggi musim hujan',status:'UMUM'},
+{komoditi:'Jagung',luas:30,volume:90,satuan:'Ton',sdm:60,dusun:'Krajan',rtrw:'RT 02/RW 01',alamat:'Tegal',analisisManual:'',status:'UMUM'},
+{komoditi:'Ayam Petelur',luas:0.5,volume:5000,satuan:'Ekor',sdm:15,dusun:'Sokawera',rtrw:'RT 03/RW 02',alamat:'Kandang Komunal',analisisManual:'Butuh pakan murah dari koperasi',status:'UMUM'},
+],
+kopdes:{nik:'3301.001.001',nib:'1234567890',sk:'SK Kades No 10/2024',tgl:'2024-01-15',total:1250,laki:620,perempuan:630},
+pengurus:[
+{nama:'Budi Santoso',jabatan:'Ketua',alamat:'Kasih',dusun:'Kasih',rtrw:'RT 01/RW 01',hp:'6281234567890'},
+{nama:'Siti Aminah',jabatan:'Sekretaris',alamat:'Krajan',dusun:'Krajan',rtrw:'RT 02/RW 01',hp:'6281234567891'},
+{nama:'Agus',jabatan:'Bendahara',alamat:'Sokawera',dusun:'Sokawera',rtrw:'RT 03/RW 02',hp:'6281234567892'},
+],
+pengawas:[
+{nama:'Kepala Desa',jabatan:'Pengawas',alamat:'Balai Desa',dusun:'Kasih',rtrw:'RT 01/RW 01',hp:'6281234567893'},
+]
+};
+let data=JSON.parse(localStorage.getItem(LS_KEY)||'null')||JSON.parse(JSON.stringify(defaultData));
+let isLogin=localStorage.getItem('kdmp_login')==='1';
+function save(){localStorage.setItem(LS_KEY,JSON.stringify(data));renderAll();}
+function waLink(hp){let n=hp.replace(/\D/g,'');if(n.startsWith('0'))n='62'+n.slice(1);return 'https://wa.me/'+n;}
+function dusunOptions(v=''){return data.dusuns.map(d=>`<option ${d===v?'selected':''}>${d}</option>`).join('')}
+function rtrwOptions(v=''){return data.rtrw.map(r=>`<option ${r===v?'selected':''}>${r}</option>`).join('')}
+function renderTabs(){document.querySelectorAll('.tabBtn').forEach(b=>{b.onclick=()=>{document.querySelectorAll('.tabBtn').forEach(x=>x.className='tabBtn flex-1 py-2 rounded-xl bg-gray-100 min-w-[120px]');b.className='tabBtn flex-1 py-2 rounded-xl bg-black text-white font-semibold min-w-[120px]';document.querySelectorAll('.tabPanel').forEach(p=>p.classList.add('hidden'));document.getElementById('tab'+b.dataset.tab).classList.remove('hidden');}})}
+function renderPublic(){let all=[...data.stakeholders.filter(s=>s.status==='UMUM').map(s=>({type:'Stakeholder',title:s.nama+' - '+s.jabatan,dusun:s.dusun,rtrw:s.rtrw,jml:'',alamat:s.alamat})),...data.desil.filter(s=>s.status==='UMUM').map(s=>({type:'Desil',title:s.desil,dusun:s.dusun,rtrw:s.rtrw,jml:s.jml+' org',alamat:s.alamat})),...data.pekerjaanData.filter(s=>s.status==='UMUM').map(s=>({type:'Pekerjaan',title:s.pekerjaan,dusun:s.dusun,rtrw:s.rtrw,jml:s.jml+' org',alamat:s.alamat})),...data.potensiData.filter(s=>s.status==='UMUM').map(s=>({type:'Potensi',title:s.komoditi+' - '+s.volume+' '+s.satuan,dusun:s.dusun,rtrw:s.rtrw,jml:s.luas+' Ha',alamat:s.alamat}))];document.getElementById('publicList').innerHTML=all.map(i=>`<div class="border rounded-xl p-3"><span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">${i.type} - ${i.dusun}</span><div class="font-semibold mt-1">${i.title}</div><div class="text-sm text-gray-600">${i.jml} ${i.alamat?'- '+i.alamat:''} ${i.rtrw||''}</div></div>`).join('')||'Belum ada UMUM';}
+function renderStakeholder(){document.getElementById('stakeholderList').innerHTML=data.stakeholders.map((s,i)=>`<div class="border rounded-xl p-3 flex justify-between"><div><div class="font-semibold">${s.nama} <span class="text-xs px-2 py-0.5 rounded ${s.status==='UMUM'?'bg-green-100':'bg-gray-100'}">${s.status}</span></div><div class="text-sm text-gray-600">${s.jabatan} - ${s.dusun} ${s.rtrw}</div><a href="${waLink(s.hp)}" target="_blank" class="text-xs bg-green-600 text-white px-3 py-1 rounded-lg inline-block mt-1">WA ${s.hp}</a></div>${isLogin?`<div class="flex flex-col gap-1"><button onclick="editStakeholder(${i})" class="text-xs bg-gray-100 px-2 py-1 rounded">Edit</button><button onclick="delStakeholder(${i})" class="text-xs bg-red-50 px-2 py-1 rounded">Hapus</button></div>`:''}</div>`).join('');}
+function renderDesil(){document.getElementById('desilList').innerHTML=data.desil.map((d,i)=>`<div class="border rounded-xl p-3 flex justify-between"><div><div class="font-semibold">${d.desil} - ${d.jml} org</div><div class="text-xs text-gray-600">${d.dusun} ${d.rtrw} ${d.alamat}</div></div>${isLogin?`<div class="flex flex-col gap-1"><button onclick="editDesil(${i})" class="text-xs bg-gray-100 px-2 py-1 rounded">Edit</button><button onclick="delDesil(${i})" class="text-xs bg-red-50 px-2 py-1 rounded">Hapus</button></div>`:''}</div>`).join('');document.getElementById('pekerjaanList').innerHTML=data.pekerjaanData.map((d,i)=>`<div class="border rounded-xl p-3 flex justify-between"><div><div class="font-semibold">${d.pekerjaan} - ${d.jml} org</div><div class="text-xs text-gray-600">${d.dusun} ${d.rtrw}</div></div>${isLogin?`<div class="flex flex-col gap-1"><button onclick="editPekerjaanData(${i})" class="text-xs bg-gray-100 px-2 py-1 rounded">Edit</button><button onclick="delPekerjaanData(${i})" class="text-xs bg-red-50 px-2 py-1 rounded">Hapus</button></div>`:''}</div>`).join('');document.getElementById('konsumenList').innerHTML=data.konsumenData.map((d,i)=>`<div class="border rounded-xl p-3 flex justify-between"><div><div class="font-semibold">${d.jenis} - ${d.jml} Daya ${d.daya}</div><div class="text-xs text-gray-600">${d.dusun} ${d.rtrw}</div></div>${isLogin?`<div class="flex flex-col gap-1"><button onclick="editKonsumen(${i})" class="text-xs bg-gray-100 px-2 py-1 rounded">Edit</button><button onclick="delKonsumen(${i})" class="text-xs bg-red-50 px-2 py-1 rounded">Hapus</button></div>`:''}</div>`).join('');document.getElementById('potensiList').innerHTML=data.potensiData.map((d,i)=>`<div class="border rounded-xl p-3"><div class="flex justify-between"><div><div class="font-semibold">${d.komoditi} - Luas ${d.luas} Ha, Volume ${d.volume} ${d.satuan}, SDM ${d.sdm} org</div><div class="text-xs text-gray-600">${d.dusun} ${d.rtrw} ${d.alamat}</div><div class="text-xs mt-1"><span class="bg-yellow-100 px-2 py-0.5 rounded">Manual: ${d.analisisManual||'-'}</span> <span class="bg-green-100 px-2 py-0.5 rounded ml-1">${d.status}</span></div></div>${isLogin?`<div class="flex flex-col gap-1"><button onclick="editPotensi(${i})" class="text-xs bg-gray-100 px-2 py-1 rounded">Edit</button><button onclick="delPotensi(${i})" class="text-xs bg-red-50 px-2 py-1 rounded">Hapus</button></div>`:''}</div></div>`).join('');}
+function renderChips(){document.getElementById('pekerjaanChips').innerHTML=data.pekerjaans.map((p,i)=>`<span class="text-xs bg-black text-white px-3 py-1 rounded-full">${p} ${isLogin?`<button onclick="delPekerjaanChip(${i})" class="ml-1">x</button>`:''}</span>`).join('');document.getElementById('filterDusun').innerHTML='<option value="">Semua Dusun</option>'+data.dusuns.map(d=>`<option>${d}</option>`).join('');}
+function renderTab4(){if(!isLogin){document.getElementById('tab4Locked').classList.remove('hidden');document.getElementById('tab4Content').classList.add('hidden');}else{document.getElementById('tab4Locked').classList.add('hidden');document.getElementById('tab4Content').classList.remove('hidden');document.getElementById('kop_nik').value=data.kopdes.nik||'';document.getElementById('kop_nib').value=data.kopdes.nib||'';document.getElementById('kop_sk').value=data.kopdes.sk||'';document.getElementById('kop_tgl').value=data.kopdes.tgl||'';document.getElementById('kop_total').value=data.kopdes.total||0;document.getElementById('kop_laki').value=data.kopdes.laki||0;document.getElementById('kop_perempuan').value=data.kopdes.perempuan||0;document.getElementById('kopRingkasan').innerHTML=`Total: ${data.kopdes.total} (L:${data.kopdes.laki} P:${data.kopdes.perempuan})<br>NIK:${data.kopdes.nik} NIB:${data.kopdes.nib}<br>SK:${data.kopdes.sk}`;document.getElementById('pengurusList').innerHTML=data.pengurus.map((p,i)=>`<div class="border rounded-xl p-3 flex justify-between"><div><div class="font-semibold">${p.nama} - ${p.jabatan}</div><div class="text-sm text-gray-600">${p.alamat} ${p.dusun} ${p.rtrw}</div><a href="${waLink(p.hp)}" class="text-xs bg-green-600 text-white px-3 py-1 rounded-lg inline-block mt-1">WA ${p.hp}</a></div><div class="flex flex-col gap-1"><button onclick="editPengurus(${i})" class="text-xs bg-gray-100 px-2 py-1 rounded">Edit</button><button onclick="delPengurus(${i})" class="text-xs bg-red-50 px-2 py-1 rounded">Hapus</button></div></div>`).join('');document.getElementById('pengawasList').innerHTML=data.pengawas.map((p,i)=>`<div class="border rounded-xl p-3 flex justify-between"><div><div class="font-semibold">${p.nama} - ${p.jabatan}</div><div class="text-sm text-gray-600">${p.alamat} ${p.dusun} ${p.rtrw}</div><a href="${waLink(p.hp)}" class="text-xs bg-green-600 text-white px-3 py-1 rounded-lg inline-block mt-1">WA ${p.hp}</a></div><div class="flex flex-col gap-1"><button onclick="editPengawas(${i})" class="text-xs bg-gray-100 px-2 py-1 rounded">Edit</button><button onclick="delPengawas(${i})" class="text-xs bg-red-50 px-2 py-1 rounded">Hapus</button></div></div>`).join('');}}
+function renderAll(){renderChips();renderPublic();renderStakeholder();renderDesil();renderTab4();document.getElementById('addStakeholderBtn').classList.toggle('hidden',!isLogin);document.getElementById('addDesilBtn').classList.toggle('hidden',!isLogin);document.getElementById('addPotensiBtn').classList.toggle('hidden',!isLogin);document.getElementById('btnLogin').textContent=isLogin?'Logout':'Login Manajer';}
+function openModal(t,f,onSave){document.getElementById('modalTitle').textContent=t;let b=document.getElementById('modalBody');b.innerHTML=f.map(ff=>{if(ff.type==='select')return `<label class="text-xs font-semibold">${ff.label}</label><select id="${ff.id}" class="border rounded-lg p-2 text-sm">${ff.options}</select>`;if(ff.type==='textarea')return `<label class="text-xs font-semibold">${ff.label}</label><textarea id="${ff.id}" class="border rounded-lg p-2 text-sm">${ff.value||''}</textarea>`;return `<label class="text-xs font-semibold">${ff.label}</label><input id="${ff.id}" type="${ff.type||'text'}" value="${ff.value||''}" class="border rounded-lg p-2 text-sm">`;}).join('');document.getElementById('modal').classList.remove('hidden');document.getElementById('modal').classList.add('flex');document.getElementById('modalSave').onclick=()=>{let vals={};f.forEach(ff=>vals[ff.id]=document.getElementById(ff.id).value);onSave(vals);closeModal();};}
+function closeModal(){document.getElementById('modal').classList.add('hidden');}
+document.getElementById('modalCancel').onclick=closeModal;
+window.editStakeholder=(i)=>{let s=data.stakeholders[i];openModal('Edit Stakeholder',[{id:'nama',label:'Nama',value:s.nama},{id:'jabatan',label:'Jabatan',value:s.jabatan},{id:'hp',label:'HP WA',value:s.hp},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions(s.dusun)},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions(s.rtrw)},{id:'alamat',label:'Alamat',value:s.alamat},{id:'status',label:'Status',type:'select',options:`<option ${s.status==='UMUM'?'selected':''}>UMUM</option><option>PRIVACY</option>`}],v=>{data.stakeholders[i]={...s,...v};save();});};
+window.delStakeholder=(i)=>{if(confirm('Hapus?')){data.stakeholders.splice(i,1);save();}};
+document.getElementById('addStakeholderBtn').onclick=()=>{openModal('Tambah Stakeholder',[{id:'nama',label:'Nama'},{id:'jabatan',label:'Jabatan'},{id:'hp',label:'HP WA'},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions()},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions()},{id:'alamat',label:'Alamat'},{id:'status',label:'Status',type:'select',options:'<option>UMUM</option><option>PRIVACY</option>'}],v=>{data.stakeholders.push(v);save();});};
+window.editDesil=(i)=>{let d=data.desil[i];openModal('Edit Desil',[{id:'desil',label:'Desil',value:d.desil},{id:'jml',label:'Jumlah',type:'number',value:d.jml},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions(d.dusun)},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions(d.rtrw)},{id:'alamat',label:'Alamat',value:d.alamat}],v=>{v.jml=parseInt(v.jml)||0;data.desil[i]={...d,...v};save();});};
+window.delDesil=(i)=>{if(confirm('Hapus?')){data.desil.splice(i,1);save();}};
+document.getElementById('addDesilBtn').onclick=()=>{openModal('Tambah Desil/Pekerjaan/Konsumen',[{id:'tipe',label:'Tipe',type:'select',options:'<option value="desil">Desil</option><option value="pekerjaan">Pekerjaan</option><option value="konsumen">Konsumen</option>'},{id:'nama',label:'Nama'},{id:'jml',label:'Jumlah',type:'number'},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions()},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions()},{id:'alamat',label:'Alamat'}],v=>{let b={jml:parseInt(v.jml)||0,dusun:v.dusun,rtrw:v.rtrw,alamat:v.alamat,status:'UMUM'};if(v.tipe==='desil')data.desil.push({desil:v.nama,...b,catatan:''});if(v.tipe==='pekerjaan')data.pekerjaanData.push({pekerjaan:v.nama,...b});if(v.tipe==='konsumen')data.konsumenData.push({jenis:v.nama,...b,daya:'Tinggi'});save();});};
+window.editPekerjaanData=(i)=>{let d=data.pekerjaanData[i];openModal('Edit Pekerjaan',[{id:'pekerjaan',label:'Pekerjaan',type:'select',options:data.pekerjaans.map(p=>`<option ${p===d.pekerjaan?'selected':''}>${p}</option>`).join('')},{id:'jml',label:'Jumlah',type:'number',value:d.jml},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions(d.dusun)}],v=>{v.jml=parseInt(v.jml)||0;data.pekerjaanData[i]={...d,...v};save();});};
+window.delPekerjaanData=(i)=>{if(confirm('Hapus?')){data.pekerjaanData.splice(i,1);save();}};
+window.editKonsumen=(i)=>{let d=data.konsumenData[i];openModal('Edit Konsumen',[{id:'jenis',label:'Jenis',value:d.jenis},{id:'jml',label:'Jumlah',type:'number',value:d.jml}],v=>{v.jml=parseInt(v.jml)||0;data.konsumenData[i]={...d,...v};save();});};
+window.delKonsumen=(i)=>{if(confirm('Hapus?')){data.konsumenData.splice(i,1);save();}};
+window.delPekerjaanChip=(i)=>{data.pekerjaans.splice(i,1);save();};
+document.getElementById('btnAddPekerjaan').onclick=()=>{let v=document.getElementById('customPekerjaan').value.trim();if(v){data.pekerjaans.push(v);document.getElementById('customPekerjaan').value='';save();}};
+window.editPotensi=(i)=>{let d=data.potensiData[i];openModal('Edit Potensi Desa',[{id:'komoditi',label:'Komoditi (Padi/Jagung/Ayam/dll)',value:d.komoditi},{id:'luas',label:'Luas Area (Ha)',type:'number',value:d.luas},{id:'volume',label:'Volume',type:'number',value:d.volume},{id:'satuan',label:'Satuan (Ton/Ekor/Kg)',value:d.satuan},{id:'sdm',label:'Jumlah SDM Terlibat',type:'number',value:d.sdm},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions(d.dusun)},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions(d.rtrw)},{id:'alamat',label:'Alamat Lahan/Kandang',value:d.alamat},{id:'analisisManual',label:'Analisis Manual',type:'textarea',value:d.analisisManual},{id:'status',label:'Status',type:'select',options:`<option ${d.status==='UMUM'?'selected':''}>UMUM</option><option>PRIVACY</option>`}],v=>{v.luas=parseFloat(v.luas)||0;v.volume=parseFloat(v.volume)||0;v.sdm=parseInt(v.sdm)||0;data.potensiData[i]={...d,...v};save();});};
+window.delPotensi=(i)=>{if(confirm('Hapus komoditi?')){data.potensiData.splice(i,1);save();}};
+document.getElementById('addPotensiBtn').onclick=()=>{openModal('Tambah Potensi Desa',[{id:'komoditi',label:'Komoditi'},{id:'luas',label:'Luas Area Ha',type:'number'},{id:'volume',label:'Volume',type:'number'},{id:'satuan',label:'Satuan',value:'Ton'},{id:'sdm',label:'SDM Terlibat',type:'number'},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions()},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions()},{id:'alamat',label:'Alamat'},{id:'analisisManual',label:'Analisis Manual',type:'textarea'},{id:'status',label:'Status',type:'select',options:'<option>UMUM</option><option>PRIVACY</option>'}],v=>{v.luas=parseFloat(v.luas)||0;v.volume=parseFloat(v.volume)||0;v.sdm=parseInt(v.sdm)||0;data.potensiData.push(v);save();});};
+document.getElementById('saveKopdes').onclick=()=>{data.kopdes={nik:document.getElementById('kop_nik').value,nib:document.getElementById('kop_nib').value,sk:document.getElementById('kop_sk').value,tgl:document.getElementById('kop_tgl').value,total:parseInt(document.getElementById('kop_total').value)||0,laki:parseInt(document.getElementById('kop_laki').value)||0,perempuan:parseInt(document.getElementById('kop_perempuan').value)||0};save();alert('Data Kopdes disimpan');};
+window.editPengurus=(i)=>{let p=data.pengurus[i];openModal('Edit Pengurus',[{id:'nama',label:'Nama',value:p.nama},{id:'jabatan',label:'Jabatan',value:p.jabatan},{id:'alamat',label:'Alamat',value:p.alamat},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions(p.dusun)},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions(p.rtrw)},{id:'hp',label:'HP WA',value:p.hp}],v=>{data.pengurus[i]={...p,...v};save();});};
+window.delPengurus=(i)=>{if(confirm('Hapus?')){data.pengurus.splice(i,1);save();}};
+document.getElementById('addPengurusBtn').onclick=()=>{openModal('Tambah Pengurus',[{id:'nama',label:'Nama'},{id:'jabatan',label:'Jabatan'},{id:'alamat',label:'Alamat'},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions()},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions()},{id:'hp',label:'HP WA'}],v=>{data.pengurus.push(v);save();});};
+window.editPengawas=(i)=>{let p=data.pengawas[i];openModal('Edit Pengawas',[{id:'nama',label:'Nama',value:p.nama},{id:'jabatan',label:'Jabatan',value:p.jabatan},{id:'alamat',label:'Alamat',value:p.alamat},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions(p.dusun)},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions(p.rtrw)},{id:'hp',label:'HP WA',value:p.hp}],v=>{data.pengawas[i]={...p,...v};save();});};
+window.delPengawas=(i)=>{if(confirm('Hapus?')){data.pengawas.splice(i,1);save();}};
+document.getElementById('addPengawasBtn').onclick=()=>{openModal('Tambah Pengawas',[{id:'nama',label:'Nama'},{id:'jabatan',label:'Jabatan'},{id:'alamat',label:'Alamat'},{id:'dusun',label:'Dusun',type:'select',options:dusunOptions()},{id:'rtrw',label:'RT/RW',type:'select',options:rtrwOptions()},{id:'hp',label:'HP WA'}],v=>{data.pengawas.push(v);save();});};
+document.getElementById('btnLogin').onclick=()=>{if(isLogin){localStorage.removeItem('kdmp_login');isLogin=false;renderAll();}else{let p=prompt('Password (kasih123)');if(p==='kasih123'){localStorage.setItem('kdmp_login','1');isLogin=true;renderAll();}else if(p)alert('Salah');}};
+document.getElementById('btnTampilAnalisis').onclick=()=>{
+let totalDesil=data.desil.reduce((a,b)=>a+b.jml,0);
+let perDusun={};data.desil.forEach(d=>{perDusun[d.dusun]=(perDusun[d.dusun]||0)+d.jml;});
+let topDusun=Object.entries(perDusun).sort((a,b)=>b[1]-a[1])[0];
+let totalPotensi=data.potensiData.reduce((a,b)=>a+b.volume,0);
+let totalSDM=data.potensiData.reduce((a,b)=>a+b.sdm,0);
+let html=`<b>Data Kopdes (Tab 4):</b><br>NIK:${data.kopdes.nik} NIB:${data.kopdes.nib} SK:${data.kopdes.sk}<br>Total Penduduk: ${data.kopdes.total} (L:${data.kopdes.laki} P:${data.kopdes.perempuan})<br>Pengurus: ${data.pengurus.length} org, Pengawas: ${data.pengawas.length} org<br><br><b>Desil:</b> Total ${totalDesil} org, konsentrasi di ${topDusun?topDusun[0]:'-'}<br><br><b>Potensi Desa:</b><br>${data.potensiData.map(p=>`- ${p.komoditi}: ${p.luas} Ha, ${p.volume} ${p.satuan}, SDM ${p.sdm} org di ${p.dusun} ${p.rtrw} - Manual: ${p.analisisManual||'-'}`).join('<br>')}<br>Total Volume: ${totalPotensi} (gabungan), Total SDM Terlibat: ${totalSDM} org<br><br><b>Analisis Otomatis Potensi:</b><br>`;
+data.potensiData.forEach(p=>{
+let potensi=`${p.komoditi}: `;
+if(p.komoditi.toLowerCase().includes('padi')) potensi+=`Produktivitas ${(p.volume/p.luas||0).toFixed(2)} Ton/Ha, ${p.sdm} petani - peluang koperasi jual beras, pupuk. `;
+if(p.komoditi.toLowerCase().includes('jagung')) potensi+=`Cocok untuk pakan ternak, ${p.sdm} pekerja - koperasi bisa jadi pengepul. `;
+if(p.komoditi.toLowerCase().includes('ayam')) potensi+=`${p.volume} ekor butuh pakan ${p.volume*0.1} kg/hari - peluang toko pakan. `;
+html+=`- ${potensi} (Manual: ${p.analisisManual})<br>`;
+});
+let rasioLaki=(data.kopdes.laki/data.kopdes.total*100||0).toFixed(1);
+html+=`<br><b>Rekomendasi:</b> Dengan penduduk ${data.kopdes.total} (${rasioLaki}% laki), fokus koperasi di ${topDusun?topDusun[0]:'dusun padat'} dengan komoditi ${data.potensiData[0]?.komoditi||'padi'} untuk ${totalSDM} SDM.`;
+document.getElementById('analisisContent').innerHTML=html;
+document.getElementById('analisisBox').classList.remove('hidden');
+document.getElementById('analisisBox').scrollIntoView({behavior:'smooth'});
+};
+renderTabs();renderAll();
 </script>
 </body>
 </html>
