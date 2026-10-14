@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>V22 WEB V18 + PDF FIX - KDKMP KASIH</title>
+<title>V24 TTD OTOMATIS DINAMIS</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -10,40 +10,16 @@
 <body class="bg-[#f8fafc]">
 <div class="bg-[#0f5132] text-white sticky top-0 z-50">
 <div class="max-w-5xl mx-auto p-3">
-<div class="flex justify-between items-center">
-<div><h1 class="font-bold text-[11px]">KDKMP KASIH - KERJA 30 HARI</h1><p id="tgl" class="text-[9px] font-bold text-yellow-200 mt-1"></p></div>
-<div class="text-right"><div class="w-24 h-2 bg-white/20 rounded-full"><div id="bar" class="h-2 bg-yellow-300 rounded-full" style="width:0%"></div></div><p id="txt" class="text-[9px] font-bold">0%</p></div>
-</div>
-<div class="flex gap-2 mt-3">
-<button id="tab1" onclick="switchTab(1)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white text-[#0f5132]">TAB 1: 1-30</button>
-<button id="tab2" onclick="switchTab(2)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20 text-white">TAB 2: 31-60</button>
-<button id="tab3" onclick="switchTab(3)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20 text-white">TAB 3: TTD CAP NAMA</button>
+<div class="flex justify-between items-center"><div><h1 class="font-bold text-[11px]">KDKMP KASIH V24 - TTD OTOMATIS</h1><p id="tgl" class="text-[9px] text-yellow-200 mt-1"></p></div><div class="text-right"><div class="w-24 h-2 bg-white/20 rounded-full"><div id="bar" class="h-2 bg-yellow-300 rounded-full" style="width:0%"></div></div><p id="txt" class="text-[9px] font-bold">0%</p></div></div>
+<div class="flex gap-2 mt-3"><button id="tab1" onclick="switchTab(1)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white text-[#0f5132]">TAB 1: 1-30</button><button id="tab2" onclick="switchTab(2)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20">TAB 2: 31-60</button><button id="tab3" onclick="switchTab(3)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20">TAB 3: TTD CAP NAMA</button></div>
 </div>
 </div>
-</div>
-
 <div class="max-w-5xl mx-auto p-3 space-y-3">
 <div id="content1"><div id="container1" class="grid gap-3"></div></div>
-<div id="content2" class="hidden"><div class="bg-white border-2 border-blue-200 p-3 rounded-xl"><div class="grid grid-cols-4 gap-2"><input id="newDay" type="number" min="31" max="60" placeholder="31-60" class="border rounded p-2 text-[11px]"><input id="newTitle" placeholder="Judul" class="border rounded p-2 text-[11px] col-span-2"><select id="newMode" class="border rounded p-2 text-[11px]"><option>RUMAH</option><option>DESA</option><option>GERAI</option></select></div><textarea id="newTasks" placeholder="1 baris = 1 kotak" class="mt-2 w-full border rounded p-2 text-[11px] h-14"></textarea><button onclick="addNewDay()" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded text-[11px] font-bold w-full">+ Tambah Hari 31-60</button></div><div id="container2" class="grid gap-3 mt-3"></div></div>
-
-<div id="content3" class="hidden space-y-3">
-<div class="bg-white border-2 border-[#0f5132] p-4 rounded-xl">
-<p class="font-bold text-[13px]">TTD + CAP + NAMA (Tampilan Web Tetap V18)</p>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-<div class="border-2 border-orange-300 p-3 rounded-xl bg-orange-50"><p class="font-bold text-[11px]">BLOK KADES - Cap di posisi Kades</p><div class="grid grid-cols-2 gap-2 mt-2"><div class="bg-white p-2 rounded border"><p class="text-[10px] font-bold">TTD Kades</p><input id="namaKades" placeholder="Nama Kades" class="w-full border rounded p-1 text-[10px] mt-1" oninput="saveNames()"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'ttdKades')"><img id="prevKades" class="w-full h-16 object-contain mt-1 border hidden"><label class="text-[9px]"><input type="checkbox" id="needKades" checked onchange="saveNeed()"> Tampilkan</label></div><div class="bg-white p-2 rounded border"><p class="text-[10px] font-bold">Cap Kades</p><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'capKades')"><img id="prevCapKades" class="w-full h-16 object-contain mt-1 border hidden"><label class="text-[9px]"><input type="checkbox" id="needCapKades" checked onchange="saveNeed()"> Tampilkan</label></div></div></div>
-<div class="border-2 border-green-300 p-3 rounded-xl bg-green-50"><p class="font-bold text-[11px]">BLOK MANAJER - Cap di posisi Manajer</p><div class="grid grid-cols-2 gap-2 mt-2"><div class="bg-white p-2 rounded border"><p class="text-[10px] font-bold">TTD Manajer</p><input id="namaManajer" placeholder="Nama Manajer" class="w-full border rounded p-1 text-[10px] mt-1" oninput="saveNames()"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'ttdManajer')"><img id="prevManajer" class="w-full h-16 object-contain mt-1 border hidden"><label class="text-[9px]"><input type="checkbox" id="needManajer" checked onchange="saveNeed()"> Tampilkan</label></div><div class="bg-white p-2 rounded border"><p class="text-[10px] font-bold">Cap KDKMP</p><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'capKoperasi')"><img id="prevCap" class="w-full h-16 object-contain mt-1 border hidden"><label class="text-[9px]"><input type="checkbox" id="needCap" checked onchange="saveNeed()"> Tampilkan</label></div></div></div>
-<div class="border-2 border-blue-300 p-3 rounded-xl bg-blue-50"><p class="font-bold text-[11px]">BLOK KETUA - Cap di posisi Ketua</p><div class="grid grid-cols-2 gap-2 mt-2"><div class="bg-white p-2 rounded border"><p class="text-[10px] font-bold">TTD Ketua</p><input id="namaKetua" placeholder="Nama Ketua" class="w-full border rounded p-1 text-[10px] mt-1" oninput="saveNames()"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'ttdKetua')"><img id="prevKetua" class="w-full h-16 object-contain mt-1 border hidden"><label class="text-[9px]"><input type="checkbox" id="needKetua" onchange="saveNeed()"> Aktif</label></div><div class="bg-white p-2 rounded border"><p class="text-[10px] font-bold">Cap Ketua</p><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'capKetua')"><img id="prevCapKetua" class="w-full h-16 object-contain mt-1 border hidden"><label class="text-[9px]"><input type="checkbox" id="needCapKetua" onchange="saveNeed()"> Tampilkan</label></div></div></div>
-<div class="border p-3 rounded-xl bg-slate-50"><p class="font-bold text-[11px]">Pengawas (Baris ke-2)</p><input id="namaPengawas" placeholder="Nama Pengawas" class="w-full border rounded p-1 text-[10px] mt-1" oninput="saveNames()"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'ttdPengawas')"><img id="prevPengawas" class="w-full h-16 object-contain mt-1 border hidden"><label class="text-[9px]"><input type="checkbox" id="needPengawas" onchange="saveNeed()"> Aktif</label></div>
+<div id="content2" class="hidden"><div class="bg-white border p-3 rounded-xl"><div class="grid grid-cols-4 gap-2"><input id="newDay" type="number" placeholder="31-60" class="border rounded p-2 text-[11px]"><input id="newTitle" placeholder="Judul" class="border rounded p-2 text-[11px] col-span-2"><select id="newMode" class="border rounded p-2 text-[11px]"><option>RUMAH</option><option>DESA</option><option>GERAI</option></select></div><textarea id="newTasks" placeholder="1 baris = 1 kotak" class="w-full border rounded p-2 text-[11px] h-12 mt-2"></textarea><button onclick="addNewDay()" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded text-[11px] w-full">+ Tambah</button></div><div id="container2" class="grid gap-3 mt-3"></div></div>
+<div id="content3" class="hidden"><div class="bg-white border-2 border-[#0f5132] p-4 rounded-xl"><p class="font-bold text-[12px]">Centang siapa yang aktif - PDF otomatis atur posisi</p><p class="text-[10px] text-slate-500">2 aktif = Manajer kiri, Kades kanan | 3 aktif = Manajer, Ketua, Kades 1 baris | 4 aktif = Manajer kiri, Ketua kanan, Pengawas kiri bawah, Kades kanan bawah</p><div class="grid grid-cols-2 gap-3 mt-3"><div class="border p-2 rounded bg-green-50"><p class="text-[10px] font-bold">MANAJER (KIRI)</p><input id="namaManajer" placeholder="Nama Manajer" class="w-full border rounded p-1 text-[10px] mt-1" oninput="saveNames()"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'ttdManajer')"><img id="prevManajer" class="h-12 object-contain border hidden"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'capKoperasi')"><img id="prevCap" class="h-12 object-contain border hidden"><label class="text-[9px]"><input type="checkbox" id="needManajer" checked onchange="saveNeed()">Aktif</label> <label class="text-[9px]"><input type="checkbox" id="needCap" checked onchange="saveNeed()">Cap</label></div><div class="border p-2 rounded bg-blue-50"><p class="text-[10px] font-bold">KETUA (TENGAH / KANAN)</p><input id="namaKetua" placeholder="Nama Ketua" class="w-full border rounded p-1 text-[10px] mt-1" oninput="saveNames()"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'ttdKetua')"><img id="prevKetua" class="h-12 object-contain border hidden"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'capKetua')"><img id="prevCapKetua" class="h-12 object-contain border hidden"><label class="text-[9px]"><input type="checkbox" id="needKetua" checked onchange="saveNeed()">Aktif</label> <label class="text-[9px]"><input type="checkbox" id="needCapKetua" checked onchange="saveNeed()">Cap</label></div><div class="border p-2 rounded bg-orange-50"><p class="text-[10px] font-bold">KADES (KANAN)</p><input id="namaKades" placeholder="Supriyadi" class="w-full border rounded p-1 text-[10px] mt-1" oninput="saveNames()"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'ttdKades')"><img id="prevKades" class="h-12 object-contain border hidden"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'capKades')"><img id="prevCapKades" class="h-12 object-contain border hidden"><label class="text-[9px]"><input type="checkbox" id="needKades" checked onchange="saveNeed()">Aktif</label> <label class="text-[9px]"><input type="checkbox" id="needCapKades" checked onchange="saveNeed()">Cap</label></div><div class="border p-2 rounded bg-slate-50"><p class="text-[10px] font-bold">PENGAWAS (BAWAH KIRI JIKA 4)</p><input id="namaPengawas" placeholder="Nama Pengawas" class="w-full border rounded p-1 text-[10px] mt-1" oninput="saveNames()"><input type="file" accept="image/*" class="text-[8px] w-full mt-1" onchange="saveImg(this,'ttdPengawas')"><img id="prevPengawas" class="h-12 object-contain border hidden"><label class="text-[9px]"><input type="checkbox" id="needPengawas" onchange="saveNeed()">Aktif (jadi 4)</label></div></div></div></div>
+<div class="bg-white p-4 rounded-xl border"><button onclick="exportPDF()" class="bg-[#0f5132] text-white px-5 py-3 rounded-lg text-xs font-bold w-full">📄 EXPORT PDF - TTD OTOMATIS 2/3/4</button></div>
 </div>
-</div>
-</div>
-
-<div class="bg-white p-4 rounded-xl border">
-<button onclick="exportPDF()" class="bg-[#0f5132] text-white px-5 py-3 rounded-lg text-xs font-bold w-full">📄 EXPORT PDF RAPI - FONT SAMA + TTD 1 BARIS</button>
-<p class="text-[9px] text-center mt-2 text-slate-500">Web tetap V18, cuma PDF yang di-fix</p>
-</div>
-</div>
-
 <script>
 const { jsPDF } = window.jspdf;
 let currentTab=1;
@@ -52,9 +28,9 @@ function getStoredStart(){return localStorage.getItem('kdkmp_startDate');}
 function getStartDateObj(){const s=getStoredStart(); if(s){const d=new Date(s); d.setHours(0,0,0,0); return d;} const n=new Date(); n.setHours(0,0,0,0); return n;}
 function getHariIni(){const start=getStartDateObj(); const now=new Date(); now.setHours(0,0,0,0); return Math.max(1, Math.floor((now-start)/86400000)+1);}
 function saveNeed(){['Manajer','Kades','Cap','CapKades','CapKetua','Ketua','Pengawas'].forEach(k=>localStorage.setItem('need'+k,document.getElementById('need'+k).checked));}
-function loadNeed(){['Manajer','Kades','Cap','CapKades','CapKetua','Ketua','Pengawas'].forEach(k=>{const v=localStorage.getItem('need'+k); if(v!==null) document.getElementById('need'+k).checked=v==='true'; else document.getElementById('need'+k).checked=(k==='Manajer'||k==='Kades'||k==='Cap'||k==='CapKades');});}
+function loadNeed(){['Manajer','Kades','Cap','CapKades','CapKetua','Ketua','Pengawas'].forEach(k=>{const v=localStorage.getItem('need'+k); if(v!==null) document.getElementById('need'+k).checked=v==='true'; else document.getElementById('need'+k).checked=(k==='Manajer'||k==='Kades'||k==='Ketua');});}
 function saveNames(){['Manajer','Kades','Ketua','Pengawas'].forEach(k=>{const el=document.getElementById('nama'+k); if(el) localStorage.setItem('nama'+k,el.value);});}
-function loadNames(){['Manajer','Kades','Ketua','Pengawas'].forEach(k=>{const v=localStorage.getItem('nama'+k); if(v!==null){const el=document.getElementById('nama'+k); if(el) el.value=v;} else if(k==='Kades'){document.getElementById('namaKades').value='Supriyadi'; localStorage.setItem('namaKades','Supriyadi');}});}
+function loadNames(){['Manajer','Kades','Ketua','Pengawas'].forEach(k=>{const v=localStorage.getItem('nama'+k); if(v){const el=document.getElementById('nama'+k); if(el) el.value=v;} else if(k==='Kades'){document.getElementById('namaKades').value='Supriyadi';}});}
 function saveImg(input,key){const f=input.files[0]; if(!f) return; const r=new FileReader(); r.onload=e=>{localStorage.setItem(key,e.target.result); loadImgs();}; r.readAsDataURL(f);}
 function loadImgs(){const map={'ttdManajer':'prevManajer','ttdKades':'prevKades','capKoperasi':'prevCap','capKades':'prevCapKades','capKetua':'prevCapKetua','ttdKetua':'prevKetua','ttdPengawas':'prevPengawas'}; Object.entries(map).forEach(([k,el])=>{const d=localStorage.getItem(k); const e=document.getElementById(el); if(d){e.src=d; e.classList.remove('hidden');} else e.classList.add('hidden');});}
 loadNeed(); loadNames(); loadImgs();
@@ -63,8 +39,7 @@ function getDeleted(day){return JSON.parse(localStorage.getItem(`deleted_${day}`
 function getAdded(day){return JSON.parse(localStorage.getItem(`added_${day}`)||'[]');}
 function getText(day,idx,def){return localStorage.getItem(`custom_text_${day}_${idx}`)||def;}
 function getStatus(day,idx,isAdd){return localStorage.getItem(isAdd?`status_${day}_add_${idx}`:`status_${day}_${idx}`)||'';}
-function isChecked(day,idx,isAdd){const prefixes=['v22','v21','v20','v19','v18','v17','v16']; for(let p of prefixes){const key=isAdd?`${p}_${day}_add_${idx}`:`${p}_${day}_${idx}`; if(localStorage.getItem(key)==='1') return true;} return false;}
-
+function isChecked(day,idx,isAdd){const prefixes=['v24','v23','v22','v21','v20','v19','v18']; for(let p of prefixes){const key=isAdd?`${p}_${day}_add_${idx}`:`${p}_${day}_${idx}`; if(localStorage.getItem(key)==='1') return true;} return false;}
 const baseDays=[
 {d:1,t:"Laporan Diri Tingkat Desa",m:"DESA",tasks:["Melaporkan keberadaan kepada Kepala Desa","Melaporkan kepada Lurah","Serah terima penugasan kepada Pengurus","Perkenalkan diri sebagai Manajer","Catat kontak Kades","Melaporkan kepada Babinsa","Catat kontak babinsa","Catat kontak ketua pengurus"]},
 {d:2,t:"Silaturahmi",m:"DESA",tasks:["Silaturahmi Ketua BPD","Silaturahmi Anggota BPD","Silaturahmi Tokoh Masyarakat","Silaturahmi Ketua RT","Silaturahmi Ketua RW","Sampaikan visi inklusif","Sampaikan visi kolaboratif","Sampaikan visi transparan","Catat aspirasi"]},
@@ -97,7 +72,6 @@ const baseDays=[
 {d:29,t:"Rapat Evaluasi",m:"DESA",tasks:["Rapat dengan Pengurus","Bahasa capaian 30 hari","Catat masukan"]},
 {d:30,t:"Rencana Bulan 2",m:"RUMAH",tasks:["Susun Rencana Bulan 2","Fokus unit usaha baru","Rencana kemitraan","Rencana permodalan","Finalisasi Laporan Resmi","Finalisasi Master Plan","Export untuk Kades","Export untuk Korwil","Export untuk Dinas"]},
 ];
-
 function render(){
  const startObj=getStartDateObj(); const hariIni=getHariIni();
  document.getElementById('tgl').innerText=`Start: ${startObj.toLocaleDateString('id-ID')} | Hari ke-${hariIni}`;
@@ -107,22 +81,19 @@ function render(){
    const container=document.getElementById(containerId); container.innerHTML='';
    days.sort((a,b)=>a.d-b.d).forEach(day=>{
      const deleted=getDeleted(day.d); const added=getAdded(day.d); let html='';
-     day.tasks.forEach((orig,i)=>{if(deleted.includes(i)) return; const key=`v22_${day.d}_${i}`; const text=getText(day.d,i,orig); const chk=isChecked(day.d,i,false); const status=getStatus(day.d,i,false); html+=`<div class="flex items-center gap-2 py-2.5 px-2 border-b"><input type="checkbox" data-key="${key}" data-day="${day.d}" data-idx="${i}" data-add="0" ${chk?'checked':''} class="w-5 h-5"><span class="flex-1 text-[12px] ${chk?'line-through':''}">${text}</span><div class="flex gap-1"><button onclick="setStatus(${day.d},${i},'ADA',false)" class="text-[9px] px-2 py-1 rounded-full border ${status==='ADA'?'bg-green-600 text-white':'bg-white'}">ADA</button><button onclick="setStatus(${day.d},${i},'TIDAK',false)" class="text-[9px] px-2 py-1 rounded-full border ${status==='TIDAK'?'bg-red-600 text-white':'bg-white'}">TIDAK</button><button onclick="setStatus(${day.d},${i},'BELUM',false)" class="text-[9px] px-2 py-1 rounded-full border ${status==='BELUM'?'bg-amber-500 text-white':'bg-white'}">BELUM</button><button onclick="editTask(${day.d},${i},false)" class="text-[10px] bg-slate-100 px-1.5 py-1 rounded">✏️</button><button onclick="deleteTask(${day.d},${i},false)" class="text-[10px] bg-slate-100 px-1.5 py-1 rounded">🗑️</button></div></div>`;});
-     added.forEach((t,i)=>{const key=`v22_${day.d}_add_${i}`; const chk=isChecked(day.d,i,true); const status=getStatus(day.d,i,true); let clean=t.trim().replace(/^[+\-`'"]+/, '').trim().replace(/\s+/g,' '); html+=`<div class="flex items-center gap-2 py-2.5 px-2 border-b bg-blue-50/40"><input type="checkbox" data-key="${key}" data-day="${day.d}" data-idx="${i}" data-add="1" ${chk?'checked':''} class="w-5 h-5"><span class="flex-1 text-[12px]">${clean}</span><div class="flex gap-1"><button onclick="setStatus(${day.d},${i},'ADA',true)" class="text-[9px] px-2 py-1 rounded-full border ${status==='ADA'?'bg-green-600 text-white':'bg-white'}">ADA</button><button onclick="setStatus(${day.d},${i},'TIDAK',true)" class="text-[9px] px-2 py-1 rounded-full border ${status==='TIDAK'?'bg-red-600 text-white':'bg-white'}">TIDAK</button><button onclick="setStatus(${day.d},${i},'BELUM',true)" class="text-[9px] px-2 py-1 rounded-full border ${status==='BELUM'?'bg-amber-500 text-white':'bg-white'}">BELUM</button></div></div>`;});
+     day.tasks.forEach((orig,i)=>{if(deleted.includes(i)) return; const key=`v24_${day.d}_${i}`; const text=getText(day.d,i,orig); const chk=isChecked(day.d,i,false); const status=getStatus(day.d,i,false); html+=`<div class="flex items-center gap-2 py-2.5 px-2 border-b"><input type="checkbox" data-day="${day.d}" data-idx="${i}" data-add="0" ${chk?'checked':''} class="w-5 h-5"><span class="flex-1 text-[12px] ${chk?'line-through':''}">${text}</span><div class="flex gap-1"><button onclick="setStatus(${day.d},${i},'ADA',false)" class="text-[9px] px-2 py-1 rounded-full border ${status==='ADA'?'bg-green-600 text-white':'bg-white'}">ADA</button><button onclick="setStatus(${day.d},${i},'TIDAK',false)" class="text-[9px] px-2 py-1 rounded-full border ${status==='TIDAK'?'bg-red-600 text-white':'bg-white'}">TIDAK</button><button onclick="setStatus(${day.d},${i},'BELUM',false)" class="text-[9px] px-2 py-1 rounded-full border ${status==='BELUM'?'bg-amber-500 text-white':'bg-white'}">BELUM</button></div></div>`;});
+     added.forEach((t,i)=>{const key=`v24_${day.d}_add_${i}`; const chk=isChecked(day.d,i,true); let clean=t.trim().replace(/^[+\-`'"]+/, '').trim().replace(/\s+/g,' '); html+=`<div class="flex items-center gap-2 py-2.5 px-2 border-b bg-blue-50/40"><input type="checkbox" data-day="${day.d}" data-idx="${i}" data-add="1" ${chk?'checked':''} class="w-5 h-5"><span class="flex-1 text-[12px]">${clean}</span></div>`;});
      const isToday=day.d===hariIni; const color=day.m==='RUMAH'?'bg-blue-100 text-blue-700':day.m==='DESA'?'bg-orange-100 text-orange-700':'bg-green-100 text-green-700';
      const noteActive=localStorage.getItem(`noteActive_${day.d}`)==='1'; const noteText=localStorage.getItem(`note_${day.d}`)||'';
-     const div=document.createElement('div'); div.className=`bg-white p-3 rounded-xl border ${isToday?'ring-2 ring-[#0f5132]':''}`;
-     div.innerHTML=`<div class="flex justify-between items-center mb-2"><p class="font-bold text-[12px]">${isToday?'👉 ':''}HARI ${day.d}: ${day.t}</p><span class="text-[9px] px-2 py-0.5 rounded-full ${color}">${day.m}</span></div><div class="border rounded-lg overflow-hidden">${html}</div><div class="flex gap-2 mt-2"><input id="input_${day.d}" placeholder="Tambah kotak..." class="flex-1 border rounded-lg p-2 text-[11px]"><button onclick="addTaskBox(${day.d})" class="bg-[#0f5132] text-white px-4 py-2 rounded-lg text-[11px]">+ Kotak</button></div><div class="mt-3 bg-amber-50/50 p-3 rounded-lg"><div class="flex justify-between"><p class="font-bold text-[11px]">📝 Catatan Hari ${day.d}</p><label class="text-[10px] font-bold"><input type="checkbox" id="checkNote_${day.d}" ${noteActive?'checked':''} onchange="toggleNote(${day.d})"> ${noteActive?'Aktif':'Non-Aktif'}</label></div><textarea id="note_${day.d}" class="w-full border rounded-lg p-2 text-[11px] h-20 mt-2" ${!noteActive?'disabled':''} oninput="saveNote(${day.d})">${noteText}</textarea></div>`;
+     const div=document.createElement('div'); div.className=`bg-white p-3 rounded-xl border ${isToday?'ring-2 ring-[#0f5132]':''}`; div.innerHTML=`<div class="flex justify-between items-center mb-2"><p class="font-bold text-[12px]">${isToday?'👉 ':''}HARI ${day.d}: ${day.t}</p><span class="text-[9px] px-2 py-0.5 rounded-full ${color}">${day.m}</span></div><div class="border rounded-lg overflow-hidden">${html}</div><div class="flex gap-2 mt-2"><input id="input_${day.d}" placeholder="Tambah kotak..." class="flex-1 border rounded-lg p-2 text-[11px]"><button onclick="addTaskBox(${day.d})" class="bg-[#0f5132] text-white px-4 py-2 rounded-lg text-[11px]">+ Kotak</button></div><div class="mt-3 bg-amber-50/50 p-3 rounded-lg"><div class="flex justify-between"><p class="font-bold text-[11px]">📝 Catatan Hari ${day.d}</p><label class="text-[10px]"><input type="checkbox" id="checkNote_${day.d}" ${noteActive?'checked':''} onchange="toggleNote(${day.d})"> Aktif</label></div><textarea id="note_${day.d}" class="w-full border rounded-lg p-2 text-[11px] h-20 mt-2" ${!noteActive?'disabled':''} oninput="saveNote(${day.d})">${noteText}</textarea></div>`;
      container.appendChild(div);
    });
  }
  renderContainer(baseDays,'container1'); renderContainer(getCustomDays(),'container2');
- document.querySelectorAll('#container1 input[type=checkbox], #container2 input[type=checkbox]').forEach(cb=>{if(cb.id.startsWith('checkNote_')) return; cb.addEventListener('change',e=>{const day=e.target.dataset.day; const idx=e.target.dataset.idx; const isAdd=e.target.dataset.add; const key=`v22_${day}${isAdd==='1'?'_add':''}_${idx}`; localStorage.setItem(key,e.target.checked?'1':'0'); render();});});
+ document.querySelectorAll('#container1 input[type=checkbox], #container2 input[type=checkbox]').forEach(cb=>{if(cb.id.startsWith('checkNote_')) return; cb.addEventListener('change',e=>{const key=`v24_${e.target.dataset.day}${e.target.dataset.add==='1'?'_add':''}_${e.target.dataset.idx}`; localStorage.setItem(key,e.target.checked?'1':'0');});});
 }
-function toggleNote(day){localStorage.setItem(`noteActive_${day}`, document.getElementById(`checkNote_${day}`).checked?'1':'0'); render();}
-function saveNote(day){localStorage.setItem(`note_${day}`, document.getElementById(`note_${day}`).value);}
-function editTask(d,i,a){if(a){const ad=getAdded(d); const cur=ad[i]; const b=prompt('Edit:',cur); if(b!==null&&b.trim()){ad[i]=b.trim(); localStorage.setItem(`added_${d}`,JSON.stringify(ad)); render();}} else {const def=baseDays.find(x=>x.d===d)?.tasks[i]||''; const cur=getText(d,i,def); const b=prompt('Edit:',cur); if(b===null) return; if(b.trim()===def||!b.trim()) localStorage.removeItem(`custom_text_${d}_${i}`); else localStorage.setItem(`custom_text_${d}_${i}`,b.trim()); render();}}
-function deleteTask(d,i,a){if(!confirm('Hapus?')) return; if(a){const ad=getAdded(d); ad.splice(i,1); localStorage.setItem(`added_${d}`,JSON.stringify(ad)); render();} else {const del=getDeleted(d); if(!del.includes(i)){del.push(i); localStorage.setItem(`deleted_${d}`,JSON.stringify(del));} render();}}
+function toggleNote(d){localStorage.setItem(`noteActive_${d}`,document.getElementById(`checkNote_${d}`).checked?'1':'0'); render();}
+function saveNote(d){localStorage.setItem(`note_${d}`,document.getElementById(`note_${d}`).value);}
 function addTaskBox(d){let v=document.getElementById(`input_${d}`).value.trim(); if(!v) return; v=v.replace(/^[+\-`'"]+/, '').trim(); const ad=getAdded(d); ad.push(v); localStorage.setItem(`added_${d}`,JSON.stringify(ad)); document.getElementById(`input_${d}`).value=''; render();}
 function setStatus(d,i,v,a){const k=a?`status_${d}_add_${i}`:`status_${d}_${i}`; const cur=localStorage.getItem(k); if(cur===v) localStorage.removeItem(k); else localStorage.setItem(k,v); render();}
 function addNewDay(){const day=parseInt(document.getElementById('newDay').value); const title=document.getElementById('newTitle').value.trim(); const mode=document.getElementById('newMode').value; const raw=document.getElementById('newTasks').value.trim(); if(!day||day<31||day>60||!title||!raw){alert('Lengkapi'); return;} const tasks=raw.split('\n').map(s=>s.trim().replace(/^[+\-`'"]+/, '').replace(/\s+/g,' ')).filter(Boolean); const c=getCustomDays(); c.push({d:day,t:title,m:mode,tasks}); c.sort((a,b)=>a.d-b.d); localStorage.setItem('customDays',JSON.stringify(c)); document.getElementById('newDay').value=''; document.getElementById('newTitle').value=''; document.getElementById('newTasks').value=''; render();}
@@ -130,39 +101,29 @@ render();
 
 function exportPDF(){
  const doc=new jsPDF('l','mm','a4');
- const hariIni=getHariIni(); const tgl=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}); const tglFile=new Date().toISOString().slice(0,10);
- doc.setFillColor(15,81,50); doc.rect(0,0,297,22,'F'); doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.text("KDKMP KASIH",148.5,13,{align:'center'}); doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.text(`Hari ke-${hariIni} - ${tgl}`,148.5,18,{align:'center'});
+ const tglLong=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+ const tglFile=new Date().toISOString().slice(0,10);
+
+ // KOP RAME TANPA HARI & TANGGAL
+ doc.setFillColor(15,81,50); doc.rect(0,0,297,28,'F');
+ doc.setDrawColor(212,175,55); doc.setLineWidth(1.2); doc.line(0,28,297,28);
+ doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.text("KDKMP KASIH",148.5,12,{align:'center'});
+ doc.setFontSize(11); doc.text("KOPERASI DESA MERAH PUTIH - DESA KASIH",148.5,19,{align:'center'});
+ doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.text("KEC. KERTANEGARA - KAB. PURBALINGGA 53354 - JAWA TENGAH",148.5,24,{align:'center'});
+ doc.setTextColor(15,81,50); doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.text("LAPORAN KEGIATAN HARIAN MANAJER",10,34);
+ doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(80,80,80); doc.text("Dokumen Resmi KDKMP - SIMKOPDES Terintegrasi",10,38);
 
  const rows=[];
  [...baseDays,...getCustomDays()].sort((a,b)=>a.d-b.d).forEach(day=>{
    const del=getDeleted(day.d); const add=getAdded(day.d);
-   day.tasks.forEach((orig,i)=>{
-     if(del.includes(i)) return;
-     let text=getText(day.d,i,orig).trim().replace(/\s+/g,' '); // FIX RENGANG
-     const chk=isChecked(day.d,i,false)?'SELESAI':'BELUM';
-     const status=getStatus(day.d,i,false)||'-';
-     rows.push([`Hari ${day.d}`,day.t,text,chk,status]);
-   });
-   add.forEach((t,i)=>{
-     let clean=t.trim().replace(/^[+\-`'"]+/, '').trim().replace(/\s+/g,' '); // FIX FONT RENGANG
-     const chk=isChecked(day.d,i,true)?'SELESAI':'BELUM';
-     const status=getStatus(day.d,i,true)||'-';
-     rows.push([`Hari ${day.d}`,day.t,clean,chk,status]);
-   });
+   day.tasks.forEach((orig,i)=>{if(del.includes(i)) return; let text=getText(day.d,i,orig).trim().replace(/\s+/g,' '); const chk=isChecked(day.d,i,false)?'SELESAI':'BELUM'; const status=getStatus(day.d,i,false)||'-'; rows.push([`Hari ${day.d}`,day.t,text,chk,status]);});
+   add.forEach((t,i)=>{let clean=t.trim().replace(/^[+\-`'"]+/, '').trim().replace(/\s+/g,' '); const chk=isChecked(day.d,i,true)?'SELESAI':'BELUM'; const status=getStatus(day.d,i,true)||'-'; rows.push([`Hari ${day.d}`,day.t,clean,chk,status]);});
  });
 
- doc.autoTable({
-   startY:26,
-   head:[['HARI','JUDUL','KEGIATAN','SELESAI','KONDISI']],
-   body:rows,
-   theme:'grid',
-   styles:{font:'helvetica', fontSize:8, cellPadding:2.5, overflow:'linebreak', valign:'middle', lineColor:[180,180,180], lineWidth:0.25},
-   headStyles:{fillColor:[15,81,50], halign:'center', fontSize:9, fontStyle:'bold'},
-   columnStyles:{0:{cellWidth:15, halign:'center'},1:{cellWidth:30},2:{cellWidth:165},3:{cellWidth:20, halign:'center'},4:{cellWidth:20, halign:'center'}},
-   didParseCell:function(d){if(d.section==='body'&&d.column.index===3&&d.cell.raw==='SELESAI'){d.cell.styles.fillColor=[220,252,231]; d.cell.styles.textColor=[22,101,52]; d.cell.styles.fontStyle='bold';}}
- });
+ doc.autoTable({startY:40, head:[['HARI','JUDUL','KEGIATAN','STATUS','KONDISI']], body:rows, theme:'grid', styles:{font:'helvetica', fontSize:8, cellPadding:2.5, overflow:'linebreak', valign:'middle', lineColor:[180,180,180], lineWidth:0.25}, headStyles:{fillColor:[15,81,50], textColor:255, halign:'center', fontStyle:'bold'}, columnStyles:{0:{cellWidth:15, halign:'center'},1:{cellWidth:32},2:{cellWidth:163},3:{cellWidth:20, halign:'center'},4:{cellWidth:20, halign:'center'}}, didParseCell:function(d){if(d.section==='body'&&d.column.index===3&&d.cell.raw==='SELESAI'){d.cell.styles.fillColor=[220,252,231]; d.cell.styles.textColor=[22,101,52]; d.cell.styles.fontStyle='bold';}}});
 
- // CATATAN AKTIF
+ let finalY=doc.lastAutoTable.finalY+6;
+
  const notes=[];
  [...baseDays,...getCustomDays()].sort((a,b)=>a.d-b.d).forEach(day=>{
    const active=localStorage.getItem(`noteActive_${day.d}`)==='1';
@@ -170,44 +131,118 @@ function exportPDF(){
    if(active && text.trim()) notes.push([`Hari ${day.d}`,day.t,text.trim()]);
  });
  if(notes.length>0){
-   doc.addPage('l','a4');
-   doc.setFillColor(15,81,50); doc.rect(0,0,297,14,'F'); doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.text("CATATAN HARIAN AKTIF",10,10);
-   doc.autoTable({startY:18, head:[['HARI','JUDUL','CATATAN']], body:notes, theme:'grid', styles:{font:'helvetica', fontSize:8, overflow:'linebreak', cellPadding:3, lineWidth:0.2}, headStyles:{fillColor:[146,64,14], halign:'center'}, columnStyles:{0:{cellWidth:15, halign:'center'},1:{cellWidth:35},2:{cellWidth:200}}});
+   if(finalY>150){ doc.addPage('l','a4'); finalY=15; }
+   doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(146,64,14); doc.text("CATATAN HARIAN AKTIF",10,finalY); finalY+=2;
+   doc.autoTable({startY:finalY, head:[['HARI','JUDUL','CATATAN']], body:notes, theme:'grid', styles:{font:'helvetica', fontSize:8, cellPadding:2.5, overflow:'linebreak', lineWidth:0.2}, headStyles:{fillColor:[146,64,14], halign:'center'}, columnStyles:{0:{cellWidth:15, halign:'center'},1:{cellWidth:32},2:{cellWidth:203}}});
+   finalY=doc.lastAutoTable.finalY+10;
+ } else { finalY+=4; }
+
+ if(finalY>140){ doc.addPage('l','a4'); finalY=15; }
+
+ // ===== PENGESAHAN OTOMATIS DINAMIS =====
+ const isManajer=localStorage.getItem('needManajer')!=='false';
+ const isKetua=localStorage.getItem('needKetua')!=='false';
+ const isKades=localStorage.getItem('needKades')!=='false';
+ const isPengawas=localStorage.getItem('needPengawas')==='true';
+
+ const roles=[];
+ if(isManajer) roles.push({key:'Manajer', label:'Manajer KDKMP Kasih', nama:localStorage.getItem('namaManajer')||'(Nama Manajer)', ttd:localStorage.getItem('ttdManajer'), cap:localStorage.getItem('capKoperasi'), needCap:localStorage.getItem('needCap')!=='false'});
+ if(isKetua) roles.push({key:'Ketua', label:'Ketua Pengurus', nama:localStorage.getItem('namaKetua')||'(Nama Ketua)', ttd:localStorage.getItem('ttdKetua'), cap:localStorage.getItem('capKetua'), needCap:localStorage.getItem('needCapKetua')!=='false'});
+ if(isKades) roles.push({key:'Kades', label:'Kepala Desa Kasih', nama:localStorage.getItem('namaKades')||'Supriyadi', ttd:localStorage.getItem('ttdKades'), cap:localStorage.getItem('capKades'), needCap:localStorage.getItem('needCapKades')!=='false'});
+ if(isPengawas) roles.push({key:'Pengawas', label:'Pengawas', nama:localStorage.getItem('namaPengawas')||'(Nama Pengawas)', ttd:localStorage.getItem('ttdPengawas'), cap:null, needCap:false});
+
+ // Urutan khusus sesuai permintaan: Manajer, Ketua, Kades, Pengawas tapi untuk 4: Manajer kiri, Ketua kanan, Pengawas kiri bawah, Kades kanan bawah
+ // Jadi sort: Manajer, Ketua, Pengawas, Kades untuk 4? Tapi untuk 3: Manajer, Ketua, Kades. Kita handle di drawing.
+
+ doc.setDrawColor(15,81,50); doc.setLineWidth(0.5); doc.line(10,finalY,287,finalY); finalY+=6;
+ doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(15,81,50);
+ doc.text(`Kasih, ${tglLong}`,148.5,finalY,{align:'center'}); finalY+=2;
+ doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(80,80,80);
+ doc.text("Desa Kasih - Kec. Kertanegara - Kab. Purbalingga",148.5,finalY,{align:'center'}); finalY+=8;
+
+ const count=roles.length;
+
+ if(count===2){
+   // 2 TTD: Manajer kiri, yang satunya kanan (Kades atau Ketua)
+   const left=roles[0], right=roles[1];
+   const colL=25, colR=200;
+   doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(0,0,0);
+   doc.text(left.label,colL,finalY); doc.text(right.label,colR,finalY);
+   try{
+     if(left.ttd) doc.addImage(left.ttd,'PNG',colL,finalY+2,34,18);
+     if(left.needCap && left.cap) doc.addImage(left.cap,'PNG',colL+38,finalY,20,20);
+     if(right.ttd) doc.addImage(right.ttd,'PNG',colR,finalY+2,34,18);
+     if(right.needCap && right.cap) doc.addImage(right.cap,'PNG',colR+38,finalY,20,20);
+   }catch(e){}
+   finalY+=26;
+   doc.setFont('helvetica','bold'); doc.setFontSize(10);
+   doc.text(left.nama,colL,finalY); doc.text(right.nama,colR,finalY);
+   doc.setFont('helvetica','normal'); doc.setFontSize(8);
+   doc.text("__________________________",colL,finalY+3); doc.text("__________________________",colR,finalY+3);
+ } else if(count===3){
+   // 3 TTD: Manajer kiri, Ketua tengah, Kades kanan - 1 baris lurus
+   const col1=25, col2=120, col3=215;
+   const cols=[col1,col2,col3];
+   doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(0,0,0);
+   roles.forEach((r,i)=>{ doc.text(r.label,cols[i],finalY); });
+   try{
+     roles.forEach((r,i)=>{
+       if(r.ttd) doc.addImage(r.ttd,'PNG',cols[i],finalY+2,34,18);
+       if(r.needCap && r.cap) doc.addImage(r.cap,'PNG',cols[i]+38,finalY,20,20);
+     });
+   }catch(e){}
+   finalY+=26;
+   doc.setFont('helvetica','bold'); doc.setFontSize(10);
+   roles.forEach((r,i)=>{ doc.text(r.nama,cols[i],finalY); });
+   doc.setFont('helvetica','normal'); doc.setFontSize(8);
+   cols.forEach(c=>{ doc.text("__________________________",c,finalY+3); });
+ } else if(count===4){
+   // 4 TTD: Manajer kiri atas, Ketua kanan atas, Pengawas kiri bawah, Kades kanan bawah
+   // Cari role berdasarkan key
+   const manajer=roles.find(r=>r.key==='Manajer')||roles[0];
+   const ketua=roles.find(r=>r.key==='Ketua')||roles[1];
+   const pengawas=roles.find(r=>r.key==='Pengawas')||roles[2];
+   const kades=roles.find(r=>r.key==='Kades')||roles[3];
+   const colL=25, colR=200;
+   let yTop=finalY;
+   doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(0,0,0);
+   doc.text(manajer.label,colL,yTop); doc.text(ketua.label,colR,yTop);
+   try{
+     if(manajer.ttd) doc.addImage(manajer.ttd,'PNG',colL,yTop+2,34,18);
+     if(manajer.needCap && manajer.cap) doc.addImage(manajer.cap,'PNG',colL+38,yTop,20,20);
+     if(ketua.ttd) doc.addImage(ketua.ttd,'PNG',colR,yTop+2,34,18);
+     if(ketua.needCap && ketua.cap) doc.addImage(ketua.cap,'PNG',colR+38,yTop,20,20);
+   }catch(e){}
+   let yMid=yTop+26;
+   doc.setFont('helvetica','bold'); doc.setFontSize(10);
+   doc.text(manajer.nama,colL,yMid); doc.text(ketua.nama,colR,yMid);
+   doc.setFont('helvetica','normal'); doc.setFontSize(8);
+   doc.text("__________________________",colL,yMid+3); doc.text("__________________________",colR,yMid+3);
+
+   let yBot=yMid+15;
+   doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(0,0,0);
+   doc.text(pengawas.label,colL,yBot); doc.text(kades.label,colR,yBot);
+   try{
+     if(pengawas.ttd) doc.addImage(pengawas.ttd,'PNG',colL,yBot+2,34,18);
+     if(kades.ttd) doc.addImage(kades.ttd,'PNG',colR,yBot+2,34,18);
+     if(kades.needCap && kades.cap) doc.addImage(kades.cap,'PNG',colR+38,yBot,20,20);
+   }catch(e){}
+   let yBot2=yBot+26;
+   doc.setFont('helvetica','bold'); doc.setFontSize(10);
+   doc.text(pengawas.nama,colL,yBot2); doc.text(kades.nama,colR,yBot2);
+   doc.setFont('helvetica','normal'); doc.setFontSize(8);
+   doc.text("__________________________",colL,yBot2+3); doc.text("__________________________",colR,yBot2+3);
+ } else {
+   // fallback 1 atau lainnya
+   const col1=25, col2=120, col3=215;
+   const cols=[col1,col2,col3];
+   doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(0,0,0);
+   roles.forEach((r,i)=>{ if(i<3) doc.text(r.label,cols[i],finalY); });
+   finalY+=26;
+   roles.forEach((r,i)=>{ if(i<3) doc.text(r.nama,cols[i],finalY); });
  }
 
- // TTD 1 BARIS LURUS 3 KOLOM
- doc.addPage('l','a4');
- doc.setFillColor(15,81,50); doc.rect(0,0,297,14,'F'); doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.text("KDKMP KASIH - PENGESAHAN",10,10);
- doc.setTextColor(0,0,0); doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.text(`Tanggal: ${tgl} | Hari ke-${hariIni}`,10,20);
- const needKades=localStorage.getItem('needKades')!=='false'; const needCapKades=localStorage.getItem('needCapKades')!=='false';
- const needManajer=localStorage.getItem('needManajer')!=='false'; const needCap=localStorage.getItem('needCap')!=='false';
- const needKetua=localStorage.getItem('needKetua')!=='false'; const needCapKetua=localStorage.getItem('needCapKetua')!=='false';
- const needPengawas=localStorage.getItem('needPengawas')==='true';
- const namaKades=localStorage.getItem('namaKades')||'Supriyadi'; const namaManajer=localStorage.getItem('namaManajer')||'(Nama Manajer)'; const namaKetua=localStorage.getItem('namaKetua')||'(Nama Ketua)'; const namaPengawas=localStorage.getItem('namaPengawas')||'';
- const col1=15, col2=110, col3=205; let y=30;
- doc.setFont('helvetica','bold'); doc.setFontSize(11);
- if(needKades) doc.text("Kepala Desa Kasih",col1,y);
- if(needManajer) doc.text("Manajer KDKMP Kasih",col2,y);
- if(needKetua) doc.text("Ketua Kopdes",col3,y);
- try{
-   const ttdKades=localStorage.getItem('ttdKades'); const capKades=localStorage.getItem('capKades');
-   const ttdManajer=localStorage.getItem('ttdManajer'); const capKoperasi=localStorage.getItem('capKoperasi');
-   const ttdKetua=localStorage.getItem('ttdKetua'); const capKetua=localStorage.getItem('capKetua');
-   const ttdPengawas=localStorage.getItem('ttdPengawas');
-   if(needKades&&ttdKades) doc.addImage(ttdKades,'PNG',col1,y+3,32,16);
-   if(needCapKades&&capKades) doc.addImage(capKades,'PNG',col1+36,y+1,18,18);
-   if(needManajer&&ttdManajer) doc.addImage(ttdManajer,'PNG',col2,y+3,32,16);
-   if(needCap&&capKoperasi) doc.addImage(capKoperasi,'PNG',col2+36,y+1,18,18);
-   if(needKetua&&ttdKetua) doc.addImage(ttdKetua,'PNG',col3,y+3,32,16);
-   if(needCapKetua&&capKetua) doc.addImage(capKetua,'PNG',col3+36,y+1,18,18);
-   if(needPengawas&&ttdPengawas){doc.setFont('helvetica','bold'); doc.text("Pengawas",col1,y+50); doc.addImage(ttdPengawas,'PNG',col1,y+53,32,16);}
- }catch(e){}
- doc.setFont('helvetica','bold'); doc.setFontSize(10);
- if(needKades){doc.text(namaKades,col1,y+26); doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.text("__________________________",col1,y+29);}
- if(needManajer){doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.text(namaManajer,col2,y+26); doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.text("__________________________",col2,y+29);}
- if(needKetua){doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.text(namaKetua,col3,y+26); doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.text("__________________________",col3,y+29);}
- if(needPengawas){doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.text(namaPengawas,col1,y+76); doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.text("__________________________",col1,y+79);}
- doc.save(`KDKMP-KASIH-Hari${hariIni}-${tglFile}-WEB-V18-PDF-FIX.pdf`);
+ doc.save(`KDKMP-KASIH-${tglFile}-TTD-OTOMATIS-${count}.pdf`);
 }
 </script>
 </body>
