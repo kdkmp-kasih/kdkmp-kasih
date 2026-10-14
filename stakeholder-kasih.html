@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stakeholder & Analisis Desa Kasih</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#f8fafc] min-h-screen">
+<div class="bg-[#0f5132] text-white p-4 sticky top-0 z-50">
+<div class="max-w-5xl mx-auto flex justify-between items-center">
+<div>
+<h1 class="font-bold text-[13px]">KDKMP KASIH - STAKEHOLDER & ANALISIS</h1>
+<p class="text-[10px] text-yellow-200">Desa Kasih - Kertanegara - Purbalingga | Data untuk Manajer</p>
+</div>
+<div class="text-right">
+<p id="loginInfo" class="text-[10px] font-bold">Belum Login</p>
+<button onclick="logout()" id="btnLogout" class="hidden text-[9px] bg-white/20 px-2 py-1 rounded mt-1">Logout</button>
+</div>
+</div>
+<div class="max-w-5xl mx-auto flex gap-2 mt-3">
+<button id="tab1Btn" onclick="switchTab(1)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white text-[#0f5132]">TAB 1: DATA PUBLIK</button>
+<button id="tab2Btn" onclick="switchTab(2)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20">TAB 2: KONTAK (LOGIN)</button>
+<button id="tab3Btn" onclick="switchTab(3)" class="px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20">TAB 3: ANALISIS DESA (LOGIN)</button>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto p-3">
+
+<!-- LOGIN BOX -->
+<div id="loginBox" class="bg-white border-2 border-amber-300 p-4 rounded-xl mb-3">
+<p class="font-bold text-[12px]">🔒 Buat Akun Manajer / Login</p>
+<p class="text-[10px] text-slate-500">Akun disimpan di HP ini (localStorage). Untuk buka Tab 2 & 3 harus login dulu.</p>
+<div class="grid grid-cols-3 gap-2 mt-3">
+<input id="loginUser" placeholder="Username manajer" class="border rounded p-2 text-[11px]">
+<input id="loginPass" type="password" placeholder="Password" class="border rounded p-2 text-[11px]">
+<div class="flex gap-1">
+<button onclick="buatAkun()" class="bg-blue-600 text-white px-3 py-2 rounded text-[10px] font-bold">Buat Akun</button>
+<button onclick="doLogin()" class="bg-[#0f5132] text-white px-3 py-2 rounded text-[10px] font-bold">Login</button>
+</div>
+</div>
+<p id="loginMsg" class="text-[10px] mt-2 text-red-600"></p>
+</div>
+
+<!-- TAB 1: PUBLIK -->
+<div id="content1" class="space-y-3">
+<div class="bg-white p-4 rounded-xl border">
+<h2 class="font-bold text-[13px]">📢 Data Umum Desa Kasih - Bisa Dicek Orang Lain</h2>
+<p class="text-[10px] text-slate-500">Hanya yang kamu set UMUM di Tab 2 & 3 yang muncul di sini. Privacy tidak muncul.</p>
+</div>
+<div class="grid md:grid-cols-2 gap-3">
+<div class="bg-white p-3 rounded-xl border"><p class="font-bold text-[11px]">👥 Kontak Umum</p><div id="publikKontak" class="mt-2 space-y-2 text-[11px]"></div></div>
+<div class="bg-white p-3 rounded-xl border"><p class="font-bold text-[11px]">📊 Ringkasan Desa Umum</p><div id="publikDesa" class="mt-2 text-[11px]"></div></div>
+</div>
+<div class="bg-white p-3 rounded-xl border"><p class="font-bold text-[11px]">💡 Saran Analisis (Publik)</p><div id="publikSaran" class="mt-2 text-[11px]"></div></div>
+</div>
+
+<!-- TAB 2: KONTAK -->
+<div id="content2" class="hidden space-y-3">
+<div class="bg-white border-2 border-blue-200 p-4 rounded-xl">
+<p class="font-bold text-[12px]">Tambah Kontak Stakeholder</p>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-2 mt-2">
+<input id="cNama" placeholder="Nama" class="border rounded p-2 text-[11px]">
+<input id="cJabatan" placeholder="Jabatan / Kategori (Kades, Bulog, RT)" class="border rounded p-2 text-[11px]">
+<input id="cHP" placeholder="No HP" class="border rounded p-2 text-[11px]">
+<select id="cPriv" class="border rounded p-2 text-[11px]"><option value="umum">UMUM - Tampil di Tab 1</option><option value="privacy">PRIVACY - Hanya Manajer</option></select>
+<input id="cCatatan" placeholder="Catatan" class="border rounded p-2 text-[11px]">
+</div>
+<button onclick="addKontak()" class="mt-2 bg-[#0f5132] text-white px-4 py-2 rounded text-[11px] font-bold w-full">+ Tambah Kontak</button>
+</div>
+<div id="listKontak" class="grid gap-2"></div>
+</div>
+
+<!-- TAB 3: ANALISIS -->
+<div id="content3" class="hidden space-y-3">
+<div class="bg-white border-2 border-orange-200 p-4 rounded-xl">
+<p class="font-bold text-[12px]">Data Awal Desa Kasih</p>
+<div class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-3">
+<div class="col-span-2 md:col-span-5 font-bold text-[11px] bg-slate-100 p-2 rounded">Desil (Jumlah KK)</div>
+<div>Desil 1 <input id="desil1" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Desil 2 <input id="desil2" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Desil 3 <input id="desil3" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Desil 4 <input id="desil4" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Desil 5 <input id="desil5" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Desil 6 <input id="desil6" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Desil 7 <input id="desil7" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Desil 8 <input id="desil8" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Desil 9 <input id="desil9" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Desil 10 <input id="desil10" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+
+<div class="col-span-2 md:col-span-5 font-bold text-[11px] bg-slate-100 p-2 rounded mt-3">Jumlah Orang per Pekerjaan (Jiwa)</div>
+<div>Petani <input id="jobPetani" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Buruh Tani <input id="jobBuruhTani" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Pedagang <input id="jobPedagang" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>PNS/Perangkat <input id="jobPNS" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Buruh Pabrik <input id="jobPabrik" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Peternak <input id="jobTernak" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>UMKM <input id="jobUMKM" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Lainnya <input id="jobLain" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+
+<div class="col-span-2 md:col-span-5 font-bold text-[11px] bg-slate-100 p-2 rounded mt-3">Kekuatan Konsumen & Daya Serap</div>
+<div>Kekuatan Beli (1-10) <input id="dayaBeli" type="number" min="1" max="10" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Daya Serap Pedagang Lokal (Kg/Hari) <input id="dayaSerap" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Jumlah Warung <input id="jmlWarung" type="number" class="w-full border rounded p-1 text-[11px]" oninput="saveAnalisis()"></div>
+<div>Privacy Data <select id="analisisPriv" class="w-full border rounded p-1 text-[11px]" onchange="saveAnalisis()"><option value="umum">UMUM</option><option value="privacy">PRIVACY</option></select></div>
+</div>
+
+<div class="mt-4 bg-amber-50 p-3 rounded border">
+<p class="font-bold text-[11px]">📈 Saran Otomatis Analisis</p>
+<div id="autoSaran" class="text-[11px] mt-2 space-y-1"></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+let currentTab=1;
+function switchTab(n){
+  if(n!==1 &&!isLoggedIn()){ alert('Harus login dulu untuk Tab 2 & 3'); return; }
+  currentTab=n;
+  document.getElementById('content1').classList.toggle('hidden',n!==1);
+  document.getElementById('content2').classList.toggle('hidden',n!==2);
+  document.getElementById('content3').classList.toggle('hidden',n!==3);
+  ['tab1Btn','tab2Btn','tab3Btn'].forEach((id,i)=>{
+    document.getElementById(id).className = (i+1===n)? 'px-4 py-2 rounded-lg text-[11px] font-bold bg-white text-[#0f5132]' : 'px-4 py-2 rounded-lg text-[11px] font-bold bg-white/20';
+  });
+  renderAll();
+}
+function isLoggedIn(){ return localStorage.getItem('kdkmp_login')==='1'; }
+function getAkun(){ return JSON.parse(localStorage.getItem('kdkmp_akun')||'null'); }
+function buatAkun(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value.trim();
+  if(!u||!p){ document.getElementById('loginMsg').innerText='Isi username & password'; return; }
+  localStorage.setItem('kdkmp_akun',JSON.stringify({u,p}));
+  document.getElementById('loginMsg').innerText='Akun dibuat, sekarang klik Login';
+}
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value.trim();
+  const akun=getAkun();
+  if(!akun){ document.getElementById('loginMsg').innerText='Belum ada akun, buat dulu'; return; }
+  if(akun.u===u && akun.p===p){
+    localStorage.setItem('kdkmp_login','1');
+    localStorage.setItem('kdkmp_user',u);
+    document.getElementById('loginMsg').innerText='Login berhasil';
+    checkLogin();
+    renderAll();
+  }else{ document.getElementById('loginMsg').innerText='Username/password salah'; }
+}
+function logout(){ localStorage.removeItem('kdkmp_login'); checkLogin(); switchTab(1); }
+function checkLogin(){
+  if(isLoggedIn()){
+    document.getElementById('loginInfo').innerText='Login: '+localStorage.getItem('kdkmp_user');
+    document.getElementById('btnLogout').classList.remove('hidden');
+    document.getElementById('loginBox').classList.add('hidden');
+  }else{
+    document.getElementById('loginInfo').innerText='Belum Login';
+    document.getElementById('btnLogout').classList.add('hidden');
+    document.getElementById('loginBox').classList.remove('hidden');
+  }
+}
+checkLogin();
+
+// KONTAK
+function getKontak(){ return JSON.parse(localStorage.getItem('kasih_kontak')||'[]'); }
+function saveKontak(arr){ localStorage.setItem('kasih_kontak',JSON.stringify(arr)); }
+function addKontak(){
+  const nama=document.getElementById('cNama').value.trim();
+  const jab=document.getElementById('cJabatan').value.trim();
+  const hp=document.getElementById('cHP').value.trim();
+  const priv=document.getElementById('cPriv').value;
+  const cat=document.getElementById('cCatatan').value.trim();
+  if(!nama||!hp){ alert('Nama & HP wajib'); return; }
+  const arr=getKontak(); arr.push({id:Date.now(),nama,jab,hp,priv,cat}); saveKontak(arr);
+  document.getElementById('cNama').value=''; document.getElementById('cHP').value=''; document.getElementById('cCatatan').value='';
+  renderAll();
+}
+function hapusKontak(id){ if(!confirm('Hapus kontak?')) return; saveKontak(getKontak().filter(x=>x.id!==id)); renderAll(); }
+
+// ANALISIS
+function saveAnalisis(){
+  const data={};
+  for(let i=1;i<=10;i++) data['desil'+i]=document.getElementById('desil'+i).value;
+  ['Petani','BuruhTani','Pedagang','PNS','Pabrik','Ternak','UMKM','Lain'].forEach(k=>{ data['job'+k]=document.getElementById('job'+k).value; });
+  data.dayaBeli=document.getElementById('dayaBeli').value;
+  data.dayaSerap=document.getElementById('dayaSerap').value;
+  data.jmlWarung=document.getElementById('jmlWarung').value;
+  data.priv=document.getElementById('analisisPriv').value;
+  localStorage.setItem('kasih_analisis',JSON.stringify(data));
+  renderAll();
+}
+function loadAnalisis(){
+  const d=JSON.parse(localStorage.getItem('kasih_analisis')||'{}');
+  for(let i=1;i<=10;i++){ const el=document.getElementById('desil'+i); if(el && d['desil'+i]) el.value=d['desil'+i]; }
+  ['Petani','BuruhTani','Pedagang','PNS','Pabrik','Ternak','UMKM','Lain'].forEach(k=>{ const el=document.getElementById('job'+k); if(el && d['job'+k]) el.value=d['job'+k]; });
+  if(d.dayaBeli) document.getElementById('dayaBeli').value=d.dayaBeli;
+  if(d.dayaSerap) document.getElementById('dayaSerap').value=d.dayaSerap;
+  if(d.jmlWarung) document.getElementById('jmlWarung').value=d.jmlWarung;
+  if(d.priv) document.getElementById('analisisPriv').value=d.priv;
+  return d;
+}
+function generateSaran(d){
+  let s=[];
+  const desil123=(parseInt(d.desil1||0)+parseInt(d.desil2||0)+parseInt(d.desil3||0));
+  const totalDesil=Array.from({length:10},(_,i)=>parseInt(d['desil'+(i+1)]||0)).reduce((a,b)=>a+b,0);
+  if(desil123>0){
+    if(desil123/totalDesil>0.4) s.push(`🔴 Desil 1-3 dominan (${desil123} KK / ${Math.round(desil123/totalDesil*100)}%) - Fokus utama beras SPHP Rp12.500, LPG 3kg, Minyakita. Potensi subsidi besar.`);
+    else s.push(`🟡 Desil 1-3 ada ${desil123} KK - Cukup untuk program sembako, tapi perlu edukasi anggota koperasi.`);
+  }
+  const petani=parseInt(d.jobPetani||0)+parseInt(d.jobBuruhTani||0);
+  if(petani>100) s.push(`🌾 Petani+Buruh Tani ${petani} jiwa dominan - Saran: Pupuk subsidi, benih, gabah, kemitraan penggilingan. KDKMP bisa jadi off-taker gabah.`);
+  const pedagang=parseInt(d.jobPedagang||0)+parseInt(d.jobUMKM||0);
+  if(pedagang>50) s.push(`🛒 Pedagang+UMKM ${pedagang} jiwa - Daya serap tinggi, saran modal usaha kecil, kulakan bareng, warung kemitraan.`);
+  const dayaBeli=parseInt(d.dayaBeli||0);
+  if(dayaBeli<=4) s.push(`💸 Daya beli rendah (${dayaBeli}/10) - Jangan stok barang mahal dulu, fokus kebutuhan pokok HET.`);
+  else if(dayaBeli>=7) s.push(`💰 Daya beli kuat (${dayaBeli}/10) - Bisa tambah produk sekunder: telur, gula, sabun.`);
+  const dayaSerap=parseInt(d.dayaSerap||0);
+  const warung=parseInt(d.jmlWarung||0);
+  if(dayaSerap>0 && warung>0) s.push(`📦 Daya serap ${dayaSerap} Kg/hari dari ${warung} warung - Potensi omzet harian Rp ${(dayaSerap*12500).toLocaleString('id-ID')} jika beras SPHP.`);
+  if(s.length===0) s.push('Isi data desil & pekerjaan dulu untuk dapat saran otomatis.');
+  return s;
+}
+
+function renderAll(){
+  const kontak=getKontak();
+  const analisis=loadAnalisis();
+  // TAB 2 list
+  const list=document.getElementById('listKontak'); list.innerHTML='';
+  kontak.forEach(k=>{
+    const div=document.createElement('div');
+    div.className='bg-white p-3 rounded-xl border flex justify-between items-center';
+    div.innerHTML=`<div class="text-[11px]"><p class="font-bold">${k.nama} - ${k.jab} <span class="text-[9px] px-2 py-0.5 rounded-full ${k.priv==='umum'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${k.priv.toUpperCase()}</span></p><p>📞 ${k.hp} - ${k.cat}</p></div><button onclick="hapusKontak(${k.id})" class="text-[10px] bg-red-50 px-2 py-1 rounded">🗑️ Hapus</button>`;
+    list.appendChild(div);
+  });
+  // TAB 1 publik
+  const pubK=document.getElementById('publikKontak'); pubK.innerHTML='';
+  kontak.filter(k=>k.priv==='umum').forEach(k=>{ pubK.innerHTML+=`<div class="border-b py-1"><b>${k.nama}</b> (${k.jab}) - ${k.hp}<br><span class="text-[10px] text-slate-500">${k.cat}</span></div>`; });
+  if(pubK.innerHTML==='') pubK.innerHTML='<p class="text-slate-400">Belum ada kontak umum</p>';
+
+  const pubD=document.getElementById('publikDesa');
+  if(analisis.priv==='umum'){
+    let html=`Desil: `;
+    for(let i=1;i<=10;i++) html+=`D${i}:${analisis['desil'+i]||0} `;
+    html+=`<br>Pekerjaan: Petani ${analisis.jobPetani||0}, Pedagang ${analisis.jobPedagang||0}, UMKM ${analisis.jobUMKM||0}<br>Daya Beli: ${analisis.dayaBeli||'-'}/10, Daya Serap: ${analisis.dayaSerap||'-'} Kg/hari, Warung: ${analisis.jmlWarung||'-'}`;
+    pubD.innerHTML=html;
+  }else{ pubD.innerHTML='<span class="text-slate-400">Data analisis di-set Privacy</span>'; }
+
+  const saran=generateSaran(analisis);
+  document.getElementById('autoSaran').innerHTML=saran.map(x=>`<div>• ${x}</div>`).join('');
+  document.getElementById('publikSaran').innerHTML=(analisis.priv==='umum')?saran.map(x=>`<div class="py-1 border-b">• ${x}</div>`).join(''):'<span class="text-slate-400">Saran privacy</span>';
+}
+renderAll();
+</script>
+</body>
+</html>
